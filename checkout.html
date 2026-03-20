@@ -218,7 +218,7 @@
 var cart = [];
 try { cart = JSON.parse(localStorage.getItem('gna_cart') || '[]'); } catch(e) {}
 
-var stripeInstance = Stripe('pk_test_51TCcpQLfIfmHfekWiv0cFR2AbszSGSan4nG7sFiYof9G8THhi2lmIktog3gr7oVhKvjWWCcGnOmNmuVirj19quv5009iKtWrDr');
+var stripeInstance = Stripe('pk_live_51TCcpFLz11VjJakFjTkjWesMRpGTr0h1RqRIYqsTVhrLY2WiICPxB05kBlTfZK82rz7BMYhH676sG95R6bPTkapX00GO4WUZ0e');
 var elements = stripeInstance.elements();
 var cardElement = elements.create('card', {
   hidePostalCode: true,
