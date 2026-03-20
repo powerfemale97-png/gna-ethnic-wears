@@ -258,7 +258,7 @@ function gnaOpen(idx){
     cDiv.innerHTML="<p style='font-size:0.8rem;color:#999'>One colour</p>";
     var sz=Array.isArray(p.sizes)?p.sizes:[];
     sDiv.innerHTML=sz.map(function(s,i){
-      return "<button class='gna-size-btn"+(i===0?" active":"")+"' onclick='gnaPickSz(this,""+s+"")'>" +s+"</button>";
+      return "<button class='gna-size-btn"+(i===0?" active":"")+"' onclick='gnaPickSz(this,this.textContent)'>" +s+"</button>";
     }).join("");
     if(sz.length) gnaSelectedSize=sz[0];
   }
@@ -269,7 +269,7 @@ function gnaOpen(idx){
 function gnaShowSz(v){
   var sz=Object.keys(v.sizes||{});
   document.getElementById("mSizes").innerHTML=sz.map(function(s,i){
-    return "<button class='gna-size-btn"+(i===0?" active":"")+"' onclick='gnaPickSz(this,""+s+"")'>" +s+"</button>";
+    return "<button class='gna-size-btn"+(i===0?" active":"")+"' onclick='gnaPickSz(this,this.textContent)'>" +s+"</button>";
   }).join("");
   gnaSelectedSize=sz[0]||"";
 }
