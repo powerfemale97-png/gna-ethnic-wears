@@ -1059,6 +1059,22 @@ function showPage(page){
 
 // ── DASHBOARD ──
 // ── LOAD PRODUCTS FROM GOOGLE SHEETS ON ADMIN LOAD ──
+// ── TOGGLE FEATURED ON HOMEPAGE ──
+async function toggleFeatured(id){
+  var p = products.find(function(p){ return p.id === id; });
+  if(!p) return;
+  p.featured = !p.featured;
+  localStorage.setItem('gna_products', JSON.stringify(products));
+  // Push to Firebase
+  if(typeof netlifyDBSave === 'function'){
+    var ok = await netlifyDBSave(products);
+    showToastMsg(p.featured ? '⭐ "'+p.name+'" added to homepage featured!' : '✓ "'+p.name+'" removed from featured', 'success');
+  } else {
+    showToastMsg(p.featured ? '⭐ Featured!' : 'Unfeatured', 'success');
+  }
+  renderProductsTable(products);
+}
+
 // ── QUICK STOCK RESET ──
 async function quickResetStock(id, qty){
   qty = qty || 1;
@@ -1561,6 +1577,7 @@ function renderProductsTable(list){
           <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${p.id}','${p.name.replace(/'/g,"\\'")}')">🗑</button>
           <button class="btn btn-sm" style="background:#25D366;color:white;font-size:0.62rem" onclick="testAddToCart('${p.id}')" title="Add to cart for testing">🛒 Test</button>
           <button class="btn btn-sm" style="background:#1565C0;color:white;font-size:0.62rem" onclick="quickResetStock('${p.id}',1)" title="Reset all stock to 1">🔄 Reset Stock</button>
+          <button class="btn btn-sm" style="background:${p.featured?'#C9A84C':'#f5f5f5'};color:${p.featured?'#1C0A00':'#666'};font-size:0.62rem" onclick="toggleFeatured('${p.id}')" title="Toggle homepage featured">⭐ ${p.featured?'Featured':'Feature'}</button>
         </div>
       </td>
     </tr>`).join('');
