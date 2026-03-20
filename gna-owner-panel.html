@@ -1756,36 +1756,72 @@ function filterToCollection(name){
 }
 
 // ── ORDERS ──
-function renderOrders(){
+async function renderOrders(){
   const el=document.getElementById('ordersContent');
   const tableWrap=document.getElementById('ordersTableWrap');
+
+  // Load from Firebase
+  showToastMsg('⏳ Loading orders...','');
+  try {
+    const res = await fetch('https://gna-ethnic-wears-default-rtdb.firebaseio.com/orders.json');
+    const data = await res.json();
+    if(data){
+      orders = Object.values(data).filter(Boolean).sort(function(a,b){
+        return new Date(b.timestamp||b.date) - new Date(a.timestamp||a.date);
+      });
+    } else {
+      orders = [];
+    }
+    showToastMsg('','');
+  } catch(e) {
+    console.error('Error loading orders:', e);
+    showToastMsg('Could not load orders from database','error');
+  }
+
   if(orders.length===0){
     el.style.display='block';tableWrap.style.display='none';return;
   }
   el.style.display='none';tableWrap.style.display='block';
-  document.getElementById('ordersTableBody').innerHTML=orders.map(o=>`
-    <tr>
-      <td><strong>#${o.id}</strong></td>
-      <td>${o.customer}<br/><span style="font-size:0.72rem;color:var(--muted)">${o.email||''}</span></td>
-      <td style="font-size:0.78rem">${o.items||'—'}</td>
-      <td style="font-weight:700;color:var(--rust)">AUD $${o.total}</td>
-      <td style="font-size:0.78rem">${o.country||'—'}</td>
-      <td>
-        <select style="font-size:0.72rem;padding:0.3rem 0.5rem;border:1px solid var(--border);font-family:'Raleway',sans-serif" onchange="updateOrderStatus('${o.id}',this.value)">
-          <option ${o.status==='pending'?'selected':''} value="pending">Pending</option>
-          <option ${o.status==='processing'?'selected':''} value="processing">Processing</option>
-          <option ${o.status==='shipped'?'selected':''} value="shipped">Shipped</option>
-          <option ${o.status==='delivered'?'selected':''} value="delivered">Delivered</option>
-        </select>
-      </td>
-      <td style="font-size:0.78rem">${o.date}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="deleteOrder('${o.id}')">🗑</button></td>
-    </tr>`).join('');
+  document.getElementById('ordersTableBody').innerHTML=orders.map(o=>{
+    var itemsText = '';
+    if(Array.isArray(o.items)){
+      itemsText = o.items.map(function(i){ return i.name+' ('+i.size+(i.colour?' · '+i.colour:'')+') x'+i.qty; }).join('<br/>');
+    } else {
+      itemsText = o.items||'—';
+    }
+    return '<tr>'+
+      '<td><strong>'+o.id+'</strong><br/><span style="font-size:0.68rem;color:var(--muted)">'+o.date+'</span></td>'+
+      '<td>'+o.customer+'<br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.email||'')+'</span><br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.phone||'')+'</span></td>'+
+      '<td style="font-size:0.78rem">'+o.address+'</td>'+
+      '<td style="font-size:0.78rem">'+itemsText+'</td>'+
+      '<td style="font-weight:700;color:var(--rust)">AUD $'+(parseFloat(o.total)||0).toFixed(2)+'</td>'+
+      '<td><select style="font-size:0.72rem;padding:0.3rem 0.5rem;border:1px solid var(--border);font-family:Raleway,sans-serif" onchange="updateOrderStatus(''+o.id+'',this.value)">'+
+        '<option '+(o.status==='paid'?'selected':'')+' value="paid">Paid</option>'+
+        '<option '+(o.status==='processing'?'selected':'')+' value="processing">Processing</option>'+
+        '<option '+(o.status==='shipped'?'selected':'')+' value="shipped">Shipped</option>'+
+        '<option '+(o.status==='delivered'?'selected':'')+' value="delivered">Delivered</option>'+
+      '</select></td>'+
+      '<td><a href="https://wa.me/'+( o.phone||'').replace(/[^0-9]/g,'')+'" target="_blank" class="btn btn-sm" style="background:#25D366;color:white">💬</a></td>'+
+    '</tr>';
+  }).join('');
+  document.getElementById('statOrders').textContent = orders.length;
 }
 
-function updateOrderStatus(id,status){
+async function updateOrderStatus(id,status){
   const o=orders.find(o=>o.id===id);
-  if(o){o.status=status;localStorage.setItem('gna_orders',JSON.stringify(orders));showToastMsg('Order status updated','success');}
+  if(o){
+    o.status=status;
+    try {
+      await fetch('https://gna-ethnic-wears-default-rtdb.firebaseio.com/orders/'+id+'.json', {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({status:status})
+      });
+      showToastMsg('✅ Order status updated to '+status,'success');
+    } catch(e) {
+      showToastMsg('Order updated locally','success');
+    }
+  }
 }
 
 function deleteOrder(id){
