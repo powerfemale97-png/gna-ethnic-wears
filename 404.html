@@ -31,7 +31,7 @@
   </div>
 </section>
 <script>
-function updateCartCount(){try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.getElementById('cartCount').textContent=t;}catch(e){}}
+function updateCartCount(){try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});}catch(e){}}
 updateCartCount();
 </script>
 </body>
