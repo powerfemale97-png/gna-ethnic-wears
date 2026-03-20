@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Contact Us — GnA Ethnic Wears</title>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contact Us — GnA Ethnic Wears Australia</title>
+<meta name="description" content="Get in touch with GnA Ethnic Wears. Available 24/7 via WhatsApp, email or phone. Based in Australia."/>
+<meta name="keywords" content="contact gna ethnic wears, indian wear australia contact"/>
+<meta property="og:title" content="Contact Us — GnA Ethnic Wears Australia"/>
+<meta property="og:description" content="Get in touch with GnA Ethnic Wears. Available 24/7 via WhatsApp, email or phone. Based in Australia."/>
+<meta property="og:image" content="https://powerfemale97-png.github.io/gna-ethnic-wears/logo.png"/>
+<meta property="og:url" content="https://powerfemale97-png.github.io/gna-ethnic-wears/contact.html"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="canonical" href="https://powerfemale97-png.github.io/gna-ethnic-wears/contact.html"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <style>.logo-img-wrap{display:flex;align-items:center;}.logo-img-wrap img{height:46px;width:auto;}</style>
@@ -10,7 +21,9 @@
 /* Fallback fonts if Google Fonts unavailable */
 body{font-family:'Raleway','Helvetica Neue',Arial,sans-serif;}
 h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;}
-</style></head>
+</style><script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>emailjs.init("GBcr5ZTvq7VO52xql");</script>
+</head>
 <body>
 <div class="topbar">🌍 Worldwide Shipping &nbsp;|&nbsp; 🇦🇺 Based in Australia &nbsp;|&nbsp; ✦ 24/7 Online Support</div>
 <nav id="navbar">
@@ -28,6 +41,10 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
     <li><a href="about.html">About</a></li>
     <li><a href="contact.html" class="active">Contact</a></li>
   </ul>
+  <div class="search-wrap">
+    <input class="search-input-nav" id="navSearch" type="text" placeholder="🔍 Search products..." oninput="navSearchProducts(this.value)" onblur="setTimeout(function(){document.getElementById('navSearchResults').classList.remove('show')},200)"/>
+    <div class="search-results" id="navSearchResults"></div>
+  </div>
   <div class="nav-actions">
     <a href="cart.html" class="cart-btn">🛒 <span class="cart-count" id="cartCount">0</span></a>
     <a href="checkout.html" class="btn-nav">Shop Now</a>
@@ -57,7 +74,7 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
         <div class="contact-icon">📧</div>
         <div>
           <h4>Email Us</h4>
-          <p><a href="/cdn-cgi/l/email-protection#7c1b121d19081412151f0b191d0e0f3c1b111d1510521f1311" style="color:var(--rust);font-weight:600"><span class="__cf_email__" data-cfemail="71161f101405191f1812061410030231161c10181d5f121e1c">[email&#160;protected]</span></a></p>
+          <p>gnaethnicwears@gmail.com</p>
           <p style="font-size:0.78rem;color:var(--muted);margin-top:0.2rem">We reply within 2–4 hours</p>
         </div>
       </div>
@@ -194,7 +211,7 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
   <div class="footer-bottom"><span>© 2025 GnA Ethnic Wears. All rights reserved.</span><span>Proudly Australian · Authentically Indian</span></div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 function updateCartCount(){
   try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});}catch(e){}
 }

@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Cart — GnA Ethnic Wears</title>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Cart — GnA Ethnic Wears Australia</title>
+<meta name="description" content="Review your cart and proceed to checkout. Free standard shipping in Australia on orders over AUD $150."/>
+<meta name="keywords" content=""/>
+<meta property="og:title" content="Your Cart — GnA Ethnic Wears Australia"/>
+<meta property="og:description" content="Review your cart and proceed to checkout. Free standard shipping in Australia on orders over AUD $150."/>
+<meta property="og:image" content="https://powerfemale97-png.github.io/gna-ethnic-wears/logo.png"/>
+<meta property="og:url" content="https://powerfemale97-png.github.io/gna-ethnic-wears/cart.html"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="canonical" href="https://powerfemale97-png.github.io/gna-ethnic-wears/cart.html"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <style>
@@ -19,7 +30,15 @@
 /* Fallback fonts if Google Fonts unavailable */
 body{font-family:'Raleway','Helvetica Neue',Arial,sans-serif;}
 h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;}
-</style></head>
+</style><!-- Google Analytics (replace G-XXXXXXXXXX with your GA4 ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-XXXXXXXXXX');
+</script>
+</head>
 <body>
 <div class="topbar">🔒 Secure Checkout &nbsp;|&nbsp; 📦 Australia Post · Official 2025 Rates &nbsp;|&nbsp; 🎁 FREE AU Shipping on AUD $150+</div>
 <nav id="navbar">
@@ -37,6 +56,10 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
     <li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li>
     <li><a href="reviews.html">Reviews ⭐</a></li>
   </ul>
+  <div class="search-wrap">
+    <input class="search-input-nav" id="navSearch" type="text" placeholder="🔍 Search products..." oninput="navSearchProducts(this.value)" onblur="setTimeout(function(){document.getElementById('navSearchResults').classList.remove('show')},200)"/>
+    <div class="search-results" id="navSearchResults"></div>
+  </div>
   <div class="nav-actions">
     <a href="cart.html" class="cart-btn">🛒 <span class="cart-count" id="cartCount">0</span></a>
     <a href="checkout.html" class="btn-nav">Checkout</a>
@@ -121,7 +144,7 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
   </div>
   <div class="footer-bottom"><span>© 2025 GnA Ethnic Wears.</span><span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span></div>
 </footer>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="shipping-calc.js"></script>
+<script src="shipping-calc.js"></script>
 <script>
 function updateCartCount(){
   try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});}catch(e){}
@@ -308,6 +331,38 @@ function updateCartSummary(){ updateTotals(); }
 renderCountryOptions('shippingCountryCart');
 initCart();
 updateCartCount();
+</script>
+
+<script>
+function navSearchProducts(q){
+  var res = document.getElementById('navSearchResults');
+  if(!res) return;
+  if(!q || q.length < 2){ res.classList.remove('show'); return; }
+  try {
+    var all = JSON.parse(localStorage.getItem('gna_products')||'[]');
+    var filtered = all.filter(function(p){
+      return p.name.toLowerCase().includes(q.toLowerCase()) || 
+             (p.collection||'').toLowerCase().includes(q.toLowerCase()) ||
+             (p.desc||'').toLowerCase().includes(q.toLowerCase());
+    }).slice(0,6);
+    if(filtered.length === 0){
+      res.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.82rem">No products found</div>';
+    } else {
+      res.innerHTML = filtered.map(function(p){
+        var src='';
+        try{ var ph=typeof p.photos==='string'?JSON.parse(p.photos||'[]'):(p.photos||[]); if(ph.length>0) src=typeof ph[0]==='string'?ph[0]:(ph[0].data||ph[0].url||''); }catch(e){}
+        return '<a href="product.html?id='+p.id+'" class="search-result-item">'+
+          (src?'<img class="search-result-img" src="'+src+'" onerror="this.style.display='none'"/>':'<div class="search-result-img" style="background:'+(p.bg||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:1.5rem">'+(p.emoji||'👗')+'</div>')+
+          '<div class="search-result-info">'+
+            '<div class="cat">'+(p.cat||p.collection||'')+'</div>'+
+            '<div class="name">'+p.name+'</div>'+
+            '<div class="price">AUD $'+parseFloat(p.price).toFixed(2)+'</div>'+
+          '</div></a>';
+      }).join('');
+    }
+    res.classList.add('show');
+  } catch(e){ res.classList.remove('show'); }
+}
 </script>
 </body>
 </html>

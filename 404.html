@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Page Not Found — GnA Ethnic Wears</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="topbar">🌍 Worldwide Shipping &nbsp;|&nbsp; 🇦🇺 Based in Australia &nbsp;|&nbsp; ✦ Authentic Indian Ethnic Wear</div>
+<nav id="navbar">
+  <div class="nav-left"><a href="index.html" class="logo-img-wrap"><img src="logo.png" alt="GnA Ethnic Wears" style="height:48px;width:auto;object-fit:contain"/></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="short-kurti.html">Collections</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-actions"><a href="cart.html" class="cart-btn">🛒 <span id="cartCount">0</span></a></div>
+</nav>
+<section style="min-height:70vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:3rem;background:var(--cream)">
+  <div>
+    <div style="font-family:'Playfair Display',serif;font-size:8rem;color:var(--gold);line-height:1;margin-bottom:1rem">404</div>
+    <h1 style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--deep);margin-bottom:1rem">Page Not Found</h1>
+    <p style="color:var(--muted);max-width:400px;margin:0 auto 2rem;line-height:1.8">The page you're looking for doesn't exist. Let's get you back to our beautiful collections!</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="index.html" class="btn-gold">Go to Homepage</a>
+      <a href="short-kurti.html" class="btn-rust">Browse Collections</a>
+    </div>
+  </div>
+</section>
+<script>
+function updateCartCount(){try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.getElementById('cartCount').textContent=t;}catch(e){}}
+updateCartCount();
+</script>
+</body>
+</html>
