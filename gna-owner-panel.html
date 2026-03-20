@@ -1301,37 +1301,44 @@ function triggerPhotoInput(){
   if(inp) inp.click();
 }
 
-function addPhotos(input){
+async function addPhotos(input){
   if(!input || !input.files || input.files.length === 0) return;
   var remaining = 5 - _photos.length;
   if(remaining <= 0){ showToastMsg('Maximum 5 photos. Remove one first.','error'); return; }
   var files = Array.from(input.files).slice(0, remaining);
-  var done = 0;
-  var added = 0;
   var total = files.length;
-  console.log('Adding', total, 'photos, remaining slots:', remaining);
-  files.forEach(function(f){
-    _compress(f, function(data){
-      done++;
-      if(data){
-        _photos.push(data);
+  var added = 0;
+  showToastMsg('⏳ Uploading ' + total + ' photo(s) to cloud...','');
+
+  for(var i = 0; i < files.length; i++){
+    try {
+      var formData = new FormData();
+      formData.append('file', files[i]);
+      formData.append('upload_preset', 'gna_products');
+      formData.append('cloud_name', 'dwbwldr1p');
+
+      var res = await fetch('https://api.cloudinary.com/v1_1/dwbwldr1p/image/upload', {
+        method: 'POST',
+        body: formData
+      });
+      var data = await res.json();
+      if(data.secure_url){
+        _photos.push(data.secure_url);
         added++;
-        console.log('Photo added! Total now:', _photos.length);
         _renderPhotoGrid();
-        if(_photos.length === 1) _updatePreview(data);
+        if(_photos.length === 1) _updatePreview(data.secure_url);
+        showToastMsg('✓ ' + added + '/' + total + ' photo(s) uploaded!','success');
       } else {
-        console.error('Photo compression failed for file:', f.name);
+        console.error('Cloudinary error:', data);
+        showToastMsg('❌ Upload failed for photo ' + (i+1) + '. Try again.','error');
       }
-      if(done === total){
-        if(added > 0){
-          showToastMsg('✓ ' + added + ' photo(s) added!','success');
-        } else {
-          showToastMsg('❌ Could not process photos. Try a smaller file.','error');
-        }
-      }
-    });
-  });
+    } catch(e) {
+      console.error('Upload error:', e);
+      showToastMsg('❌ Upload failed. Check internet connection.','error');
+    }
+  }
   input.value = '';
+  if(added === total) showToastMsg('✅ All ' + total + ' photo(s) uploaded successfully!','success');
 }
 
 function addPhotoUrl(){
