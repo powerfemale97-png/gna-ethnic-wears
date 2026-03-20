@@ -57,13 +57,13 @@
 .spinner{display:none;width:20px;height:20px;border:2px solid rgba(201,168,76,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;}
 @media(max-width:768px){.checkout-wrap{grid-template-columns:1fr;}.order-summary-section{position:static;}}
 </style>
-<!-- Google Analytics (replace G-XXXXXXXXXX with your GA4 ID) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<!-- Google Analytics (replace G-VXGK39TFNJ with your GA4 ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VXGK39TFNJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-VXGK39TFNJ');
 </script>
 </head>
 <body>
@@ -217,6 +217,24 @@
 // ── CART ──
 var cart = [];
 try { cart = JSON.parse(localStorage.getItem('gna_cart') || '[]'); } catch(e) {}
+
+// ── GA4: Begin checkout event ──
+if(typeof gtag === 'function' && cart.length > 0){
+  var _coSubtotal = cart.reduce(function(a,b){ return a+(b.price*b.qty); }, 0);
+  gtag('event', 'begin_checkout', {
+    currency: 'AUD',
+    value: _coSubtotal,
+    items: cart.map(function(item, idx){
+      return {
+        item_id: item.id || ('item_' + idx),
+        item_name: item.name,
+        item_category: item.cat || item.collection || 'Ethnic Wear',
+        price: item.price,
+        quantity: item.qty || 1
+      };
+    })
+  });
+}
 
 var stripeInstance = Stripe('pk_live_51TCcpFLz11VjJakFjTkjWesMRpGTr0h1RqRIYqsTVhrLY2WiICPxB05kBlTfZK82rz7BMYhH676sG95R6bPTkapX00GO4WUZ0e');
 var elements = stripeInstance.elements();
@@ -471,6 +489,25 @@ async function placeOrder(){
     confirmDiv.style.display = 'flex';
     document.getElementById('confirmOrderId').textContent = orderId;
     window.scrollTo({top:0,behavior:'smooth'});
+
+    // ── GA4: Purchase event ──
+    if(typeof gtag === 'function'){
+      gtag('event', 'purchase', {
+        transaction_id: orderId,
+        value: total,
+        currency: 'AUD',
+        shipping: shippingCost,
+        items: cart.map(function(item, idx){
+          return {
+            item_id: item.id || ('item_' + idx),
+            item_name: item.name,
+            item_category: item.cat || item.collection || 'Ethnic Wear',
+            price: item.price,
+            quantity: item.qty || 1
+          };
+        })
+      });
+    }
 
   } catch(err) {
     console.error('Order error:', err);

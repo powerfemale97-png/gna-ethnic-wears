@@ -341,6 +341,20 @@ function gnaAddToCart(){
   localStorage.setItem("gna_cart",JSON.stringify(cart));
   gnaUpdateCartCount(); closeGnaModal();
   gnaShowToast("✓ "+gnaCurrentProduct.name+" ("+gnaSelectedSize+(gnaSelectedColour?" · "+gnaSelectedColour:"")+") added!");
+  if(typeof gtag === 'function'){
+    gtag('event', 'add_to_cart', {
+      currency: 'AUD',
+      value: parseFloat(gnaCurrentProduct.price) || 0,
+      items: [{
+        item_id: gnaCurrentProduct.id || 'unknown',
+        item_name: gnaCurrentProduct.name,
+        item_category: typeof COLLECTION !== 'undefined' ? COLLECTION : 'Ethnic Wear',
+        item_variant: gnaSelectedSize + (gnaSelectedColour ? ' · ' + gnaSelectedColour : ''),
+        price: parseFloat(gnaCurrentProduct.price) || 0,
+        quantity: 1
+      }]
+    });
+  }
 }
 
 function gnaWhatsApp(){

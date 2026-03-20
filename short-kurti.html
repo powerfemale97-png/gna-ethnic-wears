@@ -36,13 +36,13 @@
 </style>
 <script src="gna-products-data.js"></script>
 <script src="netlify-db.js"></script>
-<!-- Google Analytics (replace G-XXXXXXXXXX with your GA4 ID) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<!-- Google Analytics (replace G-VXGK39TFNJ with your GA4 ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VXGK39TFNJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-VXGK39TFNJ');
 </script>
 </head>
 <body>
@@ -349,6 +349,21 @@ function gnaAddToCart(){
   localStorage.setItem("gna_cart",JSON.stringify(cart));
   gnaUpdateCartCount(); closeGnaModal();
   gnaShowToast("✓ "+gnaCurrentProduct.name+" ("+gnaSelectedSize+(gnaSelectedColour?" · "+gnaSelectedColour:"")+") added!");
+  // ── GA4: Add to cart ──
+  if(typeof gtag === 'function'){
+    gtag('event', 'add_to_cart', {
+      currency: 'AUD',
+      value: parseFloat(gnaCurrentProduct.price) || 0,
+      items: [{
+        item_id: gnaCurrentProduct.id || 'unknown',
+        item_name: gnaCurrentProduct.name,
+        item_category: COLLECTION,
+        item_variant: gnaSelectedSize + (gnaSelectedColour ? ' · ' + gnaSelectedColour : ''),
+        price: parseFloat(gnaCurrentProduct.price) || 0,
+        quantity: 1
+      }]
+    });
+  }
 }
 
 function gnaWhatsApp(){

@@ -30,13 +30,13 @@
 /* Fallback fonts if Google Fonts unavailable */
 body{font-family:'Raleway','Helvetica Neue',Arial,sans-serif;}
 h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;}
-</style><!-- Google Analytics (replace G-XXXXXXXXXX with your GA4 ID) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+</style><!-- Google Analytics (replace G-VXGK39TFNJ with your GA4 ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VXGK39TFNJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
+  gtag('config', 'G-VXGK39TFNJ');
 </script>
 </head>
 <body>
@@ -140,11 +140,11 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
     <div class="footer-brand"><div class="footer-logo"><img src="logo.png" alt="GnA Ethnic Wears" style="height:55px;width:auto;object-fit:contain;filter:brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg)"/></div><p>Authentic Indian ethnic fashion delivered worldwide from Australia.</p><div class="social-links"><a href="https://www.facebook.com/share/19hwZJTKyC/?mibextid=wwXIfr" target="_blank">📘</a><a href="https://www.instagram.com/gna_ethnicwears?igsh=MTZkemN1ZWJsZWNtdw%3D%3D&utm_source=qr" target="_blank">📸</a><a href="https://wa.me/61404722166">💬 WhatsApp</a></div></div>
     <div class="footer-links-col"><h4>Collections</h4><a href="short-kurti.html">Short Kurti</a><a href="long-kurti.html">Long Kurti</a><a href="cord-set.html">Cord Set</a><a href="daily-wear.html">Daily Wear Suit</a><a href="plus-size.html">Plus Size Suit</a><a href="premium-suit.html">Premium Suit</a></div>
     <div class="footer-links-col"><h4>Info</h4><a href="about.html">About</a><a href="contact.html">Contact</a><a href="shipping.html">Shipping Policy</a></div>
-    <div class="footer-links-col"><h4>Contact</h4><p>📧 gnaethnicwears@gmail.com</p><p>📱 0404 722 166</p><p>🕐 24/7 · 7 Days</p></div>
+    <div class="footer-links-col"><h4>Contact</h4><p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="44232a2521302c2a2d273321253637042329252d286a272b29">[email&#160;protected]</a></p><p>📱 0404 722 166</p><p>🕐 24/7 · 7 Days</p></div>
   </div>
   <div class="footer-bottom"><span>© 2025 GnA Ethnic Wears.</span><span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span></div>
 </footer>
-<script src="shipping-calc.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="shipping-calc.js"></script>
 <script>
 function updateCartCount(){
   try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});}catch(e){}
@@ -355,14 +355,4 @@ function navSearchProducts(q){
           (src?'<img class="search-result-img" src="'+src+'" onerror="this.style.display='none'"/>':'<div class="search-result-img" style="background:'+(p.bg||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:1.5rem">'+(p.emoji||'👗')+'</div>')+
           '<div class="search-result-info">'+
             '<div class="cat">'+(p.cat||p.collection||'')+'</div>'+
-            '<div class="name">'+p.name+'</div>'+
-            '<div class="price">AUD $'+parseFloat(p.price).toFixed(2)+'</div>'+
-          '</div></a>';
-      }).join('');
-    }
-    res.classList.add('show');
-  } catch(e){ res.classList.remove('show'); }
-}
-</script>
-</body>
-</html>
+            '<div class="name">'+p.name+'</div>'
