@@ -7,6 +7,16 @@
 <link rel="stylesheet" href="styles.css"/>
 <script src="netlify-db.js"></script>
 <style>
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:92vw;max-height:92vh;object-fit:contain;}
+.lightbox-close{position:absolute;top:1.5rem;right:1.5rem;color:white;font-size:2rem;cursor:pointer;background:none;border:none;line-height:1;}
+.lightbox-prev,.lightbox-next{position:absolute;top:50%;transform:translateY(-50%);color:white;font-size:2.5rem;cursor:pointer;background:rgba(0,0,0,0.4);border:none;padding:0.5rem 1rem;line-height:1;}
+.lightbox-prev{left:1rem;}
+.lightbox-next{right:1rem;}
+.main-photo-wrap{cursor:zoom-in;}
+
 .product-page{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1100px;margin:0 auto;padding:3rem 2rem;}
 .product-gallery{position:sticky;top:90px;}
 .main-photo{width:100%;aspect-ratio:1;object-fit:cover;background:var(--cream2);display:block;border:1px solid var(--border);}
@@ -47,7 +57,17 @@
 .back-link{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.78rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:1.5rem 2rem;transition:color 0.2s;}
 .back-link:hover{color:var(--rust);}
 @media(max-width:768px){
-  .product-page{grid-template-columns:1fr;gap:2rem;padding:1.5rem 1rem;}
+  /* LIGHTBOX */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;display:none;align-items:center;justify-content:center;cursor:zoom-out;}
+.lightbox.open{display:flex;}
+.lightbox img{max-width:92vw;max-height:92vh;object-fit:contain;}
+.lightbox-close{position:absolute;top:1.5rem;right:1.5rem;color:white;font-size:2rem;cursor:pointer;background:none;border:none;line-height:1;}
+.lightbox-prev,.lightbox-next{position:absolute;top:50%;transform:translateY(-50%);color:white;font-size:2.5rem;cursor:pointer;background:rgba(0,0,0,0.4);border:none;padding:0.5rem 1rem;line-height:1;}
+.lightbox-prev{left:1rem;}
+.lightbox-next{right:1rem;}
+.main-photo-wrap{cursor:zoom-in;}
+
+.product-page{grid-template-columns:1fr;gap:2rem;padding:1.5rem 1rem;}
   .product-gallery{position:static;}
   .product-title{font-size:1.5rem;}
 }
@@ -87,6 +107,14 @@
 
 <div class="toast-msg" id="toastMsg"></div>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-prev" onclick="lightboxNav(-1);event.stopPropagation()">❮</button>
+  <img id="lightboxImg" src="" alt="Product"/>
+  <button class="lightbox-next" onclick="lightboxNav(1);event.stopPropagation()">❯</button>
+</div>
+
 <script>
 var currentProduct = null;
 var selectedColour = '';
@@ -96,6 +124,32 @@ var variants = [];
 var allPhotos = [];
 var selectedVariantIdx = 0;
 var maxQty = 99;
+
+// ── LIGHTBOX ──
+var lightboxIndex = 0;
+function openLightbox(idx){
+  lightboxIndex = idx || 0;
+  var src = allPhotos[lightboxIndex];
+  if(!src) return;
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e){
+  if(e && e.target !== document.getElementById('lightbox') && e.target !== document.querySelector('.lightbox-close')) return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function lightboxNav(dir){
+  lightboxIndex = (lightboxIndex + dir + allPhotos.length) % allPhotos.length;
+  document.getElementById('lightboxImg').src = allPhotos[lightboxIndex];
+}
+// Close on escape key
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+  if(e.key === 'ArrowLeft') lightboxNav(-1);
+  if(e.key === 'ArrowRight') lightboxNav(1);
+});
 
 function toggleMenu(){
   var m=document.getElementById('mobileMenu');
@@ -132,6 +186,7 @@ function getPhotos(p){
 function switchPhoto(src){
   var main=document.getElementById('mainPhotoImg');
   if(main) main.src=src;
+  lightboxIndex = allPhotos.indexOf(src);
   document.querySelectorAll('.thumb').forEach(function(t){
     t.classList.toggle('active', t.src===src||t.getAttribute('data-src')===src);
   });
@@ -241,7 +296,7 @@ function renderProduct(p){
   // Main photo
   var mainPhotoHTML = '';
   if(allPhotos.length>0){
-    mainPhotoHTML = '<div class="main-photo-wrap"><img id="mainPhotoImg" src="'+allPhotos[0]+'" alt="'+p.name+'"/></div>';
+    mainPhotoHTML = '<div class="main-photo-wrap" onclick="openLightbox(0)"><img id="mainPhotoImg" src="'+allPhotos[0]+'" alt="'+p.name+'"/><div style="position:absolute;bottom:0.5rem;right:0.5rem;background:rgba(0,0,0,0.5);color:white;padding:0.3rem 0.6rem;font-size:0.7rem;border-radius:3px">🔍 Click to zoom</div></div>';
   } else {
     mainPhotoHTML = '<div class="main-photo-wrap"><span>'+(p.emoji||'👗')+'</span></div>';
   }
