@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Your Cart — GnA Ethnic Wears Australia</title>
+<meta name="description" content="Review your cart and proceed to checkout. Free standard shipping in Australia on orders over AUD $150."/>
+<meta name="keywords" content=""/>
+<meta property="og:title" content="Your Cart — GnA Ethnic Wears Australia"/>
+<meta property="og:description" content="Review your cart and proceed to checkout. Free standard shipping in Australia on orders over AUD $150."/>
+<meta property="og:image" content="https://www.gnaethnicwears.com.au/logo.png"/>
+<meta property="og:url" content="https://www.gnaethnicwears.com.au/cart.html"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="canonical" href="https://www.gnaethnicwears.com.au/cart.html"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.free-bar-wrap{background:var(--gold-pale);border:1px solid var(--border);padding:1rem;margin-bottom:1rem;border-radius:2px;}
+.free-bar-track{background:#e0d5c5;height:8px;border-radius:4px;overflow:hidden;margin:0.5rem 0;}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--rust));border-radius:4px;transition:width 0.5s ease;}
+.ship-method-row{display:flex;gap:0.7rem;margin:0.5rem 0;}
+.ship-radio{display:flex;align-items:center;gap:0.5rem;padding:0.55rem 0.9rem;border:1px solid var(--border);cursor:pointer;font-size:0.78rem;background:white;transition:all 0.2s;flex:1;justify-content:center;}
+.ship-radio input{accent-color:var(--rust);}
+.ship-radio.sel{border-color:var(--gold);background:var(--gold-pale);font-weight:600;}
+.auspost-note{font-size:0.68rem;color:var(--muted);line-height:1.5;padding:0.6rem;background:var(--cream2);border-left:3px solid var(--gold);margin-top:0.5rem;}
+</style>
+<style>
+/* Fallback fonts if Google Fonts unavailable */
+body{font-family:'Raleway','Helvetica Neue',Arial,sans-serif;}
+h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;}
+</style><!-- Google Analytics (replace G-VXGK39TFNJ with your GA4 ID) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VXGK39TFNJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VXGK39TFNJ');
+</script>
+</head>
+<body>
+<div class="topbar">🔒 Secure Checkout &nbsp;|&nbsp; 📦 Australia Post · Official 2025 Rates &nbsp;|&nbsp; 🎁 FREE AU Shipping on AUD $150+</div>
+<nav id="navbar">
+  <div class="nav-left"><a href="index.html" class="logo-img-wrap"><img src="logo.png" alt="GnA Ethnic Wears" style="height:48px;width:auto;object-fit:contain"/></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li class="dropdown"><a href="#">Collections ▾</a>
+      <div class="dropdown-menu">
+        <a href="short-kurti.html">Short Kurti</a><a href="long-kurti.html">Long Kurti</a>
+        <a href="cord-set.html">Cord Set</a><a href="daily-wear.html">Daily Wear 3 Piece Suit</a>
+        <a href="plus-size.html">Plus Size 3 Piece Suit</a>
+        <a href="premium-suit.html">Premium 3 Piece Suit</a>
+      </div>
+    </li>
+    <li><a href="about.html">About</a></li><li><a href="contact.html">Contact</a></li>
+    <li><a href="reviews.html">Reviews ⭐</a></li>
+  </ul>
+  <div class="search-wrap">
+    <input class="search-input-nav" id="navSearch" type="text" placeholder="🔍 Search products..." oninput="navSearchProducts(this.value)" onblur="setTimeout(function(){document.getElementById('navSearchResults').classList.remove('show')},200)"/>
+    <div class="search-results" id="navSearchResults"></div>
+  </div>
+  <div class="nav-actions">
+    <a href="cart.html" class="cart-btn">🛒 <span class="cart-count" id="cartCount">0</span></a>
+    <a href="checkout.html" class="btn-nav">Checkout</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</nav>
+<div class="page-hero" style="padding:3rem 3rem 2.5rem;">
+  <div class="page-hero-pattern"></div>
+  <div class="page-hero-content">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Cart</div>
+    <h1>Your <em>Cart</em></h1>
+  </div>
+</div>
+<section class="cart-section">
+  <div id="cartEmpty" style="text-align:center;padding:4rem 2rem;display:none">
+    <div style="font-size:4rem;margin-bottom:1rem">🛒</div>
+    <h3 style="font-family:serif,serif;font-size:1.8rem;color:var(--deep);margin-bottom:1rem">Your cart is empty</h3>
+    <p style="color:var(--muted);margin-bottom:2rem">Browse our beautiful collections!</p>
+    <a href="index.html" class="btn-gold">Start Shopping</a>
+  </div>
+  <div class="cart-grid" id="cartTable" style="display:none">
+    <div>
+      <h2 style="font-family:serif,serif;font-size:1.5rem;color:var(--deep);margin-bottom:1.5rem">Shopping Cart <span id="cartItemCount" style="font-size:1rem;color:var(--muted);font-weight:400"></span></h2>
+      <table class="cart-table">
+        <thead><tr><th></th><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th></th></tr></thead>
+        <tbody id="cartItems"></tbody>
+      </table>
+      <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="index.html" class="btn-outline-dark">← Continue Shopping</a>
+        <button class="btn-rust" onclick="clearCartItems()">Clear Cart</button>
+      </div>
+    </div>
+    <div class="cart-summary">
+      <h3>Order Summary</h3>
+      <div style="margin-bottom:0.8rem">
+        <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.4rem">📍 Shipping Destination</label>
+        <select id="shippingCountryCart" onchange="updateCartSummary()" style="width:100%;padding:0.75rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.87rem;outline:none;-webkit-appearance:none;background:white;color:var(--text);"></select>
+      </div>
+      <div style="margin-bottom:0.8rem">
+        <label style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.4rem">🚚 Shipping Method</label>
+        <div class="ship-method-row">
+          <label class="ship-radio sel" id="stdLbl"><input type="radio" name="cartShip" value="standard" checked onchange="updateCartSummary();document.getElementById('stdLbl').classList.add('sel');document.getElementById('expLbl').classList.remove('sel')"/> Standard</label>
+          <label class="ship-radio" id="expLbl"><input type="radio" name="cartShip" value="express" onchange="updateCartSummary();document.getElementById('expLbl').classList.add('sel');document.getElementById('stdLbl').classList.remove('sel')"/> Express</label>
+        </div>
+        <div class="auspost-note">📦 Rates calculated via Australia Post official pricing (1 July 2025) based on parcel weight + destination zone.</div>
+      </div>
+      <div id="freeShipBar" class="free-bar-wrap" style="display:none">
+        <div id="freeShipNote" style="font-size:0.8rem;font-weight:600;margin-bottom:0.4rem;color:var(--rust)"></div>
+        <div class="free-bar-track"><div class="bar-fill" id="barFill" style="width:0%"></div></div>
+        <div style="font-size:0.68rem;color:var(--muted)">Free standard shipping within Australia on orders AUD $150+</div>
+      </div>
+      <div class="summary-line"><span>Subtotal</span><span id="cartSubtotal">—</span></div>
+      <div class="summary-line">
+        <span>Shipping <span id="cartZoneBadge" style="font-size:0.65rem;background:var(--deep);color:var(--gold);padding:0.1rem 0.4rem;margin-left:0.3rem;letter-spacing:0.05em"></span></span>
+        <span id="cartShipping" style="font-weight:700">Select country ↑</span>
+      </div>
+      <div style="font-size:0.7rem;color:var(--muted);padding:0 0 0.8rem;border-bottom:1px solid var(--border)">
+        <span id="cartWeightLine"></span>
+        <span id="cartDeliveryTime" style="display:block;margin-top:0.2rem"></span>
+      </div>
+      <div class="summary-line total"><span>Total (AUD)</span><span id="cartTotal">—</span></div>
+      <div style="margin:1.2rem 0;padding:0.9rem;background:var(--gold-pale);border:1px solid var(--border);font-size:0.76rem;color:var(--muted);line-height:1.65">
+        🔒 SSL secured · Shipped from Australia<br/>🌍 200+ countries · Customs may apply
+      </div>
+      <a href="checkout.html" class="btn-gold" style="display:block;text-align:center;width:100%;margin-bottom:1rem">Proceed to Checkout →</a>
+      <div style="display:flex;gap:0.4rem;justify-content:center;flex-wrap:wrap">
+        <span class="pay-badge" style="padding:0.25rem 0.5rem;font-size:0.68rem">💳 Visa</span>
+        <span class="pay-badge" style="padding:0.25rem 0.5rem;font-size:0.68rem">🅿️ PayPal</span>
+        <span class="pay-badge" style="padding:0.25rem 0.5rem;font-size:0.68rem">🍎 Apple Pay</span>
+        <span class="pay-badge" style="padding:0.25rem 0.5rem;font-size:0.68rem">🔄 Afterpay</span>
+        <span class="pay-badge" style="padding:0.25rem 0.5rem;font-size:0.68rem">G Pay</span>
+      </div>
+    </div>
+  </div>
+</section>
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><div class="footer-logo"><img src="logo.png" alt="GnA Ethnic Wears" style="height:55px;width:auto;object-fit:contain;filter:brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg)"/></div><p>Authentic Indian ethnic fashion delivered worldwide from Australia.</p><div class="social-links"><a href="https://www.facebook.com/share/19hwZJTKyC/?mibextid=wwXIfr" target="_blank">📘</a><a href="https://www.instagram.com/gna_ethnicwears?igsh=MTZkemN1ZWJsZWNtdw%3D%3D&utm_source=qr" target="_blank">📸</a><a href="https://wa.me/61404722166">💬 WhatsApp</a></div></div>
+    <div class="footer-links-col"><h4>Collections</h4><a href="short-kurti.html">Short Kurti</a><a href="long-kurti.html">Long Kurti</a><a href="cord-set.html">Cord Set</a><a href="daily-wear.html">Daily Wear Suit</a><a href="plus-size.html">Plus Size Suit</a><a href="premium-suit.html">Premium Suit</a></div>
+    <div class="footer-links-col"><h4>Info</h4><a href="about.html">About</a><a href="contact.html">Contact</a><a href="shipping.html">Shipping Policy</a></div>
+    <div class="footer-links-col"><h4>Contact</h4><p>📧 gnaethnicwears@gmail.com</p><p>📱 0404 722 166</p><p>🕐 24/7 · 7 Days</p></div>
+  </div>
+  <div class="footer-bottom"><span>© 2026 GnA Ethnic Wears.</span><span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span></div>
+</footer>
+<script src="shipping-calc.js"></script>
+<script>
+function updateCartCount(){
+  try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});}catch(e){}
+}
+function toggleMenu(){
+  var m=document.getElementById('mobileMenu');var o=document.getElementById('overlayBg');
+  if(m)m.classList.toggle('open');if(o)o.classList.toggle('open');
+}
+updateCartCount();
+</script>
+<script>
+// ══════════════════════════════════
+// CART PAGE - BULLETPROOF VERSION
+// ══════════════════════════════════
+
+function getCartFromStorage(){
+  try{
+    const raw = localStorage.getItem('gna_cart');
+    if(!raw) return [];
+    const parsed = JSON.parse(raw);
+    if(!Array.isArray(parsed)) return [];
+    return parsed;
+  } catch(e){ return []; }
+}
+
+function initCart(){
+  // Force reload from localStorage every time
+  const cartData = getCartFromStorage();
+  cart = cartData;
+
+  const tbody = document.getElementById('cartItems');
+  const empty = document.getElementById('cartEmpty');
+  const table = document.getElementById('cartTable');
+  if(!tbody||!empty||!table) return;
+
+  if(cartData.length === 0){
+    empty.style.display = 'block';
+    table.style.display = 'none';
+    return;
+  }
+
+  empty.style.display = 'none';
+  table.style.display = '';
+
+  tbody.innerHTML = cartData.map((item,idx) => {
+    const bg = item.bg || item.background || 'linear-gradient(155deg,#C9184A,#6B0020)';
+    const emoji = item.emoji || '👗';
+    const cat = item.cat || item.collection || item.category || '';
+    const size = item.size || '—';
+    const price = parseFloat(item.price) || 0;
+    const qty = parseInt(item.qty) || 1;
+    const name = item.name || 'Product';
+
+    let imgHTML = '';
+    const photoSrc = item.photoData || item.photoUrl || '';
+    if(photoSrc && photoSrc.length > 10){
+      imgHTML = `<img src="${photoSrc}" style="width:62px;height:70px;object-fit:cover;display:block" onerror="this.style.display='none'"/>`;
+    } else {
+      imgHTML = `<div style="width:62px;height:70px;background:${bg};display:flex;align-items:center;justify-content:center;font-size:2rem">${emoji}</div>`;
+    }
+
+    return `<tr>
+      <td>${imgHTML}</td>
+      <td>
+        <strong style="font-size:0.92rem;color:var(--deep);display:block">${name}</strong>
+        <span style="font-size:0.73rem;color:var(--muted)">Size: ${size}${cat?' · '+cat:''}</span>
+      </td>
+      <td style="font-weight:600">AUD $${price.toFixed(2)}</td>
+      <td>
+        <div class="qty-control">
+          <button class="qty-btn" onclick="changeQty(${idx},-1)">−</button>
+          <span class="qty-val">${qty}</span>
+          <button class="qty-btn" onclick="changeQty(${idx},1)">+</button>
+        </div>
+      </td>
+      <td style="font-weight:700;color:var(--rust)">AUD $${(price*qty).toFixed(2)}</td>
+      <td><button class="remove-btn" onclick="removeItem(${idx})">✕ Remove</button></td>
+    </tr>`;
+  }).join('');
+
+  updateTotals();
+  updateCartCount();
+}
+
+function changeQty(idx, delta){
+  const cartData = getCartFromStorage();
+  if(!cartData[idx]) return;
+  const maxStock = parseInt(cartData[idx].maxStock) || 99;
+  const newQty = Math.max(1, Math.min(maxStock, (cartData[idx].qty||1) + delta));
+  if(delta > 0 && newQty >= maxStock && (cartData[idx].qty||1) >= maxStock){
+    showCartToast('Maximum stock reached! Only '+maxStock+' available.');
+    return;
+  }
+  cartData[idx].qty = newQty;
+  localStorage.setItem('gna_cart', JSON.stringify(cartData));
+  cart = cartData;
+  initCart();
+}
+
+function showCartToast(msg){
+  var t = document.getElementById('cartToast');
+  if(!t){
+    t = document.createElement('div');
+    t.id = 'cartToast';
+    t.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1C0A00;color:#C9A84C;padding:0.8rem 1.5rem;font-family:Raleway,sans-serif;font-size:0.85rem;z-index:9999;border:1px solid #C9A84C;display:none;white-space:nowrap;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.display = 'block';
+  clearTimeout(t._t);
+  t._t = setTimeout(function(){ t.style.display = 'none'; }, 3000);
+}
+
+function removeItem(idx){
+  const cartData = getCartFromStorage();
+  cartData.splice(idx,1);
+  localStorage.setItem('gna_cart', JSON.stringify(cartData));
+  cart = cartData;
+  initCart();
+}
+
+function clearCartItems(){
+  if(!confirm('Clear your entire cart?')) return;
+  localStorage.removeItem('gna_cart');
+  cart = [];
+  initCart();
+}
+
+function updateTotals(){
+  const cartData = getCartFromStorage();
+  const country = document.getElementById('shippingCountryCart')?.value || '';
+  const method = document.querySelector('input[name="cartShip"]:checked')?.value || 'standard';
+  const subtotal = cartData.reduce((a,b) => a + (parseFloat(b.price)||0)*(parseInt(b.qty)||1), 0);
+
+  const setText = (id,val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+  setText('cartSubtotal', `AUD $${subtotal.toFixed(2)}`);
+
+  if(!country){
+    setText('cartShipping','↑ Select country');
+    setText('cartTotal',`AUD $${subtotal.toFixed(2)}`);
+    return;
+  }
+
+  const result = calculateShipping(cartData, country, method);
+  const total = subtotal + (result.price||0);
+  const weightKg = (result.weight/1000).toFixed(2);
+  const zone = AUSPOST_ZONES[country]||5;
+  const zoneNames = {AU:'Domestic AU',1:'Zone 1 · NZ',2:'Zone 2 · Asia Pac',3:'Zone 3 · US/CA',4:'Zone 4 · UK/EU',5:'Zone 5 · Rest of World'};
+
+  if(result.isFree) setText('cartShipping','FREE 🎉');
+  else if(result.price===null) setText('cartShipping','Contact us');
+  else setText('cartShipping',`AUD $${result.price.toFixed(2)}`);
+
+  setText('cartTotal',`AUD $${total.toFixed(2)}`);
+  setText('cartWeightLine',`Parcel: ~${weightKg} kg · ${zoneNames[zone]||''}`);
+  setText('cartDeliveryTime',`⏱ ${getDeliveryTime(country,method)}`);
+  const badge = document.getElementById('cartZoneBadge');
+  if(badge) badge.textContent = zoneNames[zone]||'';
+
+  const bar = document.getElementById('freeShipBar');
+  const fill = document.getElementById('barFill');
+  const note = document.getElementById('freeShipNote');
+  if(country==='AU' && bar){
+    bar.style.display='block';
+    const pct = Math.min((subtotal/150)*100,100);
+    if(fill) fill.style.width = pct+'%';
+    if(note){
+      if(subtotal>=150){note.textContent='🎉 You qualify for FREE standard shipping!';note.style.color='#1B5E20';}
+      else{note.textContent=`Add AUD $${(150-subtotal).toFixed(2)} more for FREE shipping!`;note.style.color='var(--rust)';}
+    }
+  } else if(bar){ bar.style.display='none'; }
+}
+
+// Override updateCartSummary used by shipping method toggle
+function updateCartSummary(){ updateTotals(); }
+
+renderCountryOptions('shippingCountryCart');
+initCart();
+updateCartCount();
+</script>
+
+<script>
+function navSearchProducts(q){
+  var res=document.getElementById('navSearchResults');
+  if(!res)return;
+  if(!q||q.length<2){res.classList.remove('show');return;}
+  try{
+    var all=JSON.parse(localStorage.getItem('gna_products')||'[]');
+    var filtered=all.filter(function(p){
+      return p.name.toLowerCase().includes(q.toLowerCase())||
+             (p.collection||'').toLowerCase().includes(q.toLowerCase())||
+             (p.cat||'').toLowerCase().includes(q.toLowerCase());
+    }).slice(0,6);
+    if(filtered.length===0){
+      res.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.82rem">No products found</div>';
+    } else {
+      res.innerHTML=filtered.map(function(p){
+        var src='';
+        try{var ph=typeof p.photos==='string'?JSON.parse(p.photos||'[]'):(p.photos||[]);
+          if(ph.length>0)src=typeof ph[0]==='string'?ph[0]:(ph[0].data||ph[0].url||'');
+          if(!src)src=p.photoData||p.photoUrl||'';}catch(e){}
+        return '<a href="product.html?id='+p.id+'" class="search-result-item">'+
+          (src?'<img class="search-result-img" src="'+src+'" onerror="this.style.display='none'"/>':
+               '<div class="search-result-img" style="background:'+(p.bg||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:1.5rem">'+(p.emoji||'\ud83d\udc57')+'</div>')+
+          '<div class="search-result-info">'+
+            '<div style="font-size:0.68rem;color:var(--muted)">'+(p.cat||p.collection||'')+'</div>'+
+            '<div style="font-size:0.82rem;font-weight:600;color:var(--deep)">'+p.name+'</div>'+
+            '<div style="font-size:0.78rem;color:var(--rust)">AUD $'+parseFloat(p.price||0).toFixed(2)+'</div>'+
+          '</div></a>';
+      }).join('');
+    }
+    res.classList.add('show');
+  }catch(e){res.classList.remove('show');}
+}
+updateCartCount();
+</script>
+<script src="nav-footer.js"></script>
+</body>
+</html>
