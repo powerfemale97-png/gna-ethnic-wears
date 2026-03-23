@@ -211,7 +211,7 @@ function updateCartCount(){
   try{
     var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');
     var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);
-    document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});
+    document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});
   }catch(e){}
 }
 
@@ -512,5 +512,6 @@ function navSearchProducts(q){
   } catch(e){ res.classList.remove('show'); }
 }
 </script>
+<script src="nav-footer.js"></script>
 </body>
 </html>

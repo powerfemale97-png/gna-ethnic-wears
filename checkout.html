@@ -9,11 +9,11 @@
 <meta name="keywords" content=""/>
 <meta property="og:title" content="Secure Checkout — GnA Ethnic Wears Australia"/>
 <meta property="og:description" content="Complete your purchase securely. Multiple payment options including Stripe, Apple Pay and Google Pay."/>
-<meta property="og:image" content="https://powerfemale97-png.github.io/gna-ethnic-wears/logo.png"/>
-<meta property="og:url" content="https://powerfemale97-png.github.io/gna-ethnic-wears/checkout.html"/>
+<meta property="og:image" content="https://www.gnaethnicwears.com.au/logo.png"/>
+<meta property="og:url" content="https://www.gnaethnicwears.com.au/checkout.html"/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link rel="canonical" href="https://powerfemale97-png.github.io/gna-ethnic-wears/checkout.html"/>
+<link rel="canonical" href="https://www.gnaethnicwears.com.au/checkout.html"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <script src="https://js.stripe.com/v3/"></script>
@@ -55,6 +55,12 @@
 .free-ship-note{background:#e8f5e9;border:1px solid #c8e6c9;padding:0.6rem 1rem;font-size:0.78rem;color:#1B5E20;margin-bottom:1rem;display:none;}
 #orderConfirm{display:none;min-height:80vh;align-items:center;justify-content:center;padding:4rem 2rem;text-align:center;background:var(--cream);}
 .spinner{display:none;width:20px;height:20px;border:2px solid rgba(201,168,76,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;}
+/* Payment tabs */
+.pay-tab{background:white;border:2px solid var(--border);padding:0.8rem 0.5rem;cursor:pointer;font-family:'Raleway',sans-serif;color:var(--muted);transition:all 0.2s;text-align:center;width:100%;}
+.pay-tab:hover{border-color:var(--gold);color:var(--deep);}
+.pay-tab.active{border-color:var(--gold);background:var(--gold-pale);color:var(--deep);}
+.pay-panel{animation:fadeIn 0.3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:768px){.checkout-wrap{grid-template-columns:1fr;}.order-summary-section{position:static;}}
 </style>
 <!-- Google Analytics (replace G-VXGK39TFNJ with your GA4 ID) -->
@@ -79,10 +85,10 @@
 <div id="orderConfirm" style="display:none;min-height:80vh;display:none;align-items:center;justify-content:center;padding:4rem 2rem;text-align:center;background:var(--cream)">
   <div style="max-width:560px;margin:0 auto">
     <div style="font-size:4rem;margin-bottom:1rem">🎉</div>
-    <h2 style="font-family:serif,serif;font-size:2.4rem;color:var(--deep);margin-bottom:0.8rem">Order Placed!</h2>
+    <h2 style="font-family:serif,serif;font-size:2.4rem;color:var(--deep);margin-bottom:0.8rem">Order Received!</h2>
     <p style="color:var(--muted);line-height:1.8;margin-bottom:0.6rem">Thank you for shopping with <strong>GnA Ethnic Wears</strong>!</p>
-    <p style="color:var(--muted);font-size:0.87rem;margin-bottom:0.6rem">Your order number is: <strong id="confirmOrderId" style="color:var(--rust)"></strong></p>
-    <p style="color:var(--muted);font-size:0.87rem;margin-bottom:2rem">Your parcel will be dispatched via <strong>Australia Post</strong> within 1–3 business days.</p>
+    <p style="color:var(--muted);font-size:0.87rem;margin-bottom:0.6rem">Payment method: <strong id="confirmPayMethod" style="color:var(--rust)"></strong></p>
+    <p style="color:var(--muted);font-size:0.87rem;margin-bottom:2rem">We will confirm your order and shipping via <strong>WhatsApp</strong> within 2 hours. Your parcel will be dispatched via <strong>Australia Post</strong> once payment is confirmed.</p>
     <a href="index.html" class="btn-gold">Continue Shopping</a>
   </div>
 </div>
@@ -168,29 +174,87 @@
 
     <!-- Payment -->
     <div class="checkout-form-section">
-      <div class="section-title">💳 Payment</div>
-      <!-- Apple Pay / Google Pay -->
-      <div id="apple-google-pay-wrap" style="display:none;margin-bottom:1.2rem">
-        <div id="payment-request-button"></div>
-        <div style="display:flex;align-items:center;gap:0.8rem;margin:0.8rem 0">
-          <div style="flex:1;height:1px;background:var(--border)"></div>
-          <span style="font-size:0.72rem;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase">or pay with card</span>
-          <div style="flex:1;height:1px;background:var(--border)"></div>
+      <div class="section-title">💳 How Would You Like to Pay?</div>
+
+      <!-- Payment Method Tabs -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin-bottom:1.5rem">
+        <button class="pay-tab active" id="tab-whatsapp" onclick="switchPayTab('whatsapp')">
+          <div style="font-size:1.4rem">💬</div>
+          <div style="font-size:0.72rem;font-weight:700;margin-top:0.3rem">WhatsApp</div>
+          <div style="font-size:0.62rem;color:inherit;opacity:0.8">We invoice you</div>
+        </button>
+        <button class="pay-tab" id="tab-payid" onclick="switchPayTab('payid')">
+          <div style="font-size:1.4rem">🏦</div>
+          <div style="font-size:0.72rem;font-weight:700;margin-top:0.3rem">PayID / Bank</div>
+          <div style="font-size:0.62rem;color:inherit;opacity:0.8">AU only · Free</div>
+        </button>
+        <button class="pay-tab" id="tab-stripe" onclick="switchPayTab('stripe')">
+          <div style="font-size:1.4rem">💳</div>
+          <div style="font-size:0.72rem;font-weight:700;margin-top:0.3rem">Card / Stripe</div>
+          <div style="font-size:0.62rem;color:inherit;opacity:0.8">Intl friendly</div>
+        </button>
+      </div>
+
+      <!-- OPTION 1: WhatsApp -->
+      <div id="pay-whatsapp" class="pay-panel">
+        <div style="background:var(--gold-pale);border:1px solid var(--border);padding:1.2rem;margin-bottom:1rem">
+          <p style="font-size:0.88rem;color:var(--text);line-height:1.8;margin-bottom:0.8rem">
+            📋 <strong>How it works:</strong><br/>
+            1. Click the button below — your order details are pre-filled<br/>
+            2. We confirm your order &amp; calculate exact shipping<br/>
+            3. We send you a <strong>Stripe invoice</strong> to your email<br/>
+            4. You pay securely in one click — we ship! 🚀
+          </p>
+          <p style="font-size:0.78rem;color:var(--muted)">⏱ We respond within 2 hours · Available 24/7</p>
+        </div>
+        <button class="pay-btn" style="background:#25D366;color:white" onclick="orderViaWhatsApp()">
+          💬 Send Order via WhatsApp
+        </button>
+        <p style="font-size:0.72rem;color:var(--muted);text-align:center;margin-top:0.8rem">Most popular option · Personal &amp; fast</p>
+      </div>
+
+      <!-- OPTION 2: PayID -->
+      <div id="pay-payid" class="pay-panel" style="display:none">
+        <div style="background:var(--gold-pale);border:1px solid var(--border);padding:1.2rem;margin-bottom:1rem">
+          <p style="font-size:0.88rem;color:var(--text);line-height:1.8;margin-bottom:1rem">
+            🇦🇺 <strong>Australian customers only</strong><br/>
+            Transfer directly to our bank — instant, free, no fees!
+          </p>
+          <div style="background:white;border:1px solid var(--border);padding:1rem;margin-bottom:0.8rem">
+            <div style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">PayID</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--deep);letter-spacing:0.05em">gnaethnicwears@gmail.com</div>
+          </div>
+          <div style="background:white;border:1px solid var(--border);padding:1rem;margin-bottom:1rem">
+            <div style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">Reference / Description</div>
+            <div style="font-size:0.88rem;color:var(--muted)">Use your name + order items e.g. <strong>"Priya – Short Kurti M"</strong></div>
+          </div>
+          <p style="font-size:0.78rem;color:var(--muted);line-height:1.6">
+            📋 <strong>Steps:</strong> Open your banking app → Pay Anyone → PayID → enter email above → enter amount shown in your order summary → use your name as reference → send screenshot to our WhatsApp so we can confirm!
+          </p>
+        </div>
+        <button class="pay-btn" style="background:#1C0A00" onclick="confirmPayIDOrder()">
+          ✅ I've Made the Transfer
+        </button>
+        <p style="font-size:0.72rem;color:var(--muted);text-align:center;margin-top:0.8rem">100% free · Instant transfer · AUS banks only</p>
+      </div>
+
+      <!-- OPTION 3: Stripe Card -->
+      <div id="pay-stripe" class="pay-panel" style="display:none">
+        <div style="background:var(--gold-pale);border:1px solid var(--border);padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:var(--muted);line-height:1.6">
+          💳 Pay securely by card. Works with Visa, Mastercard, Apple Pay &amp; Google Pay. International cards welcome.
+        </div>
+        <div style="background:#fff3cd;border:1px solid #ffc107;padding:0.8rem 1rem;margin-bottom:1rem;font-size:0.78rem;color:#856404;line-height:1.6">
+          ⚠️ <strong>Note:</strong> After clicking "Place Order", we will contact you via WhatsApp or email within 2 hours to confirm your order and process payment via a secure Stripe link. Your card details are never stored.
+        </div>
+        <button class="pay-btn" id="payBtn" onclick="orderViaStripeLink()">
+          💳 Pay via Secure Stripe Link
+        </button>
+        <div style="text-align:center;margin-top:0.8rem">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Stripe_Logo%2C_revised_2016.svg" style="height:20px;opacity:0.4" alt="Stripe"/>
+          <span style="font-size:0.68rem;color:var(--muted);display:block;margin-top:0.3rem">🔒 Powered by Stripe · PCI compliant</span>
         </div>
       </div>
-      <div class="form-group">
-        <label>Card Details</label>
-        <div id="stripe-card-element"></div>
-        <div id="card-errors"></div>
-      </div>
-      <div style="font-size:0.75rem;color:var(--muted);margin-bottom:1rem">🔒 Your payment is secured by Stripe. We never store your card details.</div>
-      <button class="pay-btn" id="payBtn" onclick="placeOrder()">
-        Place Order Securely 🔒
-      </button>
-      <div class="spinner" id="spinner"></div>
-      <div style="text-align:center;margin-top:1rem">
-        <a href="https://wa.me/61404722166?text=Hi%20GnA!%20I%20want%20to%20order%20via%20WhatsApp" target="_blank" style="font-size:0.78rem;color:var(--muted)">💬 Prefer to order via WhatsApp?</a>
-      </div>
+
     </div>
   </div>
 
@@ -217,91 +281,140 @@
 // ── CART ──
 var cart = [];
 try { cart = JSON.parse(localStorage.getItem('gna_cart') || '[]'); } catch(e) {}
+var shippingCost = 0;
 
 // ── GA4: Begin checkout event ──
 if(typeof gtag === 'function' && cart.length > 0){
   var _coSubtotal = cart.reduce(function(a,b){ return a+(b.price*b.qty); }, 0);
   gtag('event', 'begin_checkout', {
-    currency: 'AUD',
-    value: _coSubtotal,
+    currency: 'AUD', value: _coSubtotal,
     items: cart.map(function(item, idx){
-      return {
-        item_id: item.id || ('item_' + idx),
-        item_name: item.name,
-        item_category: item.cat || item.collection || 'Ethnic Wear',
-        price: item.price,
-        quantity: item.qty || 1
-      };
+      return { item_id: item.id||('item_'+idx), item_name: item.name,
+        item_category: item.cat||item.collection||'Ethnic Wear', price: item.price, quantity: item.qty||1 };
     })
   });
 }
 
-var stripeInstance = Stripe('pk_live_51TCcpFLz11VjJakFjTkjWesMRpGTr0h1RqRIYqsTVhrLY2WiICPxB05kBlTfZK82rz7BMYhH676sG95R6bPTkapX00GO4WUZ0e');
-var elements = stripeInstance.elements();
-var cardElement = elements.create('card', {
-  hidePostalCode: true,
-  style: {
-    base: { fontFamily: 'Raleway, sans-serif', fontSize: '15px', color: '#2A1500' },
-    invalid: { color: '#C62828' }
-  }
-});
-cardElement.mount('#stripe-card-element');
-cardElement.on('change', function(e) {
-  document.getElementById('card-errors').textContent = e.error ? e.error.message : '';
-});
+// ── PAYMENT TAB SWITCHER ──
+function switchPayTab(tab){
+  ['whatsapp','payid','stripe'].forEach(function(t){
+    document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+    document.getElementById('pay-'+t).style.display = t===tab ? 'block' : 'none';
+  });
+}
 
-// ── APPLE PAY / GOOGLE PAY ──
-var paymentRequest = stripeInstance.paymentRequest({
-  country: 'AU',
-  currency: 'aud',
-  total: { label: 'GnA Ethnic Wears', amount: 100 },
-  requestPayerName: true,
-  requestPayerEmail: true,
-  requestPayerPhone: true,
-  requestShipping: false,
-});
-var prButton = elements.create('paymentRequestButton', {
-  paymentRequest: paymentRequest,
-  style: { paymentRequestButton: { theme: 'dark', height: '48px' } }
-});
-paymentRequest.canMakePayment().then(function(result) {
-  if(result) {
-    document.getElementById('apple-google-pay-wrap').style.display = 'block';
-    prButton.mount('#payment-request-button');
-  }
-});
-paymentRequest.on('paymentmethod', async function(ev) {
-  var subtotal = cart.reduce(function(a,b){ return a+(b.price*b.qty); }, 0);
-  var total = subtotal + shippingCost;
-  paymentRequest.update({ total: { label: 'GnA Ethnic Wears', amount: Math.round(total*100) } });
-  // Process the order
-  var order = {
-    id: 'GNA-' + Date.now(),
-    customer: ev.payerName || '',
-    email: ev.payerEmail || '',
-    phone: ev.payerPhone || '',
-    address: '',
-    items: cart,
-    subtotal: subtotal,
-    shipping: shippingCost,
-    total: total,
-    paymentMethod: ev.paymentMethod.id,
-    status: 'paid',
-    date: new Date().toLocaleDateString('en-AU'),
-    timestamp: new Date().toISOString()
+// ── BUILD ORDER SUMMARY TEXT ──
+function buildOrderText(){
+  var lines = cart.map(function(i){
+    return i.name + ' (Size: ' + (i.size||'?') + (i.colour?' · '+i.colour:'') + ') x' + (i.qty||1) + ' = AUD $' + (i.price*(i.qty||1)).toFixed(2);
+  });
+  var subtotal = cart.reduce(function(a,b){ return a+(b.price*(b.qty||1)); }, 0);
+  lines.push('Subtotal: AUD $' + subtotal.toFixed(2));
+  return lines.join('\n');
+}
+
+// ── GET CUSTOMER DETAILS ──
+function getCustomerDetails(){
+  return {
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName:  document.getElementById('lastName').value.trim(),
+    email:     document.getElementById('email').value.trim(),
+    phone:     document.getElementById('phone').value.trim(),
+    address:   document.getElementById('address').value.trim(),
+    city:      document.getElementById('city').value.trim(),
+    state:     document.getElementById('state').value.trim(),
+    postcode:  document.getElementById('postcode').value.trim(),
+    country:   document.getElementById('checkoutCountry').value,
   };
-  await saveOrderToFirebase(order);
-  await reduceStock(cart);
-  sendOwnerWhatsApp(order);
-  ev.complete('success');
-  localStorage.setItem('gna_cart', '[]');
+}
+
+function validateDetails(){
+  var d = getCustomerDetails();
+  if(!d.firstName||!d.lastName){ alert('Please enter your name.'); return false; }
+  if(!d.email){ alert('Please enter your email address.'); return false; }
+  if(!d.address||!d.city||!d.postcode){ alert('Please fill in your shipping address.'); return false; }
+  if(cart.length===0){ alert('Your cart is empty!'); return false; }
+  return true;
+}
+
+// ── OPTION 1: WHATSAPP ORDER ──
+function orderViaWhatsApp(){
+  if(!validateDetails()) return;
+  var d = getCustomerDetails();
+  var subtotal = cart.reduce(function(a,b){ return a+(b.price*(b.qty||1)); }, 0);
+  var msg = 'Hi GnA Ethnic Wears! I would like to place an order 🛍️\n\n'
+    + '👤 Name: ' + d.firstName + ' ' + d.lastName + '\n'
+    + '📧 Email: ' + d.email + '\n'
+    + '📱 Phone: ' + d.phone + '\n'
+    + '📦 Ship to: ' + d.address + ', ' + d.city + ' ' + d.postcode + ', ' + d.country + '\n\n'
+    + '🛒 My Order:\n' + buildOrderText() + '\n\n'
+    + '💰 Subtotal: AUD $' + subtotal.toFixed(2) + '\n'
+    + 'Please let me know the shipping cost and send me a payment link. Thank you!';
+  window.open('https://wa.me/61404722166?text=' + encodeURIComponent(msg), '_blank');
+  showConfirmation('whatsapp');
+}
+
+// ── OPTION 2: PAYID ORDER ──
+function confirmPayIDOrder(){
+  if(!validateDetails()) return;
+  var d = getCustomerDetails();
+  var subtotal = cart.reduce(function(a,b){ return a+(b.price*(b.qty||1)); }, 0);
+  var msg = 'Hi GnA! I have paid via PayID 🏦\n\n'
+    + '👤 Name: ' + d.firstName + ' ' + d.lastName + '\n'
+    + '📧 Email: ' + d.email + '\n'
+    + '📦 Ship to: ' + d.address + ', ' + d.city + ' ' + d.postcode + '\n\n'
+    + '🛒 Order:\n' + buildOrderText() + '\n\n'
+    + 'I have sent AUD $' + subtotal.toFixed(2) + ' to gnaethnicwears@gmail.com via PayID. Please confirm receipt!';
+  // Save order to Firebase
+  saveOrderToFirebase({
+    id: 'GNA-' + Date.now(), customer: d.firstName+' '+d.lastName,
+    email: d.email, phone: d.phone,
+    address: d.address+', '+d.city+' '+d.postcode+', '+d.country,
+    items: cart, subtotal: subtotal, shipping: shippingCost,
+    total: subtotal + shippingCost, paymentMethod: 'PayID',
+    status: 'pending-payid', date: new Date().toLocaleDateString('en-AU'),
+    timestamp: new Date().toISOString()
+  });
+  window.open('https://wa.me/61404722166?text=' + encodeURIComponent(msg), '_blank');
+  showConfirmation('payid');
+}
+
+// ── OPTION 3: STRIPE LINK ORDER ──
+function orderViaStripeLink(){
+  if(!validateDetails()) return;
+  var d = getCustomerDetails();
+  var subtotal = cart.reduce(function(a,b){ return a+(b.price*(b.qty||1)); }, 0);
+  var msg = 'Hi GnA! I would like to pay by card 💳\n\n'
+    + '👤 Name: ' + d.firstName + ' ' + d.lastName + '\n'
+    + '📧 Email: ' + d.email + '\n'
+    + '📦 Ship to: ' + d.address + ', ' + d.city + ' ' + d.postcode + ', ' + d.country + '\n\n'
+    + '🛒 Order:\n' + buildOrderText() + '\n\n'
+    + 'Please send me a Stripe payment link including shipping. Thank you!';
+  // Save order to Firebase
+  saveOrderToFirebase({
+    id: 'GNA-' + Date.now(), customer: d.firstName+' '+d.lastName,
+    email: d.email, phone: d.phone,
+    address: d.address+', '+d.city+' '+d.postcode+', '+d.country,
+    items: cart, subtotal: subtotal, shipping: 0,
+    total: subtotal, paymentMethod: 'Stripe-Link-Pending',
+    status: 'pending-stripe', date: new Date().toLocaleDateString('en-AU'),
+    timestamp: new Date().toISOString()
+  });
+  window.open('https://wa.me/61404722166?text=' + encodeURIComponent(msg), '_blank');
+  showConfirmation('stripe');
+}
+
+// ── SHOW CONFIRMATION ──
+function showConfirmation(method){
+  localStorage.setItem('gna_cart','[]');
   updateCartCount();
-  document.getElementById('checkoutMain').style.display = 'none';
-  var confirmDiv = document.getElementById('orderConfirm');
-  confirmDiv.style.display = 'flex';
-  document.getElementById('confirmOrderId').textContent = order.id;
+  var labels = { whatsapp:'💬 WhatsApp', payid:'🏦 PayID', stripe:'💳 Stripe Link' };
+  document.getElementById('confirmPayMethod').textContent = labels[method]||method;
+  document.getElementById('checkoutMain').style.display='none';
+  var conf = document.getElementById('orderConfirm');
+  conf.style.display='flex';
   window.scrollTo({top:0,behavior:'smooth'});
-});
+}
 
 function toggleMenu(){
   var m=document.getElementById('mobileMenu');var o=document.getElementById('overlayBg');
@@ -309,7 +422,7 @@ function toggleMenu(){
 }
 
 function updateCartCount(){
-  try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});}catch(e){}
+  try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});}catch(e){}
 }
 
 // ── RENDER ORDER ITEMS ──
@@ -334,7 +447,6 @@ function renderOrderItems(){
 }
 
 // ── SHIPPING CALC ──
-var shippingCost = 0;
 function updateShipping(){
   var country = document.getElementById('checkoutCountry').value || 'AU';
   var method = document.querySelector('input[name="shipMethod"]:checked')?.value || 'standard';
@@ -395,129 +507,6 @@ function updateShipping(){
 }
 
 // ── PLACE ORDER ──
-async function placeOrder(){
-  if(cart.length === 0){ alert('Your cart is empty!'); return; }
-
-  var firstName = document.getElementById('firstName').value.trim();
-  var lastName = document.getElementById('lastName').value.trim();
-  var email = document.getElementById('email').value.trim();
-  var phone = document.getElementById('phone').value.trim();
-  var address = document.getElementById('address').value.trim();
-  var city = document.getElementById('city').value.trim();
-  var postcode = document.getElementById('postcode').value.trim();
-  var country = document.getElementById('checkoutCountry').value;
-
-  if(!firstName||!lastName||!email||!address||!city||!postcode){
-    alert('Please fill in all required fields.');
-    return;
-  }
-
-  var btn = document.getElementById('payBtn');
-  var spinner = document.getElementById('spinner');
-  btn.disabled = true;
-  btn.textContent = 'Processing...';
-  spinner.style.display = 'block';
-
-  try {
-    var subtotal = cart.reduce(function(a,b){ return a+(b.price*b.qty); }, 0);
-    var total = subtotal + shippingCost;
-    var amountCents = Math.round(total * 100);
-
-    // Create payment intent via a simple approach
-    // For test mode we'll use Stripe's confirmCardPayment with a test payment method
-    var result = await stripeInstance.createPaymentMethod({
-      type: 'card',
-      card: cardElement,
-      billing_details: {
-        name: firstName + ' ' + lastName,
-        email: email,
-        phone: phone,
-        address: {
-          line1: address,
-          city: city,
-          postal_code: postcode,
-          country: country === 'AU' ? 'AU' : country
-        }
-      }
-    });
-
-    if(result.error){
-      document.getElementById('card-errors').textContent = result.error.message;
-      btn.disabled = false;
-      btn.textContent = 'Place Order Securely 🔒';
-      spinner.style.display = 'none';
-      return;
-    }
-
-    // Order object
-    var orderId = 'GNA-' + Date.now();
-    var order = {
-      id: orderId,
-      customer: firstName + ' ' + lastName,
-      email: email,
-      phone: phone,
-      address: address + ', ' + city + ' ' + postcode + ', ' + country,
-      items: cart,
-      subtotal: subtotal,
-      shipping: shippingCost,
-      total: total,
-      paymentMethod: result.paymentMethod.id,
-      status: 'paid',
-      date: new Date().toLocaleDateString('en-AU'),
-      timestamp: new Date().toISOString()
-    };
-
-    // Save order to Firebase
-    await saveOrderToFirebase(order);
-
-    // Send order email notification
-    await sendOrderEmail(order);
-
-    // Reduce stock in Firebase
-    await reduceStock(cart);
-
-    // Send WhatsApp notification to owner
-    sendOwnerWhatsApp(order);
-
-    // Clear cart
-    localStorage.setItem('gna_cart', '[]');
-    updateCartCount();
-
-    // Show confirmation
-    document.getElementById('checkoutMain').style.display = 'none';
-    var confirmDiv = document.getElementById('orderConfirm');
-    confirmDiv.style.display = 'flex';
-    document.getElementById('confirmOrderId').textContent = orderId;
-    window.scrollTo({top:0,behavior:'smooth'});
-
-    // ── GA4: Purchase event ──
-    if(typeof gtag === 'function'){
-      gtag('event', 'purchase', {
-        transaction_id: orderId,
-        value: total,
-        currency: 'AUD',
-        shipping: shippingCost,
-        items: cart.map(function(item, idx){
-          return {
-            item_id: item.id || ('item_' + idx),
-            item_name: item.name,
-            item_category: item.cat || item.collection || 'Ethnic Wear',
-            price: item.price,
-            quantity: item.qty || 1
-          };
-        })
-      });
-    }
-
-  } catch(err) {
-    console.error('Order error:', err);
-    document.getElementById('card-errors').textContent = 'Something went wrong. Please try again or contact us on WhatsApp.';
-    btn.disabled = false;
-    btn.textContent = 'Place Order Securely 🔒';
-    spinner.style.display = 'none';
-  }
-}
-
 // ── EMAILJS INIT ──
 emailjs.init('GBcr5ZTvq7VO52xql');
 
@@ -600,5 +589,6 @@ updateCartCount();
 renderOrderItems();
 updateShipping();
 </script>
+<script src="nav-footer.js"></script>
 </body>
 </html>

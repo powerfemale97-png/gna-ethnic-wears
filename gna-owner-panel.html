@@ -2004,6 +2004,32 @@ function updateColPreview(){
 //  REVIEWS ADMIN SYSTEM
 // ══════════════════════════════════════
 
+// ── FIREBASE REVIEW HELPERS ──
+const GNA_FB = 'https://gna-ethnic-wears-default-rtdb.firebaseio.com';
+
+async function fbGetReviews(type){
+  try{
+    const res = await fetch(`${GNA_FB}/reviews/${type}.json`);
+    if(!res.ok) return [];
+    const data = await res.json();
+    if(!data) return [];
+    return Array.isArray(data) ? data : Object.values(data);
+  }catch(e){ return []; }
+}
+
+async function fbSaveReviews(type, data){
+  try{
+    await fetch(`${GNA_FB}/reviews/${type}.json`, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+  }catch(e){ console.error('Firebase save error:',e); }
+}
+
+// Keep sync wrappers so existing calls still work
+async function getReviewsAsync(type){ return await fbGetReviews(type); }
+
+// Legacy sync fallback (reads from localStorage cache)
 function getReviews(type){
   const key = type==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
   try{ return JSON.parse(localStorage.getItem(key)||'[]'); }catch(e){ return []; }
@@ -2011,13 +2037,15 @@ function getReviews(type){
 function saveReviews(type, data){
   const key = type==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
   localStorage.setItem(key, JSON.stringify(data));
+  fbSaveReviews(type, data); // also push to Firebase
 }
 
 function renderStarsAdmin(rating){
   return '★'.repeat(rating) + '☆'.repeat(5-rating);
 }
 
-function updateReviewBadge(){
+async function updateReviewBadge(){
+  // Use cache first for speed, then refresh from Firebase
   const pending = getReviews('pending');
   const badge = document.getElementById('pendingBadge');
   const countEl = document.getElementById('pendingCount');
@@ -2025,6 +2053,13 @@ function updateReviewBadge(){
   if(countEl) countEl.textContent = pending.length;
   const approvedEl = document.getElementById('approvedCount');
   if(approvedEl) approvedEl.textContent = getReviews('approved').length;
+  // Refresh from Firebase in background
+  const freshPending = await fbGetReviews('pending');
+  try{ localStorage.setItem('gna_reviews_pending', JSON.stringify(freshPending)); }catch(e){}
+  if(badge){ if(freshPending.length>0){badge.style.display='inline';badge.textContent=freshPending.length;}else{badge.style.display='none';} }
+  if(countEl) countEl.textContent = freshPending.length;
+  const statRevEl = document.getElementById('statReviews');
+  if(statRevEl) statRevEl.textContent = freshPending.length;
 }
 
 let currentReviewTab = 'pending';
@@ -2038,11 +2073,17 @@ function showReviewTab(tab){
   renderAdminReviews(tab);
 }
 
-function renderAdminReviews(tab){
-  updateReviewBadge();
-  const reviews = getReviews(tab);
+async function renderAdminReviews(tab){
   const container = document.getElementById('reviewsAdminContent');
   if(!container) return;
+  container.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:2rem;margin-bottom:0.5rem">⏳</div>Loading reviews...</div>`;
+
+  // Load from Firebase and sync to localStorage cache
+  const reviews = await fbGetReviews(tab);
+  const cacheKey = tab==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
+  try{ localStorage.setItem(cacheKey, JSON.stringify(reviews)); }catch(e){}
+
+  updateReviewBadge();
 
   if(reviews.length===0){
     container.innerHTML=`<div style="text-align:center;padding:4rem;color:var(--muted)">
@@ -2087,25 +2128,30 @@ function renderAdminReviews(tab){
     </div>`).join('');
 }
 
-function approveReview(id){
-  const pending = getReviews('pending');
+async function approveReview(id){
+  const pending = await fbGetReviews('pending');
   const idx = pending.findIndex(r=>r.id===id);
   if(idx<0) return;
   const review = {...pending[idx], status:'approved'};
   pending.splice(idx,1);
-  saveReviews('pending', pending);
-  const approved = getReviews('approved');
+  const approved = await fbGetReviews('approved');
   approved.push(review);
-  saveReviews('approved', approved);
+  await fbSaveReviews('pending', pending);
+  await fbSaveReviews('approved', approved);
+  // Sync localStorage cache
+  try{ localStorage.setItem('gna_reviews_pending', JSON.stringify(pending)); }catch(e){}
+  try{ localStorage.setItem('gna_reviews_approved', JSON.stringify(approved)); }catch(e){}
   showToastMsg('✓ Review approved and published!','success');
   renderAdminReviews(currentReviewTab);
   updateReviewBadge();
 }
 
-function deleteReview(id, type){
+async function deleteReview(id, type){
   if(!confirm('Delete this review? This cannot be undone.')) return;
-  const reviews = getReviews(type).filter(r=>r.id!==id);
-  saveReviews(type, reviews);
+  const reviews = (await fbGetReviews(type)).filter(r=>r.id!==id);
+  await fbSaveReviews(type, reviews);
+  const cacheKey = type==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
+  try{ localStorage.setItem(cacheKey, JSON.stringify(reviews)); }catch(e){}
   showToastMsg('Review deleted.','success');
   renderAdminReviews(currentReviewTab);
   updateReviewBadge();

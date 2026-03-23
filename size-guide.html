@@ -9,11 +9,11 @@
 <meta name="keywords" content="indian wear size guide australia, kurti size chart"/>
 <meta property="og:title" content="Size Guide — GnA Ethnic Wears Australia"/>
 <meta property="og:description" content="Indian ethnic wear size guide. Find your perfect fit with our detailed size chart for kurtis, suits and coord sets."/>
-<meta property="og:image" content="https://powerfemale97-png.github.io/gna-ethnic-wears/logo.png"/>
-<meta property="og:url" content="https://powerfemale97-png.github.io/gna-ethnic-wears/size-guide.html"/>
+<meta property="og:image" content="https://www.gnaethnicwears.com.au/logo.png"/>
+<meta property="og:url" content="https://www.gnaethnicwears.com.au/size-guide.html"/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link rel="canonical" href="https://powerfemale97-png.github.io/gna-ethnic-wears/size-guide.html"/>
+<link rel="canonical" href="https://www.gnaethnicwears.com.au/size-guide.html"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <style>
@@ -37,7 +37,15 @@
 /* Fallback fonts if Google Fonts unavailable */
 body{font-family:'Raleway','Helvetica Neue',Arial,sans-serif;}
 h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;}
-</style></head>
+</style><!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VXGK39TFNJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VXGK39TFNJ');
+</script>
+</head>
 <body>
 <div class="topbar">🌍 Worldwide Shipping &nbsp;|&nbsp; 📱 Size Help: <a href="tel:0404722166" style="color:var(--gold)">0404 722 166</a> &nbsp;|&nbsp; 💬 WhatsApp us anytime</div>
 <nav id="navbar">
@@ -283,20 +291,25 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
       <a href="reviews.html">Customer Reviews</a>
     </div>
     <div class="footer-links-col"><h4>Contact Us</h4>
-      <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ee9e0efebfae6e0e7edf9ebeffcfdcee9e3efe7e2a0ede1e3">[email&#160;protected]</a></p><p>📱 0404 722 166</p>
+      <p>📧 gnaethnicwears@gmail.com</p><p>📱 0404 722 166</p>
       <p>🕐 24/7 — 7 Days a Week</p><p>🌍 Ships Worldwide via AusPost</p>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 GnA Ethnic Wears. All rights reserved.</span>
+    <span>© 2026 GnA Ethnic Wears. All rights reserved.</span>
     <span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span>
   </div>
 </footer>
 <script>
 function updateCartCount(){
-  try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});}catch(e){}
+  try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});}catch(e){}
 }
 function toggleMenu(){
   var m=document.getElementById('mobileMenu');var o=document.getElementById('overlayBg');
   if(m)m.classList.toggle('open');if(o)o.classList.toggle('open');
 }
+updateCartCount();
+</script>
+<script src="nav-footer.js"></script>
+</body>
+</html>

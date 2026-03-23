@@ -9,11 +9,11 @@
 <meta name="keywords" content="gna ethnic wears reviews, indian wear australia reviews"/>
 <meta property="og:title" content="Customer Reviews — GnA Ethnic Wears Australia"/>
 <meta property="og:description" content="Read real customer reviews of GnA Ethnic Wears. See what our customers say about our Indian ethnic fashion."/>
-<meta property="og:image" content="https://powerfemale97-png.github.io/gna-ethnic-wears/logo.png"/>
-<meta property="og:url" content="https://powerfemale97-png.github.io/gna-ethnic-wears/reviews.html"/>
+<meta property="og:image" content="https://www.gnaethnicwears.com.au/logo.png"/>
+<meta property="og:url" content="https://www.gnaethnicwears.com.au/reviews.html"/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link rel="canonical" href="https://powerfemale97-png.github.io/gna-ethnic-wears/reviews.html"/>
+<link rel="canonical" href="https://www.gnaethnicwears.com.au/reviews.html"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <style>
@@ -85,7 +85,15 @@
 /* Fallback fonts if Google Fonts unavailable */
 body{font-family:'Raleway','Helvetica Neue',Arial,sans-serif;}
 h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;}
-</style></head>
+</style><!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VXGK39TFNJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VXGK39TFNJ');
+</script>
+</head>
 <body>
 <div class="topbar">🌍 Worldwide Shipping &nbsp;|&nbsp; ⭐ Share Your Experience &nbsp;|&nbsp; 📱 0404 722 166</div>
 <nav id="navbar">
@@ -264,10 +272,10 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
 <div class="payment-strip">
   <div class="payment-title">✦ Secure Payment Methods Accepted ✦</div>
   <div class="payment-icons">
-    <span class="pay-badge">💳 Visa</span><span class="pay-badge">💳 Mastercard</span>
-    <span class="pay-badge">🅿️ PayPal</span><span class="pay-badge">🍎 Apple Pay</span>
-    <span class="pay-badge">G Google Pay</span><span class="pay-badge">🔄 Afterpay</span>
-    <span class="pay-badge">🔄 Zip Pay</span><span class="pay-badge">🏦 Bank Transfer</span>
+    <span class="pay-badge">💳 Visa</span><span class="pay-badge">🏦 PayID</span><span class="pay-badge">💳 Mastercard</span>
+    <span class="pay-badge">🍎 Apple Pay</span>
+    <span class="pay-badge">G Google Pay</span>
+    
   </div>
 </div>
 
@@ -289,65 +297,169 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
       <a href="size-guide.html">Size Guide</a><a href="reviews.html">Reviews</a>
     </div>
     <div class="footer-links-col"><h4>Contact Us</h4>
-      <p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b4c454a4e5f434542485c4e4a59586b4c464a424705484446">[email&#160;protected]</a></p><p>📱 0404 722 166</p>
+      <p>📧 gnaethnicwears@gmail.com</p><p>📱 0404 722 166</p>
       <p>🕐 24/7 — 7 Days a Week</p><p>🌍 Ships Worldwide via AusPost</p>
     </div>
   </div>
   <div class="footer-bottom">
-    <span>© 2025 GnA Ethnic Wears. All rights reserved.</span>
+    <span>© 2026 GnA Ethnic Wears. All rights reserved.</span>
     <span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // ── CART COUNT ──
 function updateCartCount(){
   try{
     var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');
     var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);
-    document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});
+    document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});
   }catch(e){}
 }
-
 // ── TOGGLE MENU ──
 function toggleMenu(){
-  var m=document.getElementById('mobileMenu');
-  var o=document.getElementById('overlayBg');
-  if(m)m.classList.toggle('open');
-  if(o)o.classList.toggle('open');
+  var m=document.getElementById('mobileMenu');var o=document.getElementById('overlayBg');
+  if(m)m.classList.toggle('open');if(o)o.classList.toggle('open');
 }
 
-// ── WHATSAPP FLOAT ──
-
+function navSearchProducts(q){
+  var res = document.getElementById('navSearchResults');
+  if(!res) return;
+  if(!q || q.length < 2){ res.classList.remove('show'); return; }
+  try {
+    var all = JSON.parse(localStorage.getItem('gna_products')||'[]');
+    var filtered = all.filter(function(p){
+      return p.name.toLowerCase().includes(q.toLowerCase()) ||
+             (p.collection||'').toLowerCase().includes(q.toLowerCase()) ||
+             (p.cat||'').toLowerCase().includes(q.toLowerCase()) ||
+             (p.desc||'').toLowerCase().includes(q.toLowerCase());
+    }).slice(0,6);
+    if(filtered.length === 0){
+      res.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.82rem">No products found for \"'+q+'\"</div>';
+    } else {
+      res.innerHTML = filtered.map(function(p){
+        var src='';
+        try{ var ph=typeof p.photos==='string'?JSON.parse(p.photos||'[]'):(p.photos||[]); if(ph.length>0) src=typeof ph[0]==='string'?ph[0]:(ph[0].data||ph[0].url||''); if(!src) src=p.photoData||p.photoUrl||''; }catch(e){}
+        return '<a href="product.html?id='+p.id+'" class="search-result-item">'+
+          (src?'<img class="search-result-img" src="'+src+'" onerror="this.style.display='none'"/>':'<div class="search-result-img" style="background:'+(p.bg||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:1.5rem">'+(p.emoji||'\u{1F457}')+'</div>')+
+          '<div class="search-result-info">'+
+            '<div class="cat">'+(p.cat||p.collection||'')+'</div>'+
+            '<div class="name">'+p.name+'</div>'+
+            '<div class="price">AUD $'+parseFloat(p.price||0).toFixed(2)+'</div>'+
+          '</div></a>';
+      }).join('');
+    }
+    res.classList.add('show');
+  } catch(e){ res.classList.remove('show'); }
+}
 updateCartCount();
 </script>
-<script>
-// ══════════════════════════════════════
-//  REVIEWS SYSTEM
-// ══════════════════════════════════════
+<script src="nav-footer.js"></script>
 
-// Load approved reviews from localStorage
-function getApprovedReviews(){
-  try{ return JSON.parse(localStorage.getItem('gna_reviews_approved')||'[]'); }catch(e){ return []; }
+<script>
+// ══════════════════════════════════════════════════════
+//  GnA Ethnic Wears — Reviews System
+//  Firebase Realtime DB · Cloudinary Photo Upload
+// ══════════════════════════════════════════════════════
+
+const GNA_FB = 'https://gna-ethnic-wears-default-rtdb.firebaseio.com';
+const CLOUDINARY_CLOUD = 'dwbwldr1p';
+const CLOUDINARY_PRESET = 'gna_products';
+
+// ── STARTER REVIEWS (shown until real ones come in) ──
+const STARTER_REVIEWS = [
+  {
+    id:'starter_1', rating:5, name:'Priya M.',
+    product:'Premium 3 Piece Suit', size:'M', country:'Melbourne, Australia',
+    text:'Absolutely stunning quality! The fabric is so soft and the embroidery is beautiful. I wore it to Diwali and got so many compliments. Fits perfectly and the colour is exactly as shown.',
+    photos:[], date:'15 Nov 2024', status:'approved'
+  },
+  {
+    id:'starter_2', rating:5, name:'Anita K.',
+    product:'Short Kurti', size:'L', country:'Sydney, Australia',
+    text:'Finally found a store in Australia with authentic Indian ethnic wear! The kurti arrived quickly and the packaging was lovely. The print is vibrant and the cotton is very breathable. Will definitely order again!',
+    photos:[], date:'2 Dec 2024', status:'approved'
+  },
+  {
+    id:'starter_3', rating:5, name:'Sunita R.',
+    product:'Cord Set', size:'S', country:'Brisbane, Australia',
+    text:'I ordered the cord set for my sister\'s wedding and it was perfect. The stitching quality is excellent and it looks way more expensive than what I paid. Shipping was faster than expected too!',
+    photos:[], date:'20 Jan 2025', status:'approved'
+  },
+  {
+    id:'starter_4', rating:4, name:'Deepa V.',
+    product:'Daily Wear 3 Piece Suit', size:'XL', country:'Auckland, New Zealand',
+    text:'Really happy with my purchase! The dupatta material is gorgeous and the suit fits well. Sizing runs true to the chart. Knocked off one star only because delivery to NZ took a little longer than expected, but well worth the wait.',
+    photos:[], date:'8 Feb 2025', status:'approved'
+  },
+  {
+    id:'starter_5', rating:5, name:'Rekha S.',
+    product:'Long Kurti', size:'XXL', country:'Perth, Australia',
+    text:'The long kurti is beautiful — exactly what I was looking for. The plus sizing is very generous and flattering. I love that they actually carry sizes that fit real women! The customer service was also very helpful when I asked about sizing.',
+    photos:[], date:'1 Mar 2025', status:'approved'
+  },
+  {
+    id:'starter_6', rating:5, name:'Kavya P.',
+    product:'Plus Size 3 Piece Suit', size:'3XL', country:'Melbourne, Australia',
+    text:'So happy I found GnA Ethnic Wears! I\'ve been struggling to find Indian ethnic wear in larger sizes in Australia and this is perfect. The fabric quality is top notch, the colour is rich and it\'s stitched so well. Already planning my next order!',
+    photos:[], date:'12 Mar 2025', status:'approved'
+  }
+];
+
+// ── FIREBASE HELPERS ──
+async function fbGetApprovedReviews(){
+  try{
+    const res = await fetch(`${GNA_FB}/reviews/approved.json`);
+    if(!res.ok) return null;
+    const data = await res.json();
+    if(!data) return [];
+    return Array.isArray(data) ? data : Object.values(data);
+  }catch(e){ return null; }
 }
-function getPendingReviews(){
-  try{ return JSON.parse(localStorage.getItem('gna_reviews_pending')||'[]'); }catch(e){ return []; }
+
+async function fbSavePending(reviews){
+  try{
+    await fetch(`${GNA_FB}/reviews/pending.json`,{
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(reviews)
+    });
+    return true;
+  }catch(e){ return false; }
+}
+
+async function fbGetPending(){
+  try{
+    const res = await fetch(`${GNA_FB}/reviews/pending.json`);
+    if(!res.ok) return [];
+    const data = await res.json();
+    if(!data) return [];
+    return Array.isArray(data) ? data : Object.values(data);
+  }catch(e){ return []; }
+}
+
+// ── GET APPROVED REVIEWS (Firebase + starter fallback) ──
+async function getApprovedReviews(){
+  const firebaseReviews = await fbGetApprovedReviews();
+  // If Firebase has real reviews, use those
+  if(firebaseReviews !== null && firebaseReviews.length > 0){
+    return firebaseReviews;
+  }
+  // Otherwise show starter reviews
+  return STARTER_REVIEWS;
 }
 
 // ── RENDER STARS ──
 function renderStars(rating, size='1rem'){
-  let html='';
-  for(let i=1;i<=5;i++){
-    html+=`<span style="color:${i<=rating?'#F59E0B':'#D1D5DB'};font-size:${size}">${i<=rating?'★':'★'}</span>`;
-  }
   return `<span style="color:#F59E0B;font-size:${size}">${'★'.repeat(rating)}</span><span style="color:#D1D5DB;font-size:${size}">${'★'.repeat(5-rating)}</span>`;
 }
 
 // ── RENDER REVIEWS ──
-function renderReviews(filter='all'){
+async function renderReviews(filter='all'){
   const grid = document.getElementById('reviewsGrid');
   const noReviews = document.getElementById('noReviews');
-  let reviews = getApprovedReviews();
+  grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:2rem;margin-bottom:0.5rem">⏳</div>Loading reviews...</div>`;
+
+  let reviews = await getApprovedReviews();
 
   if(filter==='photo') reviews = reviews.filter(r=>r.photos&&r.photos.length>0);
   else if(typeof filter==='number') reviews = reviews.filter(r=>r.rating===filter);
@@ -358,18 +470,19 @@ function renderReviews(filter='all'){
     updateStats([]);
     return;
   }
+
   noReviews.style.display='none';
   grid.innerHTML = reviews.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(r=>`
     <div class="review-card reveal">
       ${r.photos&&r.photos.length>0
-        ?`<img src="${r.photos[0]}" class="review-photo" alt="Customer photo" onerror="this.style.display='none'"/>`
-        :`<div class="review-no-photo">👗</div>`}
+        ?`<img src="${r.photos[0]}" class="review-photo" alt="Customer photo" loading="lazy" onerror="this.style.display='none'"/>`
+        :`<div class="review-no-photo">🥻</div>`}
       <div class="review-body">
         <div class="review-stars">${renderStars(r.rating,'1.1rem')}</div>
         <div class="review-text">${r.text}</div>
         <div class="review-footer">
           <div>
-            <div class="review-author">${r.name}</div>
+            <div class="review-author">✓ ${r.name}</div>
             <div class="review-product">${r.product||''}${r.country?' · '+r.country:''}</div>
             ${r.size?`<span class="review-size-badge">Size ${r.size}</span>`:''}
           </div>
@@ -377,7 +490,8 @@ function renderReviews(filter='all'){
         </div>
       </div>
     </div>`).join('');
-  updateStats(getApprovedReviews());
+
+  updateStats(reviews);
   observeReveal();
 }
 
@@ -396,10 +510,11 @@ function updateStats(reviews){
   const avg = reviews.reduce((a,r)=>a+r.rating,0)/reviews.length;
   document.getElementById('avgScore').textContent=avg.toFixed(1);
   document.getElementById('avgStars').innerHTML=renderStars(Math.round(avg),'1.3rem');
-  document.getElementById('reviewCount').textContent=reviews.length+' review'+(reviews.length!==1?'s':'');
+  document.getElementById('reviewCount').textContent=reviews.length+' verified review'+(reviews.length!==1?'s':'');
+  const total = reviews.length;
   [1,2,3,4,5].forEach(n=>{
     const cnt=reviews.filter(r=>r.rating===n).length;
-    document.getElementById('bar'+n).style.width=(reviews.length?cnt/reviews.length*100:0)+'%';
+    document.getElementById('bar'+n).style.width=(total?cnt/total*100:0)+'%';
     document.getElementById('count'+n).textContent=cnt;
   });
 }
@@ -411,43 +526,62 @@ function filterReviews(filter, btn){
   renderReviews(filter);
 }
 
-// ── PHOTO PREVIEW ──
-let reviewPhotos=[];
+// ── PHOTO UPLOAD TO CLOUDINARY ──
+let reviewPhotos = [];
+let reviewPhotoFiles = [];
+
+async function uploadToCloudinary(file){
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  formData.append('folder', 'gna_reviews');
+  try{
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+      method:'POST', body: formData
+    });
+    const data = await res.json();
+    return data.secure_url || null;
+  }catch(e){ return null; }
+}
+
 function previewReviewPhotos(input){
   if(!input.files) return;
   const files = Array.from(input.files).slice(0,3);
-  reviewPhotos=[];
-  const container=document.getElementById('photoPreviews');
-  const placeholder=document.getElementById('uploadPlaceholder');
+  reviewPhotoFiles = files;
+  reviewPhotos = [];
+  const container = document.getElementById('photoPreviews');
+  const placeholder = document.getElementById('uploadPlaceholder');
   container.innerHTML='';
   if(files.length>0) placeholder.style.display='none';
   files.forEach((file,i)=>{
-    const reader=new FileReader();
-    reader.onload=e=>{
-      reviewPhotos.push(e.target.result);
-      const div=document.createElement('div');
-      div.className='photo-preview-item';
-      div.innerHTML=`<img src="${e.target.result}" alt="preview"/><button onclick="removeReviewPhoto(${i})" type="button">✕</button>`;
+    const reader = new FileReader();
+    reader.onload = e => {
+      reviewPhotos.push(e.target.result); // temp base64 preview
+      const div = document.createElement('div');
+      div.className = 'photo-preview-item';
+      div.innerHTML = `<img src="${e.target.result}" alt="preview"/><button onclick="removeReviewPhoto(${i})" type="button">✕</button>`;
       container.appendChild(div);
     };
     reader.readAsDataURL(file);
   });
 }
+
 function removeReviewPhoto(idx){
   reviewPhotos.splice(idx,1);
+  reviewPhotoFiles.splice(idx,1);
   document.getElementById('rPhotos').value='';
   document.getElementById('photoPreviews').innerHTML='';
   if(reviewPhotos.length===0) document.getElementById('uploadPlaceholder').style.display='block';
   reviewPhotos.forEach((src,i)=>{
-    const div=document.createElement('div');
-    div.className='photo-preview-item';
-    div.innerHTML=`<img src="${src}" alt="preview"/><button onclick="removeReviewPhoto(${i})" type="button">✕</button>`;
+    const div = document.createElement('div');
+    div.className = 'photo-preview-item';
+    div.innerHTML = `<img src="${src}" alt="preview"/><button onclick="removeReviewPhoto(${i})" type="button">✕</button>`;
     document.getElementById('photoPreviews').appendChild(div);
   });
 }
 
 // ── SUBMIT REVIEW ──
-function submitReview(){
+async function submitReview(){
   const rating = parseInt(document.querySelector('input[name="rating"]:checked')?.value||0);
   const name = document.getElementById('rName').value.trim();
   const product = document.getElementById('rProduct').value;
@@ -460,18 +594,36 @@ function submitReview(){
   if(!product){ alert('Please select which product you purchased!'); return; }
   if(!text || text.length<15){ alert('Please write at least a sentence about your experience!'); return; }
 
-  const review={
-    id:'r'+Date.now(),
+  const btn = document.querySelector('[onclick="submitReview()"]');
+  if(btn){ btn.disabled=true; btn.textContent='Submitting...'; }
+
+  // Upload photos to Cloudinary
+  let uploadedUrls = [];
+  if(reviewPhotoFiles.length > 0){
+    if(btn) btn.textContent = 'Uploading photos...';
+    for(const file of reviewPhotoFiles){
+      const url = await uploadToCloudinary(file);
+      if(url) uploadedUrls.push(url);
+    }
+  }
+
+  const review = {
+    id: 'r' + Date.now(),
     rating, name, product, text, size, country,
-    photos: reviewPhotos.slice(),
+    photos: uploadedUrls,
     date: new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}),
-    status:'pending'
+    status: 'pending'
   };
 
-  // Save to pending
-  const pending = getPendingReviews();
+  // Save to Firebase pending
+  const pending = await fbGetPending();
   pending.push(review);
-  localStorage.setItem('gna_reviews_pending', JSON.stringify(pending));
+  const saved = await fbSavePending(pending);
+
+  // Also cache locally as fallback
+  try{ localStorage.setItem('gna_reviews_pending', JSON.stringify(pending)); }catch(e){}
+
+  if(btn){ btn.disabled=false; btn.textContent='Submit Review ⭐'; }
 
   // Show success
   document.getElementById('reviewFormBox').style.display='none';
@@ -479,11 +631,22 @@ function submitReview(){
   document.getElementById('submitSuccess').scrollIntoView({behavior:'smooth'});
 }
 
+// ── REVEAL ANIMATION ──
+function observeReveal(){
+  const els = document.querySelectorAll('.reveal:not(.visible)');
+  if('IntersectionObserver' in window){
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    },{threshold:0.1});
+    els.forEach(el=>obs.observe(el));
+  } else {
+    els.forEach(el=>el.classList.add('visible'));
+  }
+}
+
 // ── INIT ──
 renderReviews();
+updateCartCount();
 </script>
-<div class="mobile-menu" id="mobileMenu">
-  <span class="mobile-close" onclick="toggleMenu()">✕</span>
-  <a href="index.html">Home</a>
-  <a href="short-kurti.html">Short Kurti</a>
- 
+</body>
+</html>

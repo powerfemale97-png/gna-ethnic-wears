@@ -9,11 +9,11 @@
 <meta name="keywords" content=""/>
 <meta property="og:title" content="Your Cart — GnA Ethnic Wears Australia"/>
 <meta property="og:description" content="Review your cart and proceed to checkout. Free standard shipping in Australia on orders over AUD $150."/>
-<meta property="og:image" content="https://powerfemale97-png.github.io/gna-ethnic-wears/logo.png"/>
-<meta property="og:url" content="https://powerfemale97-png.github.io/gna-ethnic-wears/cart.html"/>
+<meta property="og:image" content="https://www.gnaethnicwears.com.au/logo.png"/>
+<meta property="og:url" content="https://www.gnaethnicwears.com.au/cart.html"/>
 <meta property="og:type" content="website"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link rel="canonical" href="https://powerfemale97-png.github.io/gna-ethnic-wears/cart.html"/>
+<link rel="canonical" href="https://www.gnaethnicwears.com.au/cart.html"/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
 <style>
@@ -140,14 +140,14 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
     <div class="footer-brand"><div class="footer-logo"><img src="logo.png" alt="GnA Ethnic Wears" style="height:55px;width:auto;object-fit:contain;filter:brightness(0) invert(1) sepia(1) saturate(3) hue-rotate(5deg)"/></div><p>Authentic Indian ethnic fashion delivered worldwide from Australia.</p><div class="social-links"><a href="https://www.facebook.com/share/19hwZJTKyC/?mibextid=wwXIfr" target="_blank">📘</a><a href="https://www.instagram.com/gna_ethnicwears?igsh=MTZkemN1ZWJsZWNtdw%3D%3D&utm_source=qr" target="_blank">📸</a><a href="https://wa.me/61404722166">💬 WhatsApp</a></div></div>
     <div class="footer-links-col"><h4>Collections</h4><a href="short-kurti.html">Short Kurti</a><a href="long-kurti.html">Long Kurti</a><a href="cord-set.html">Cord Set</a><a href="daily-wear.html">Daily Wear Suit</a><a href="plus-size.html">Plus Size Suit</a><a href="premium-suit.html">Premium Suit</a></div>
     <div class="footer-links-col"><h4>Info</h4><a href="about.html">About</a><a href="contact.html">Contact</a><a href="shipping.html">Shipping Policy</a></div>
-    <div class="footer-links-col"><h4>Contact</h4><p>📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="44232a2521302c2a2d273321253637042329252d286a272b29">[email&#160;protected]</a></p><p>📱 0404 722 166</p><p>🕐 24/7 · 7 Days</p></div>
+    <div class="footer-links-col"><h4>Contact</h4><p>📧 gnaethnicwears@gmail.com</p><p>📱 0404 722 166</p><p>🕐 24/7 · 7 Days</p></div>
   </div>
-  <div class="footer-bottom"><span>© 2025 GnA Ethnic Wears.</span><span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span></div>
+  <div class="footer-bottom"><span>© 2026 GnA Ethnic Wears.</span><span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span></div>
 </footer>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="shipping-calc.js"></script>
+<script src="shipping-calc.js"></script>
 <script>
 function updateCartCount(){
-  try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count').forEach(function(el){el.textContent=t;});}catch(e){}
+  try{var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});}catch(e){}
 }
 function toggleMenu(){
   var m=document.getElementById('mobileMenu');var o=document.getElementById('overlayBg');
@@ -328,24 +328,39 @@ updateCartCount();
 
 <script>
 function navSearchProducts(q){
-  var res = document.getElementById('navSearchResults');
-  if(!res) return;
-  if(!q || q.length < 2){ res.classList.remove('show'); return; }
-  try {
-    var all = JSON.parse(localStorage.getItem('gna_products')||'[]');
-    var filtered = all.filter(function(p){
-      return p.name.toLowerCase().includes(q.toLowerCase()) || 
-             (p.collection||'').toLowerCase().includes(q.toLowerCase()) ||
-             (p.desc||'').toLowerCase().includes(q.toLowerCase());
+  var res=document.getElementById('navSearchResults');
+  if(!res)return;
+  if(!q||q.length<2){res.classList.remove('show');return;}
+  try{
+    var all=JSON.parse(localStorage.getItem('gna_products')||'[]');
+    var filtered=all.filter(function(p){
+      return p.name.toLowerCase().includes(q.toLowerCase())||
+             (p.collection||'').toLowerCase().includes(q.toLowerCase())||
+             (p.cat||'').toLowerCase().includes(q.toLowerCase());
     }).slice(0,6);
-    if(filtered.length === 0){
-      res.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.82rem">No products found</div>';
+    if(filtered.length===0){
+      res.innerHTML='<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.82rem">No products found</div>';
     } else {
-      res.innerHTML = filtered.map(function(p){
+      res.innerHTML=filtered.map(function(p){
         var src='';
-        try{ var ph=typeof p.photos==='string'?JSON.parse(p.photos||'[]'):(p.photos||[]); if(ph.length>0) src=typeof ph[0]==='string'?ph[0]:(ph[0].data||ph[0].url||''); }catch(e){}
+        try{var ph=typeof p.photos==='string'?JSON.parse(p.photos||'[]'):(p.photos||[]);
+          if(ph.length>0)src=typeof ph[0]==='string'?ph[0]:(ph[0].data||ph[0].url||'');
+          if(!src)src=p.photoData||p.photoUrl||'';}catch(e){}
         return '<a href="product.html?id='+p.id+'" class="search-result-item">'+
-          (src?'<img class="search-result-img" src="'+src+'" onerror="this.style.display='none'"/>':'<div class="search-result-img" style="background:'+(p.bg||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:1.5rem">'+(p.emoji||'👗')+'</div>')+
+          (src?'<img class="search-result-img" src="'+src+'" onerror="this.style.display='none'"/>':
+               '<div class="search-result-img" style="background:'+(p.bg||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:1.5rem">'+(p.emoji||'\ud83d\udc57')+'</div>')+
           '<div class="search-result-info">'+
-            '<div class="cat">'+(p.cat||p.collection||'')+'</div>'+
-            '<div class="name">'+p.name+'</div>'
+            '<div style="font-size:0.68rem;color:var(--muted)">'+(p.cat||p.collection||'')+'</div>'+
+            '<div style="font-size:0.82rem;font-weight:600;color:var(--deep)">'+p.name+'</div>'+
+            '<div style="font-size:0.78rem;color:var(--rust)">AUD $'+parseFloat(p.price||0).toFixed(2)+'</div>'+
+          '</div></a>';
+      }).join('');
+    }
+    res.classList.add('show');
+  }catch(e){res.classList.remove('show');}
+}
+updateCartCount();
+</script>
+<script src="nav-footer.js"></script>
+</body>
+</html>
