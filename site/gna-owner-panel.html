@@ -1,0 +1,2467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+<!-- GnA Admin Panel v202603160715 - Latest Version --><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GnA Admin Panel — GnA Ethnic Wears</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#C9A84C;--gold-light:#E8C97A;--gold-pale:#FFF8E7;
+  --deep:#1C0A00;--rust:#8B2E0A;--cream:#FAF5EE;--cream2:#F3EBD8;
+  --text:#2A1500;--muted:#7A6050;--border:rgba(201,168,76,0.25);
+  --green:#1B5E20;--red:#C62828;--blue:#0D47A1;
+  --sidebar:260px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overflow-x:hidden;}
+
+/* ── LOGIN ── */
+#loginScreen{position:fixed;inset:0;background:var(--deep);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;}
+#loginScreen::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(201,168,76,0.04) 0,rgba(201,168,76,0.04) 1px,transparent 1px,transparent 32px),repeating-linear-gradient(-45deg,rgba(201,168,76,0.04) 0,rgba(201,168,76,0.04) 1px,transparent 1px,transparent 32px);}
+.login-box{background:rgba(250,245,238,0.04);border:1px solid rgba(201,168,76,0.3);padding:3rem;width:100%;max-width:420px;position:relative;z-index:2;text-align:center;}
+.login-logo{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--gold);margin-bottom:0.3rem;}
+.login-sub{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(250,245,238,0.4);margin-bottom:2.5rem;}
+.login-box input{width:100%;padding:0.9rem 1rem;background:rgba(250,245,238,0.08);border:1px solid rgba(201,168,76,0.25);color:white;font-family:'Raleway',sans-serif;font-size:0.95rem;outline:none;margin-bottom:1rem;transition:border-color 0.3s;}
+.login-box input:focus{border-color:var(--gold);}
+.login-box input::placeholder{color:rgba(250,245,238,0.35);}
+.login-btn{width:100%;background:var(--gold);color:var(--deep);padding:0.9rem;font-family:'Raleway',sans-serif;font-size:0.82rem;letter-spacing:0.15em;text-transform:uppercase;font-weight:700;border:none;cursor:pointer;transition:all 0.3s;}
+.login-btn:hover{background:var(--gold-light);}
+.login-error{color:#ff6b6b;font-size:0.8rem;margin-top:0.8rem;display:none;}
+
+/* ── ADMIN LAYOUT ── */
+#adminApp{display:none;}
+.admin-layout{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--deep);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;border-right:1px solid rgba(201,168,76,0.2);z-index:100;overflow-y:auto;}
+.sidebar-logo{padding:1.5rem;border-bottom:1px solid rgba(201,168,76,0.15);}
+.sidebar-logo h1{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);line-height:1.2;}
+.sidebar-logo p{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(250,245,238,0.4);margin-top:0.3rem;}
+.sidebar-nav{padding:1rem 0;flex:1;}
+.nav-section{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(250,245,238,0.3);padding:1rem 1.5rem 0.4rem;}
+.nav-item{display:flex;align-items:center;gap:0.8rem;padding:0.75rem 1.5rem;cursor:pointer;color:rgba(250,245,238,0.65);font-size:0.82rem;transition:all 0.2s;border-left:3px solid transparent;}
+.nav-item:hover{color:var(--gold);background:rgba(201,168,76,0.06);}
+.nav-item.active{color:var(--gold);background:rgba(201,168,76,0.1);border-left-color:var(--gold);}
+.nav-item .icon{font-size:1.1rem;width:20px;text-align:center;}
+.sidebar-footer{padding:1.2rem 1.5rem;border-top:1px solid rgba(201,168,76,0.15);}
+.logout-btn{width:100%;background:rgba(139,46,10,0.2);color:var(--rust);border:1px solid rgba(139,46,10,0.3);padding:0.6rem;font-family:'Raleway',sans-serif;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.3s;}
+.logout-btn:hover{background:var(--rust);color:white;}
+
+/* MAIN CONTENT */
+.main-content{margin-left:var(--sidebar);flex:1;padding:2rem;min-height:100vh;}
+.page-section{display:none;}
+.page-section.active{display:block;}
+
+/* TOP BAR */
+.topbar-admin{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.page-title{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--deep);}
+.page-title span{font-style:italic;color:var(--rust);}
+
+/* STATS CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;margin-bottom:2rem;}
+.stat-card{background:white;border:1px solid var(--border);padding:1.5rem;transition:all 0.3s;}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(28,10,0,0.1);}
+.stat-icon{font-size:2rem;margin-bottom:0.8rem;}
+.stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--deep);font-weight:700;line-height:1;}
+.stat-label{font-size:0.72rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:0.4rem;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.65rem 1.4rem;font-family:'Raleway',sans-serif;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;cursor:pointer;border:none;transition:all 0.3s;}
+.btn-primary{background:var(--deep);color:var(--gold);}
+.btn-primary:hover{background:var(--rust);}
+.btn-gold{background:var(--gold);color:var(--deep);}
+.btn-gold:hover{background:var(--gold-light);}
+.btn-danger{background:#fff0f0;color:var(--red);border:1px solid #ffcdd2;}
+.btn-danger:hover{background:var(--red);color:white;}
+.btn-success{background:#e8f5e9;color:var(--green);border:1px solid #c8e6c9;}
+.btn-success:hover{background:var(--green);color:white;}
+.btn-sm{padding:0.4rem 0.9rem;font-size:0.68rem;}
+
+/* CARDS */
+.card{background:white;border:1px solid var(--border);padding:1.5rem;margin-bottom:1.5rem;}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:1rem;}
+.card-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--deep);}
+
+/* FORM */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-group{display:flex;flex-direction:column;gap:0.35rem;margin-bottom:0.8rem;}
+.form-group.full{grid-column:span 2;}
+.form-group label{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);font-weight:600;}
+.form-group input,.form-group select,.form-group textarea{padding:0.75rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.88rem;color:var(--text);outline:none;transition:border-color 0.3s;background:white;-webkit-appearance:none;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);}
+.form-group textarea{resize:vertical;min-height:90px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+/* SIZE CHECKBOXES */
+.size-checks{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.3rem;align-items:flex-start;}
+.size-check{display:none;}
+.size-label{padding:0.4rem 0.9rem;border:1px solid var(--border);cursor:pointer;font-size:0.78rem;font-weight:600;color:var(--muted);transition:all 0.2s;background:white;display:block;text-align:center;}
+.size-check:checked+.size-label{background:var(--deep);color:var(--gold);border-color:var(--deep);}
+/* MULTI PHOTO GALLERY */
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:0.8rem;}
+.photo-thumb{position:relative;aspect-ratio:1;border:2px solid var(--border);overflow:hidden;background:var(--cream2);}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.photo-thumb .photo-remove{position:absolute;top:3px;right:3px;background:rgba(198,40,40,0.85);color:white;border:none;border-radius:50%;width:22px;height:22px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;line-height:1;}
+.photo-thumb .photo-main-badge{position:absolute;bottom:0;left:0;right:0;background:rgba(201,168,76,0.9);color:var(--deep);font-size:0.55rem;text-align:center;padding:2px;letter-spacing:0.05em;text-transform:uppercase;font-weight:700;}
+.photo-add-btn{aspect-ratio:1;border:2px dashed var(--border);background:var(--gold-pale);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.3rem;transition:all 0.2s;font-family:'Raleway',sans-serif;}
+.photo-add-btn:hover{border-color:var(--gold);background:rgba(201,168,76,0.15);}
+.photo-add-btn span{font-size:1.5rem;}
+.photo-add-btn p{font-size:0.65rem;color:var(--muted);text-align:center;margin:0;}
+/* COLOUR + SIZE VARIANT SYSTEM */
+.variant-list{display:flex;flex-direction:column;gap:0.8rem;margin-top:0.6rem;}
+.variant-card{background:white;border:1px solid var(--border);border-radius:2px;overflow:hidden;transition:border-color 0.2s;}
+.variant-card:hover{border-color:var(--gold);}
+.variant-header{display:flex;align-items:center;gap:0.8rem;padding:0.7rem 1rem;background:var(--cream2);cursor:pointer;user-select:none;}
+.variant-swatch{width:26px;height:26px;border-radius:50%;border:2px solid rgba(0,0,0,0.12);flex-shrink:0;}
+.variant-name{font-weight:600;font-size:0.85rem;color:var(--deep);flex:1;}
+.variant-summary{font-size:0.72rem;color:var(--muted);}
+.variant-actions{display:flex;gap:0.4rem;}
+.variant-body{padding:0.8rem 1rem;border-top:1px solid var(--border);display:none;}
+.variant-body.open{display:block;}
+.variant-sizes{display:flex;gap:0.4rem;flex-wrap:wrap;margin-top:0.4rem;}
+.vsz-item{display:flex;flex-direction:column;align-items:center;gap:0.2rem;}
+.vsz-cb{display:none;}
+.vsz-lbl{font-size:0.68rem;font-weight:700;padding:0.3rem 0.6rem;border:1px solid var(--border);cursor:pointer;background:white;color:var(--muted);min-width:42px;text-align:center;transition:all 0.2s;letter-spacing:0.05em;}
+.vsz-cb:checked ~ .vsz-lbl{background:var(--deep);color:var(--gold);border-color:var(--deep);}
+.vsz-cb:checked ~ .vsz-qty{display:block;}
+.vsz-qty{display:none;width:52px;padding:0.25rem 0.3rem;border:1px solid var(--gold);font-family:'Raleway',sans-serif;font-size:0.75rem;text-align:center;outline:none;background:var(--gold-pale);}
+.add-variant-row{display:flex;gap:0.5rem;align-items:center;margin-top:0.6rem;padding-top:0.6rem;border-top:1px dashed var(--border);flex-wrap:wrap;}
+/* COLOUR VARIANT SYSTEM */
+.colour-palette{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem;}
+.colour-preset{width:32px;height:32px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s;position:relative;flex-shrink:0;}
+.colour-preset:hover{transform:scale(1.15);border-color:white;box-shadow:0 0 0 2px var(--deep);}
+.colour-preset.selected{border-color:white;box-shadow:0 0 0 2px var(--deep);transform:scale(1.15);}
+.colour-preset.selected::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:white;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,0.5);}
+.added-colours{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.8rem;min-height:20px;}
+.colour-tag{display:flex;align-items:center;gap:0.5rem;background:white;border:1px solid var(--border);padding:0.3rem 0.5rem 0.3rem 0.3rem;font-size:0.75rem;font-weight:600;}
+.colour-tag-dot{width:22px;height:22px;border-radius:50%;flex-shrink:0;border:1px solid rgba(0,0,0,0.1);}
+.colour-tag-name{color:var(--text);}
+.colour-tag-remove{background:none;border:none;cursor:pointer;color:var(--rust);font-size:0.9rem;padding:0;line-height:1;margin-left:0.2rem;}
+.custom-colour-row{display:flex;gap:0.5rem;align-items:center;margin-top:0.8rem;padding-top:0.8rem;border-top:1px dashed var(--border);}
+.custom-colour-row input[type=color]{width:38px;height:38px;border:1px solid var(--border);cursor:pointer;padding:2px;}
+.custom-colour-row input[type=text]{flex:1;padding:0.5rem 0.8rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.85rem;outline:none;}
+.custom-colour-row input[type=text]:focus{border-color:var(--gold);}
+/* SIZE + QTY BLOCK */
+.size-qty-grid{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.4rem;}
+.size-qty-item{display:flex;flex-direction:column;align-items:center;gap:0.3rem;}
+.size-qty-item .sq-label{font-size:0.7rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;padding:0.35rem 0.7rem;border:1px solid var(--border);cursor:pointer;background:white;color:var(--muted);transition:all 0.2s;min-width:48px;text-align:center;}
+.size-qty-item input[type=checkbox]{display:none;}
+.size-qty-item input[type=checkbox]:checked ~ .sq-label{background:var(--deep);color:var(--gold);border-color:var(--deep);}
+.size-qty-item input[type=checkbox]:checked ~ .sq-qty{display:block;}
+.sq-qty{display:none;width:60px;padding:0.3rem 0.4rem;border:1px solid var(--gold);font-family:'Raleway',sans-serif;font-size:0.8rem;text-align:center;outline:none;background:var(--gold-pale);}
+.sq-qty::placeholder{color:var(--muted);font-size:0.7rem;}
+
+/* IMAGE UPLOAD */
+.img-upload-area{border:2px dashed rgba(201,168,76,0.4);padding:2rem;text-align:center;cursor:pointer;transition:all 0.3s;background:var(--gold-pale);position:relative;}
+.img-upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.1);}
+.img-upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.img-preview{width:100%;max-height:200px;object-fit:cover;display:none;margin-top:0.8rem;}
+
+/* PRODUCTS TABLE */
+.products-table{width:100%;border-collapse:collapse;}
+.products-table th{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);padding:0.8rem 1rem;border-bottom:2px solid var(--border);text-align:left;background:var(--cream2);}
+.products-table td{padding:0.9rem 1rem;border-bottom:1px solid var(--border);font-size:0.85rem;vertical-align:middle;}
+.products-table tr:hover td{background:var(--gold-pale);}
+.prod-thumb{width:52px;height:58px;object-fit:cover;border-radius:2px;}
+.prod-thumb-placeholder{width:52px;height:58px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;border-radius:2px;}
+.badge{display:inline-block;padding:0.2rem 0.6rem;font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;}
+.badge-new{background:#e3f2fd;color:#0D47A1;}
+.badge-sale{background:#fce4ec;color:#C62828;}
+.badge-bestseller{background:#fff8e1;color:#F57F17;}
+.badge-premium{background:#f3e5f5;color:#6A1B9A;}
+.badge-trending{background:#e8f5e9;color:#1B5E20;}
+.badge-none{background:var(--cream2);color:var(--muted);}
+
+/* ORDERS TABLE */
+.orders-table{width:100%;border-collapse:collapse;}
+.orders-table th{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);padding:0.8rem 1rem;border-bottom:2px solid var(--border);text-align:left;background:var(--cream2);}
+.orders-table td{padding:0.9rem 1rem;border-bottom:1px solid var(--border);font-size:0.84rem;vertical-align:middle;}
+.orders-table tr:hover td{background:var(--gold-pale);}
+.status-badge{display:inline-block;padding:0.25rem 0.7rem;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;font-weight:700;border-radius:2px;}
+.status-pending{background:#fff3e0;color:#E65100;}
+.status-processing{background:#e3f2fd;color:#0D47A1;}
+.status-shipped{background:#e8f5e9;color:#1B5E20;}
+.status-delivered{background:#f3e5f5;color:#6A1B9A;}
+
+/* COLLECTIONS GRID */
+.collections-admin{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.collection-card-admin{background:white;border:1px solid var(--border);padding:1.2rem;transition:all 0.3s;}
+.collection-card-admin:hover{border-color:var(--gold);transform:translateY(-2px);}
+.col-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;}
+.col-card-emoji{font-size:2rem;}
+.col-card-name{font-family:'Playfair Display',serif;font-size:1rem;color:var(--deep);margin-bottom:0.3rem;}
+.col-card-count{font-size:0.75rem;color:var(--muted);}
+.col-card-price{font-size:0.82rem;font-weight:700;color:var(--rust);margin-top:0.5rem;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:1000;display:none;align-items:flex-start;justify-content:center;padding:2rem;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;width:100%;max-width:680px;position:relative;margin:auto;}
+.modal-head{background:var(--deep);padding:1.2rem 1.5rem;display:flex;justify-content:space-between;align-items:center;}
+.modal-head h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--cream);}
+.modal-close{background:none;border:none;color:var(--gold);font-size:1.4rem;cursor:pointer;}
+.modal-body{padding:1.8rem;}
+.modal-footer{padding:1rem 1.8rem;border-top:1px solid var(--border);display:flex;gap:0.8rem;justify-content:flex-end;background:var(--cream2);}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:var(--deep);color:var(--gold);padding:0.9rem 1.8rem;border:1px solid var(--gold);font-size:0.82rem;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.4s;max-width:320px;}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:#4CAF50;color:#4CAF50;}
+.toast.error{border-color:#f44336;color:#f44336;}
+
+/* SEARCH BAR */
+.search-bar{display:flex;gap:0.8rem;margin-bottom:1.5rem;flex-wrap:wrap;}
+.search-input{flex:1;min-width:200px;padding:0.7rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.87rem;outline:none;transition:border-color 0.3s;}
+.search-input:focus{border-color:var(--gold);}
+.filter-select{padding:0.7rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.85rem;outline:none;-webkit-appearance:none;background:white;min-width:160px;}
+
+/* PRICE INPUT */
+.price-input-wrap{position:relative;}
+.price-prefix{position:absolute;left:0.8rem;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.85rem;pointer-events:none;}
+.price-input-wrap input{padding-left:2.2rem !important;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);transition:transform 0.3s;}
+  .sidebar.open{transform:translateX(0);}
+  .main-content{margin-left:0;}
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .form-grid,.form-row{grid-template-columns:1fr;}
+  .form-group.full{grid-column:span 1;}
+  .collections-admin{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .stats-grid{grid-template-columns:1fr;}
+  .collections-admin{grid-template-columns:1fr;}
+  .main-content{padding:1rem;}
+}
+</style>
+<script src="netlify-db.js"></script>
+</head>
+<body>
+
+<!-- ── LOGIN SCREEN ── -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">GnA Ethnic Wears</div>
+    <div class="login-sub">Admin Panel · Version 2.0 · March 2026</div>
+    <input type="text" id="loginUser" placeholder="Username" autocomplete="off"/>
+    <input type="password" id="loginPass" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <button class="login-btn" onclick="doLogin()">Login to Admin Panel →</button>
+    <div class="login-error" id="loginError">❌ Incorrect username or password</div>
+  </div>
+</div>
+
+<!-- ── ADMIN APP ── -->
+<div id="adminApp">
+  <div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <h1>GnA Ethnic Wears</h1>
+        <p>Admin Panel</p>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">Main</div>
+        <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span> Dashboard</div>
+        <div class="nav-section">Catalogue</div>
+        <div class="nav-item" onclick="showPage('products')"><span class="icon">👗</span> Products</div>
+        <div class="nav-item" onclick="showPage('add-product')"><span class="icon">➕</span> Add New Product</div>
+        <div class="nav-item" onclick="showPage('collections')"><span class="icon">📂</span> Collections</div>
+        <div class="nav-section">Sales</div>
+        <div class="nav-item" onclick="showPage('orders')"><span class="icon">📦</span> Orders</div>
+        <div class="nav-section">Settings</div>
+        <div class="nav-item" onclick="showPage('reviews')"><span class="icon">⭐</span> Reviews <span id="pendingBadge" style="background:var(--rust);color:white;font-size:0.6rem;padding:0.1rem 0.4rem;margin-left:0.3rem;display:none"></span></div>
+        <div class="nav-item" onclick="showPage('settings')"><span class="icon">⚙️</span> Settings</div>
+        <div class="nav-item" onclick="window.open('index.html','_blank')"><span class="icon">🌐</span> View Website</div>
+      </nav>
+      <div class="sidebar-footer">
+        <div style="font-size:0.72rem;color:rgba(250,245,238,0.4);margin-bottom:0.8rem">Logged in as Admin</div>
+        <button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="page-section active" id="page-dashboard">
+        <div class="topbar-admin">
+          <div>
+            <div class="page-title">Good day, <span>Admin</span> 👋</div>
+            <div style="font-size:0.82rem;color:var(--muted);margin-top:0.3rem">Welcome to GnA Ethnic Wears Admin Panel</div>
+          </div>
+          <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="syncFromSheet()">🔄 Sync from Sheets</button>
+            <button class="btn" onclick="generateWebsiteFiles()" style="background:#8B2E0A;color:white;font-weight:700">⬇️ Export Products File</button>
+            <button class="btn btn-gold" onclick="showPage('add-product')">➕ Add New Product</button>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">👗</div>
+            <div class="stat-num" id="statProducts">0</div>
+            <div class="stat-label">Total Products</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📂</div>
+            <div class="stat-num">7</div>
+            <div class="stat-label">Collections</div>
+          </div>
+          <div class="stat-card" onclick="showPage('reviews')" style="cursor:pointer">
+            <div class="stat-icon">📦</div>
+            <div class="stat-num" id="statOrders">0</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+          <div class="stat-card" onclick="showPage('reviews')" style="cursor:pointer">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-num" id="statReviews">0</div>
+            <div class="stat-label">Pending Reviews</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-num" id="statRevenue">$0</div>
+            <div class="stat-label">Total Revenue (AUD)</div>
+          </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Recent Orders</div>
+            <button class="btn btn-primary btn-sm" onclick="showPage('orders')">View All</button>
+          </div>
+          <div id="recentOrdersTable">
+            <div style="text-align:center;padding:3rem;color:var(--muted)">
+              <div style="font-size:2.5rem;margin-bottom:0.8rem">📦</div>
+              <p>No orders yet. Orders will appear here when customers purchase.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Products -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Recently Added Products</div>
+            <button class="btn btn-primary btn-sm" onclick="showPage('products')">View All</button>
+          </div>
+          <div id="recentProductsTable">
+            <div style="text-align:center;padding:3rem;color:var(--muted)">
+              <div style="font-size:2.5rem;margin-bottom:0.8rem">👗</div>
+              <p>No products added yet. <a href="#" onclick="showPage('add-product')" style="color:var(--rust)">Add your first product →</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PRODUCTS PAGE ── -->
+      <div class="page-section" id="page-products">
+        <div class="topbar-admin">
+          <div class="page-title">All <span>Products</span></div>
+          <div style="display:flex;gap:0.8rem;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="syncFromSheet()">🔄 Sync from Sheets</button>
+            <button class="btn" onclick="generateWebsiteFiles()" style="background:#8B2E0A;color:white;font-weight:700">⬇️ Export Products File</button>
+            <button class="btn btn-gold" onclick="showPage('add-product')">➕ Add New Product</button>
+            <button class="btn" onclick="pushAllToNetlify()" style="background:#25D366;color:white;font-weight:700">🚀 Push All to Website</button>
+          </div>
+        </div>
+
+        <!-- HOW TO PUBLISH GUIDE -->
+        <div style="background:#FFF8E7;border:2px solid #C9A84C;padding:1.2rem 1.5rem;margin-bottom:1.5rem">
+          <div style="display:flex;align-items:flex-start;gap:1rem;flex-wrap:wrap">
+            <div style="font-size:1.8rem;flex-shrink:0">📢</div>
+            <div style="flex:1;min-width:240px">
+              <div style="font-weight:700;font-size:0.9rem;color:#1C0A00;margin-bottom:0.4rem">How to publish products to your website</div>
+              <div style="font-size:0.8rem;color:#7A6050;line-height:1.8">
+                <strong style="color:#8B2E0A">Step 1:</strong> Add or edit your products here in the admin panel.<br/>
+                <strong style="color:#8B2E0A">Step 2:</strong> Click <strong>⬇️ Export Products File</strong> above — this downloads <code style="background:#f5f5f5;padding:0 3px">gna-products-data.js</code>.<br/>
+                <strong style="color:#8B2E0A">Step 3:</strong> Replace the existing <code style="background:#f5f5f5;padding:0 3px">gna-products-data.js</code> in your website folder with the downloaded file.<br/>
+                <strong style="color:#8B2E0A">Step 4:</strong> Re-upload to your web host (Netlify / cPanel) — products will appear on all collection pages immediately!
+              </div>
+            </div>
+            <button class="btn" onclick="generateWebsiteFiles()" style="background:#1C0A00;color:#C9A84C;font-weight:700;flex-shrink:0;align-self:center">⬇️ Export Now</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="search-bar">
+            <input type="text" class="search-input" id="productSearch" placeholder="🔍 Search products by name..." oninput="filterProductsAdmin()"/>
+            <select class="filter-select" id="productCollectionFilter" onchange="filterProductsAdmin()">
+              <option value="">All Collections</option>
+              <option value="Short Kurti">Short Kurti</option>
+              <option value="Long Kurti">Long Kurti</option>
+              <option value="Cord Set">Cord Set</option>
+              <option value="Daily Wear 3 Piece Suit">Daily Wear 3 Piece Suit</option>
+              <option value="Plus Size 3 Piece Suit">Plus Size 3 Piece Suit</option>
+              <option value="Premium 3 Piece Suit">Premium 3 Piece Suit</option>
+              
+            </select>
+            <select class="filter-select" id="productBadgeFilter" onchange="filterProductsAdmin()">
+              <option value="">All Badges</option>
+              <option value="New">New</option>
+              <option value="Bestseller">Bestseller</option>
+              <option value="Sale">Sale</option>
+              <option value="Premium">Premium</option>
+              <option value="Trending">Trending</option>
+            </select>
+          </div>
+          <div style="overflow-x:auto">
+            <table class="products-table">
+              <thead>
+                <tr>
+                  <th>Photo</th>
+                  <th>Product Name</th>
+                  <th>Collection</th>
+                  <th>Price</th>
+                  <th>Sizes</th>
+                  <th>Colours</th>
+                  <th>Badge</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody"></tbody>
+            </table>
+          </div>
+          <div id="noProductsMsg" style="text-align:center;padding:3rem;color:var(--muted);display:none">
+            <div style="font-size:2.5rem;margin-bottom:0.8rem">👗</div>
+            <p>No products found. <a href="#" onclick="showPage('add-product')" style="color:var(--rust)">Add your first product →</a></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ADD/EDIT PRODUCT ── -->
+      <div class="page-section" id="page-add-product">
+        <div class="topbar-admin">
+          <div class="page-title" id="addEditTitle">Add <span>New Product</span></div>
+        </div>
+        <div class="card">
+          <div class="form-grid">
+            <!-- LEFT COLUMN -->
+            <div>
+              <div class="form-group full">
+                <label>Product Name *</label>
+                <input type="text" id="pName" placeholder="e.g. Floral Printed Cotton Short Kurti"/>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Collection *</label>
+                  <select id="pCollection">
+                    <option value="">Select Collection...</option>
+                    <option value="Short Kurti">Short Kurti</option>
+                    <option value="Long Kurti">Long Kurti</option>
+                    <option value="Cord Set">Cord Set</option>
+                    <option value="Daily Wear 3 Piece Suit">Daily Wear 3 Piece Suit</option>
+                    <option value="Plus Size 3 Piece Suit">Plus Size 3 Piece Suit</option>
+                    <option value="Premium 3 Piece Suit">Premium 3 Piece Suit</option>
+                    
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Badge</label>
+                  <select id="pBadge">
+                    <option value="">None</option>
+                    <option value="New">New Arrival</option>
+                    <option value="Bestseller">Bestseller</option>
+                    <option value="Sale">On Sale</option>
+                    <option value="Premium">Premium</option>
+                    <option value="Trending">Trending</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Price (AUD) *</label>
+                  <div class="price-input-wrap">
+                    <span class="price-prefix">$</span>
+                    <input type="number" id="pPrice" placeholder="0.00" min="0" step="0.01"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Original Price (AUD) <span style="font-size:0.65rem;color:var(--muted)">(optional — shows strikethrough)</span></label>
+                  <div class="price-input-wrap">
+                    <span class="price-prefix">$</span>
+                    <input type="number" id="pOldPrice" placeholder="0.00" min="0" step="0.01"/>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="pDesc" placeholder="Describe the fabric, embroidery, occasion, etc..."></textarea>
+              </div>
+              <div class="form-group" style="grid-column:span 2">
+                <label>Colour Variants &amp; Sizes <span style="font-size:0.65rem;color:var(--muted)">(add each colour separately with its own sizes &amp; quantities)</span></label>
+
+                <!-- Variant list -->
+                <div class="variant-list" id="variantList">
+                  <div style="font-size:0.82rem;color:var(--muted);font-style:italic;padding:0.8rem;text-align:center;border:1px dashed var(--border)">
+                    No colour variants added yet. Add a colour below to get started.
+                  </div>
+                </div>
+
+                <!-- Add new variant row -->
+                <div class="add-variant-row">
+                  <input type="color" id="newVarColour" value="#C9184A" style="width:42px;height:42px;border:1px solid var(--border);cursor:pointer;padding:2px;flex-shrink:0"/>
+                  <input type="text" id="newVarName" placeholder="Colour name e.g. Red, Navy Blue, Mustard..." style="flex:1;min-width:150px;padding:0.6rem 0.9rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.85rem;outline:none"/>
+                  <button type="button" class="btn btn-gold btn-sm" onclick="addVariant()" style="white-space:nowrap">+ Add Colour</button>
+                </div>
+
+                <!-- Quick colour presets -->
+                <div style="margin-top:0.6rem">
+                  <div style="font-size:0.67rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem">Quick add common colours:</div>
+                  <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+                    <button type="button" onclick="quickAddVariant('#E53935','Red')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#E53935;display:inline-block"></span>Red</button>
+                    <button type="button" onclick="quickAddVariant('#E91E8C','Pink')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#E91E8C;display:inline-block"></span>Pink</button>
+                    <button type="button" onclick="quickAddVariant('#1565C0','Royal Blue')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#1565C0;display:inline-block"></span>Royal Blue</button>
+                    <button type="button" onclick="quickAddVariant('#0D1B5E','Navy Blue')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#0D1B5E;display:inline-block"></span>Navy</button>
+                    <button type="button" onclick="quickAddVariant('#6A1B9A','Purple')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#6A1B9A;display:inline-block"></span>Purple</button>
+                    <button type="button" onclick="quickAddVariant('#C9A84C','Gold')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#C9A84C;display:inline-block"></span>Gold</button>
+                    <button type="button" onclick="quickAddVariant('#2E7D32','Green')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#2E7D32;display:inline-block"></span>Green</button>
+                    <button type="button" onclick="quickAddVariant('#FF6B2B','Orange')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#FF6B2B;display:inline-block"></span>Orange</button>
+                    <button type="button" onclick="quickAddVariant('#212121','Black')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#212121;display:inline-block"></span>Black</button>
+                    <button type="button" onclick="quickAddVariant('#FFFFFF','White')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#FFFFFF;border:1px solid #ccc;display:inline-block"></span>White</button>
+                    <button type="button" onclick="quickAddVariant('#880E4F','Maroon')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#880E4F;display:inline-block"></span>Maroon</button>
+                    <button type="button" onclick="quickAddVariant('#B8860B','Mustard')" style="display:flex;align-items:center;gap:0.3rem;padding:0.25rem 0.6rem;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.72rem;font-family:'Raleway',sans-serif"><span style="width:12px;height:12px;border-radius:50%;background:#B8860B;display:inline-block"></span>Mustard</button>
+                  </div>
+                </div>
+
+                <div style="font-size:0.7rem;color:var(--muted);margin-top:0.8rem;background:var(--gold-pale);padding:0.6rem 0.8rem;border-left:3px solid var(--gold);line-height:1.7">
+                  💡 <strong>Each colour can have different sizes.</strong><br/>
+                  Example: Red comes in M, L, XL — Navy Blue comes in L, XL, XXL only.<br/>
+                  Click a colour card to expand it and set its sizes &amp; quantities.
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Product Weight (grams) <span style="font-size:0.65rem;color:var(--muted)">(used for shipping calculation)</span></label>
+                <select id="pWeight">
+                  <option value="350">~350g — Short Kurti</option>
+                  <option value="450">~450g — Long Kurti</option>
+                  <option value="600">~600g — Cord Set</option>
+                  <option value="700">~700g — Daily Wear 3 Piece Suit</option>
+                  <option value="800">~800g — Plus Size / Premium Suit</option>
+                  <option value="900">~900g — Party Wear 3 Piece Suit</option>
+                  <option value="custom">Custom weight...</option>
+                </select>
+                <input type="number" id="pWeightCustom" placeholder="Enter weight in grams" style="display:none;margin-top:0.5rem;padding:0.7rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.88rem;outline:none;width:100%"/>
+              </div>
+            </div>
+
+            <!-- RIGHT COLUMN — PHOTOS -->
+            <div>
+              <div class="form-group">
+                <label>Product Photos <span style="font-size:0.65rem;color:var(--muted)">(add up to 5 photos — first photo is main)</span></label>
+                <div class="photo-grid" id="photoGrid">
+                  <!-- Photos appear here -->
+                  <button type="button" class="photo-add-btn" onclick="triggerPhotoInput()">
+                    <span>📸</span>
+                    <p>Add Photo<br/>JPG/PNG/WEBP</p>
+                  </button>
+                </div>
+                <input type="file" id="pPhotoInput" accept="image/*" multiple style="display:none" onchange="addPhotos(this)"/>
+                <div style="font-size:0.7rem;color:var(--muted);margin-top:0.5rem;background:var(--gold-pale);padding:0.5rem 0.8rem;border-left:3px solid var(--gold);line-height:1.6">
+                  💡 First photo = main photo shown to customers.<br/>
+                  Click any photo to make it the main one.<br/>
+                  Up to 5 photos per product.
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-top:0.5rem">
+                <label>Or add Photo URL <span style="font-size:0.65rem;color:var(--muted)">(from Google Drive, Cloudinary, etc)</span></label>
+                <div style="display:flex;gap:0.5rem">
+                  <input type="text" id="pPhotoUrl" placeholder="https://..." style="flex:1;padding:0.7rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.85rem;outline:none"/>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="addPhotoUrl()">Add</button>
+                </div>
+              </div>
+
+<!-- Colours now handled in variant system above -->
+
+              <!-- Preview card -->
+              <div style="margin-top:1rem;background:var(--cream2);padding:1rem;border:1px solid var(--border)">
+                <div style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem">Preview Card</div>
+                <div style="background:white;border:1px solid var(--border);overflow:hidden;max-width:200px">
+                  <div id="previewCardImg" style="height:140px;background:linear-gradient(155deg,#C9184A,#6B0020);display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;">
+                    👗
+                    <span id="previewBadge" style="position:absolute;top:0.5rem;left:0.5rem;background:var(--rust);color:white;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.18rem 0.5rem;display:none"></span>
+                  </div>
+                  <div style="padding:0.7rem">
+                    <div style="font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold)" id="previewCat">Collection</div>
+                    <div style="font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--deep);margin:0.2rem 0" id="previewName">Product Name</div>
+                    <div style="font-size:0.88rem;color:var(--rust);font-weight:700" id="previewPrice">AUD $0.00</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:1rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap">
+            <button class="btn btn-gold" onclick="saveProduct()" style="font-size:0.82rem;padding:0.85rem 2rem">
+              💾 Save Product
+            </button>
+            <button class="btn btn-primary" onclick="clearForm()" style="font-size:0.82rem;padding:0.85rem 1.5rem">
+              🔄 Clear Form
+            </button>
+            <button class="btn" onclick="showPage('products')" style="background:var(--cream2);font-size:0.82rem;padding:0.85rem 1.5rem">
+              ← Back to Products
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── COLLECTIONS ── -->
+      <div class="page-section" id="page-collections">
+        <div class="topbar-admin">
+          <div class="page-title">Manage <span>Collections</span></div>
+          <button class="btn btn-gold" onclick="openAddCollectionModal()">➕ Add New Collection</button>
+        </div>
+        <div style="background:var(--gold-pale);border:1px solid var(--border);padding:1rem 1.5rem;margin-bottom:1.5rem;font-size:0.82rem;color:var(--text);line-height:1.7">
+          📂 You have <strong id="colCount">0</strong> collections. Products you add will appear under their collection on the website.
+          <strong style="color:var(--rust)"> New collections you add here will also appear in the product dropdown when adding products.</strong>
+        </div>
+        <div class="collections-admin" id="collectionsGrid"></div>
+      </div>
+
+      <!-- ── REVIEWS ── -->
+      <div class="page-section" id="page-reviews">
+        <div class="topbar-admin">
+          <div class="page-title">Customer <span>Reviews</span></div>
+        </div>
+        <!-- Tabs -->
+        <div style="display:flex;gap:0;border-bottom:2px solid var(--gold);margin-bottom:1.5rem">
+          <button class="tab-btn active" id="pendingTab" onclick="showReviewTab('pending')" style="padding:0.7rem 1.5rem;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;border:none;background:white;cursor:pointer;color:var(--muted);font-family:'Raleway',sans-serif;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s">
+            Pending Approval <span id="pendingCount" style="background:var(--rust);color:white;font-size:0.65rem;padding:0.1rem 0.5rem;margin-left:0.4rem">0</span>
+          </button>
+          <button class="tab-btn" id="approvedTab" onclick="showReviewTab('approved')" style="padding:0.7rem 1.5rem;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;border:none;background:white;cursor:pointer;color:var(--muted);font-family:'Raleway',sans-serif;font-weight:600;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s">
+            Published Reviews <span id="approvedCount" style="background:var(--green,#1B5E20);color:white;font-size:0.65rem;padding:0.1rem 0.5rem;margin-left:0.4rem">0</span>
+          </button>
+        </div>
+        <div id="reviewsAdminContent"></div>
+      </div>
+
+      <!-- ── ORDERS ── -->
+      <div class="page-section" id="page-orders">
+        <div class="topbar-admin">
+          <div class="page-title">All <span>Orders</span></div>
+        </div>
+        <div class="card">
+          <div id="ordersContent">
+            <div style="text-align:center;padding:4rem;color:var(--muted)">
+              <div style="font-size:3rem;margin-bottom:1rem">📦</div>
+              <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--deep);margin-bottom:0.8rem">No Orders Yet</h3>
+              <p style="font-size:0.88rem;line-height:1.7">Orders placed by customers on your website will automatically appear here once you go live and connect a backend.</p>
+              <p style="font-size:0.82rem;color:var(--muted);margin-top:0.5rem">For now you can add test orders to preview the layout.</p>
+              <button class="btn btn-gold" style="margin-top:1.5rem" onclick="addTestOrder()">+ Add Test Order</button>
+            </div>
+          </div>
+          <div id="ordersTableWrap" style="display:none;overflow-x:auto">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Order #</th><th>Customer</th><th>Items</th>
+                  <th>Total</th><th>Shipping To</th><th>Status</th><th>Date</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div class="page-section" id="page-settings">
+        <div class="topbar-admin">
+          <div class="page-title">Admin <span>Settings</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Store Information</div></div>
+          <div class="form-grid">
+            <div class="form-group"><label>Store Name</label><input type="text" value="GnA Ethnic Wears"/></div>
+            <div class="form-group"><label>Email</label><input type="email" value="gnaethnicwears@gmail.com"/></div>
+            <div class="form-group"><label>Phone</label><input type="tel" value="0404 722 166"/></div>
+            <div class="form-group"><label>WhatsApp</label><input type="tel" value="+61404722166"/></div>
+            <div class="form-group full"><label>Business Hours</label><input type="text" value="24/7 — 7 Days a Week (Online Only)"/></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Change Admin Password</div></div>
+          <div class="form-row">
+            <div class="form-group"><label>Current Password</label><input type="password" id="currPass" placeholder="Enter current password"/></div>
+            <div class="form-group"><label>New Password</label><input type="password" id="newPass" placeholder="Enter new password"/></div>
+          </div>
+          <button class="btn btn-primary" onclick="changePassword()">🔒 Update Password</button>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Free Shipping Settings</div></div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Free Shipping Threshold (AUD)</label>
+              <div class="price-input-wrap"><span class="price-prefix">$</span><input type="number" value="150" placeholder="150"/></div>
+              <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem">Australian orders over this amount get free standard shipping</div>
+            </div>
+          </div>
+          <button class="btn btn-gold" onclick="showToastMsg('Settings saved! ✓','success')">💾 Save Settings</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- EDIT PRODUCT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Edit Product</h3>
+      <button class="modal-close" onclick="closeModal('editModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editId"/>
+      <div class="form-row">
+        <div class="form-group"><label>Product Name *</label><input type="text" id="editName"/></div>
+        <div class="form-group"><label>Collection *</label>
+          <select id="editCollection">
+            <option value="Short Kurti">Short Kurti</option>
+            <option value="Long Kurti">Long Kurti</option>
+            <option value="Cord Set">Cord Set</option>
+            <option value="Daily Wear 3 Piece Suit">Daily Wear 3 Piece Suit</option>
+            <option value="Plus Size 3 Piece Suit">Plus Size 3 Piece Suit</option>
+            <option value="Premium 3 Piece Suit">Premium 3 Piece Suit</option>
+            
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Price (AUD) *</label><div class="price-input-wrap"><span class="price-prefix">$</span><input type="number" id="editPrice" min="0" step="0.01"/></div></div>
+        <div class="form-group"><label>Old Price (AUD)</label><div class="price-input-wrap"><span class="price-prefix">$</span><input type="number" id="editOldPrice" min="0" step="0.01"/></div></div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="editDesc"></textarea></div>
+      <div class="form-group">
+        <label>Available Sizes &amp; Stock Quantity</label>
+        <div class="size-qty-grid">
+          <div class="size-qty-item"><input type="checkbox" id="esz-XS" value="XS" class="esz-main-check"/><label class="sq-label" for="esz-XS">XS</label><input type="number" class="esq-qty" id="eqty-XS" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-S" value="S" class="esz-main-check"/><label class="sq-label" for="esz-S">S</label><input type="number" class="esq-qty" id="eqty-S" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-M" value="M" class="esz-main-check"/><label class="sq-label" for="esz-M">M</label><input type="number" class="esq-qty" id="eqty-M" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-L" value="L" class="esz-main-check"/><label class="sq-label" for="esz-L">L</label><input type="number" class="esq-qty" id="eqty-L" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-XL" value="XL" class="esz-main-check"/><label class="sq-label" for="esz-XL">XL</label><input type="number" class="esq-qty" id="eqty-XL" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-XXL" value="XXL" class="esz-main-check"/><label class="sq-label" for="esz-XXL">XXL</label><input type="number" class="esq-qty" id="eqty-XXL" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-3XL" value="3XL" class="esz-main-check"/><label class="sq-label" for="esz-3XL">3XL</label><input type="number" class="esq-qty" id="eqty-3XL" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-4XL" value="4XL" class="esz-main-check"/><label class="sq-label" for="esz-4XL">4XL</label><input type="number" class="esq-qty" id="eqty-4XL" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-5XL" value="5XL" class="esz-main-check"/><label class="sq-label" for="esz-5XL">5XL</label><input type="number" class="esq-qty" id="eqty-5XL" placeholder="Qty" min="0"/></div>
+          <div class="size-qty-item"><input type="checkbox" id="esz-6XL" value="6XL" class="esz-main-check"/><label class="sq-label" for="esz-6XL">6XL</label><input type="number" class="esq-qty" id="eqty-6XL" placeholder="Qty" min="0"/></div>
+        </div>
+        <div style="font-size:0.7rem;color:var(--muted);margin-top:0.5rem">Tick size → enter stock quantity for that size</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Badge</label>
+          <select id="editBadge">
+            <option value="">None</option>
+            <option value="New">New Arrival</option>
+            <option value="Bestseller">Bestseller</option>
+            <option value="Sale">On Sale</option>
+            <option value="Premium">Premium</option>
+            <option value="Trending">Trending</option>
+          </select>
+        </div>
+        <div class="form-group">
+        <label>Product Photos <span style="font-size:0.62rem;color:var(--muted)">(up to 5 photos · first = main)</span></label>
+        <div class="photo-grid" id="editPhotoGrid"></div>
+        <input type="file" id="editPhotoInput" accept="image/*" multiple style="display:none" onchange="addEditPhotos(this)"/>
+        <button type="button" class="btn btn-primary btn-sm" style="margin-top:0.5rem" onclick="document.getElementById('editPhotoInput').click()">📸 Add More Photos</button>
+      </div>
+      <div class="form-group"><label>Or add Photo URL</label>
+        <div style="display:flex;gap:0.5rem">
+          <input type="text" id="editPhotoUrl" placeholder="https://..." style="flex:1"/>
+          <button type="button" class="btn btn-primary btn-sm" onclick="addEditPhotoUrl()">Add</button>
+        </div>
+      </div>
+      </div>
+      <div class="form-group">
+        <label>Available Colours</label>
+        <div class="colour-palette" id="editColourPresets"></div>
+        <div class="custom-colour-row" style="margin-top:0.6rem">
+          <input type="color" id="editCustomColourPicker" value="#C9A84C"/>
+          <input type="text" id="editCustomColourName" placeholder="Colour name e.g. Royal Blue, Mint Green..."/>
+          <button type="button" class="btn btn-primary btn-sm" onclick="addEditCustomColour()">+ Add</button>
+        </div>
+        <div style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:0.6rem 0 0.3rem">Added Colours</div>
+        <div class="added-colours" id="editAddedColoursList"><span style="font-size:0.78rem;color:var(--muted);font-style:italic">No colours yet</span></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('editModal')" style="background:var(--cream2)">Cancel</button>
+      <button class="btn btn-gold" onclick="updateProduct()">💾 Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-head" style="background:var(--red)">
+      <h3>Delete Product</h3>
+      <button class="modal-close" onclick="closeModal('deleteModal')">✕</button>
+    </div>
+    <div class="modal-body" style="text-align:center;padding:2rem">
+      <div style="font-size:3rem;margin-bottom:1rem">⚠️</div>
+      <p style="font-size:0.95rem;color:var(--text);margin-bottom:0.5rem">Are you sure you want to delete:</p>
+      <strong id="deleteProductName" style="color:var(--rust);font-size:1rem"></strong>
+      <p style="font-size:0.82rem;color:var(--muted);margin-top:0.8rem">This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer" style="justify-content:center">
+      <button class="btn" onclick="closeModal('deleteModal')" style="background:var(--cream2)">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()" style="background:var(--red);color:white;border:none">🗑 Yes, Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="adminToast"></div>
+
+<!-- ADD COLLECTION MODAL -->
+<div class="modal-overlay" id="addCollectionModal">
+  <div class="modal" style="max-width:500px">
+    <div class="modal-head">
+      <h3 id="colModalTitle">Add New Collection</h3>
+      <button class="modal-close" onclick="closeModal('addCollectionModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editColId"/>
+      <div class="form-group">
+        <label>Collection Name *</label>
+        <input type="text" id="colName" placeholder="e.g. Sarees, Lehengas, Anarkali..."/>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Starting Price (AUD) *</label>
+          <div class="price-input-wrap">
+            <span class="price-prefix">$</span>
+            <input type="number" id="colPrice" placeholder="0.00" min="0" step="0.01"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Collection Emoji</label>
+          <input type="text" id="colEmoji" placeholder="e.g. 👗 🥻 🌸 💎" maxlength="4" style="font-size:1.5rem;text-align:center"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Short Description (optional)</label>
+        <input type="text" id="colDesc" placeholder="e.g. Traditional silk sarees for every occasion"/>
+      </div>
+      <div class="form-group">
+        <label>Card Background Color / Gradient</label>
+        <select id="colBg">
+          <option value="linear-gradient(155deg,#C9184A,#6B0020)">🔴 Crimson</option>
+          <option value="linear-gradient(155deg,#FF6B2B,#7A2000)">🟠 Rust Orange</option>
+          <option value="linear-gradient(155deg,#4A148C,#1A0050)">🟣 Deep Indigo</option>
+          <option value="linear-gradient(155deg,#006064,#001A1B)">🟢 Deep Teal</option>
+          <option value="linear-gradient(155deg,#880E4F,#3D0021)">💜 Burgundy</option>
+          <option value="linear-gradient(155deg,#B8860B,#5A3000)">🟡 Saffron Gold</option>
+          <option value="linear-gradient(155deg,#0D47A1,#000D2B)">🔵 Royal Blue</option>
+          <option value="linear-gradient(155deg,#1B5E20,#000A00)">🌿 Emerald Green</option>
+          <option value="linear-gradient(155deg,#3E2723,#1A0A00)">🤎 Deep Brown</option>
+          <option value="linear-gradient(155deg,#37474F,#101010)">⚫ Charcoal</option>
+        </select>
+        <div id="colBgPreview" style="height:50px;margin-top:0.5rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:all 0.3s">
+          Preview
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('addCollectionModal')" style="background:var(--cream2)">Cancel</button>
+      <button class="btn btn-gold" onclick="saveCollection()" id="saveColBtn">➕ Add Collection</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  GnA Admin Panel — JavaScript
+// ══════════════════════════════════════
+
+const ADMIN_USER = 'admin';
+const ADMIN_PASS = 'Gnaethnicwears@2025';
+
+// ── GLOBAL STATE ──
+var _variants = []; // colour variants [{hex, name, sizes:{M:5, L:3}}]
+var _photos = [];   // product photos [base64...]
+var _editPhotos = [];
+
+// ── GOOGLE SHEETS DATABASE CONNECTION ──
+const GNA_API = 'https://script.google.com/macros/s/AKfycbxH0Ke9U8BuYKRlsNFnt84fkolne1fEEa_e6n05Fi5HiuWMlT3bkSSIpie4tu9174a4/exec';
+
+async function apiPost(data){
+  try{
+    const res = await fetch(GNA_API, {
+      method:'POST',
+      body:JSON.stringify(data),
+      headers:{'Content-Type':'application/json'}
+    });
+    return await res.json();
+  }catch(e){console.error('API error:',e);return null;}
+}
+
+async function apiGet(action, params={}){
+  try{
+    const url = new URL(GNA_API);
+    url.searchParams.set('action',action);
+    Object.entries(params).forEach(([k,v])=>url.searchParams.set(k,v));
+    const res = await fetch(url.toString());
+    return await res.json();
+  }catch(e){console.error('API error:',e);return null;}
+}
+
+// ── DATA STORE (in memory + localStorage fallback) ──
+let products = JSON.parse(localStorage.getItem('gna_products') || '[]');
+let orders = JSON.parse(localStorage.getItem('gna_orders') || '[]');
+let deleteTargetId = null;
+let editingId = null;
+
+const DEFAULT_COLLECTIONS = [
+  {id:'col1',name:'Short Kurti',emoji:'👘',from:12,bg:'linear-gradient(155deg,#C9184A,#6B0020)',isDefault:true},
+  {id:'col2',name:'Long Kurti',emoji:'🥻',from:19,bg:'linear-gradient(155deg,#FF6B2B,#7A2000)',isDefault:true},
+  {id:'col3',name:'Cord Set',emoji:'🌸',from:25,bg:'linear-gradient(155deg,#4A148C,#1A0050)',isDefault:true},
+  {id:'col4',name:'Daily Wear 3 Piece Suit',emoji:'👗',from:25,bg:'linear-gradient(155deg,#006064,#001A1B)',isDefault:true},
+  {id:'col5',name:'Plus Size 3 Piece Suit',emoji:'💐',from:35,bg:'linear-gradient(155deg,#880E4F,#3D0021)',isDefault:true},
+  {id:'col6',name:'Premium 3 Piece Suit',emoji:'✨',from:35,bg:'linear-gradient(155deg,#B8860B,#5A3000)',isDefault:true},
+];
+// Load collections from storage, merge with defaults
+let storedCollections = JSON.parse(localStorage.getItem('gna_collections')||'null');
+let COLLECTIONS_INFO = storedCollections || JSON.parse(JSON.stringify(DEFAULT_COLLECTIONS));
+// Save defaults if first time
+if(!storedCollections) localStorage.setItem('gna_collections', JSON.stringify(COLLECTIONS_INFO));
+function saveCollections(){ localStorage.setItem('gna_collections', JSON.stringify(COLLECTIONS_INFO)); }
+
+// ── LOGIN ──
+function doLogin(){
+  const u = document.getElementById('loginUser').value.trim().toLowerCase();
+  const p = document.getElementById('loginPass').value.trim();
+  // Accept: username = admin or gna, password = Gnaethnicwears@2025 or gna2025
+  const okUser = (u === 'admin' || u === 'gna' || u === 'gnaethnicwears');
+  const okPass = (p === 'Gnaethnicwears@2025' || p === 'gna2025' || p === 'GNA2025' || p === 'admin');
+  if(okUser && okPass){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('adminApp').style.display = 'block';
+    initDashboard();
+  } else if(okUser && !okPass){
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginError').innerHTML = '❌ Wrong password. Try: <strong>Gnaethnicwears@2025</strong> or <strong>gna2025</strong>';
+    document.getElementById('loginPass').value = '';
+    setTimeout(()=>{ document.getElementById('loginError').style.display='none'; }, 5000);
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+    document.getElementById('loginError').innerHTML = '❌ Username must be <strong>admin</strong> or <strong>gna</strong>';
+    setTimeout(()=>{ document.getElementById('loginError').style.display='none'; }, 5000);
+  }
+}
+
+// ── EDIT MODAL PHOTO SYSTEM ──
+// _editPhotos declared at top
+
+function addEditPhotos(input){
+  if(!input.files || input.files.length===0) return;
+  const files = Array.from(input.files).slice(0, 5 - window._editPhotos.length);
+  if(files.length===0){showToastMsg('Maximum 5 photos','error');return;}
+  showToastMsg('⏳ Processing...','');
+  let done=0;
+  files.forEach(file=>{
+    if(window._editPhotos.length>=5) return;
+    compressImage(file, 800, 0.7, compressed=>{
+      window._editPhotos.push({data:compressed,type:'file'});
+      renderEditPhotoGrid();
+      done++;
+      if(done===files.length) showToastMsg('✓ Photos added!','success');
+    });
+  });
+  input.value='';
+}
+
+function addEditPhotoUrl(){
+  const url=document.getElementById('editPhotoUrl').value.trim();
+  if(!url) return;
+  if(window._editPhotos.length>=5){showToastMsg('Maximum 5 photos','error');return;}
+  window._editPhotos.push({url,type:'url'});
+  document.getElementById('editPhotoUrl').value='';
+  renderEditPhotoGrid();
+}
+
+function removeEditPhoto(idx){
+  window._editPhotos.splice(idx,1);
+  renderEditPhotoGrid();
+}
+
+function setEditMainPhoto(idx){
+  if(idx===0) return;
+  const photo=window._editPhotos.splice(idx,1)[0];
+  window._editPhotos.unshift(photo);
+  renderEditPhotoGrid();
+  showToastMsg('Main photo updated!','success');
+}
+
+function renderEditPhotoGrid(){
+  const grid=document.getElementById('editPhotoGrid');
+  if(!grid) return;
+  grid.innerHTML=window._editPhotos.map((photo,idx)=>{
+    const src=photo.data||photo.url;
+    return `<div class="photo-thumb">
+      <img src="${src}" onclick="setEditMainPhoto(${idx})" style="cursor:pointer" title="${idx===0?'Main':'Click to set main'}"/>
+      ${idx===0?'<div class="photo-main-badge">Main</div>':''}
+      <button class="photo-remove" onclick="removeEditPhoto(${idx})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ── TEST ADD TO CART ──
+function testAddToCart(id){
+  const p = products.find(p=>p.id===id);
+  if(!p){showToastMsg('Product not found','error');return;}
+  const size = (p.sizes&&p.sizes.length>0) ? p.sizes[0] : 'M';
+  let cart = [];
+  try { cart = JSON.parse(localStorage.getItem('gna_cart')||'[]'); } catch(e){}
+  const existing = cart.find(i=>i.id===p.id && i.size===size);
+  if(existing) existing.qty++;
+  else cart.push({...p, size, qty:1});
+  localStorage.setItem('gna_cart', JSON.stringify(cart));
+  showToastMsg('✓ Added "'+p.name+'" ('+size+') to cart for testing!','success');
+}
+
+function doLogout(){
+  if(confirm('Are you sure you want to logout?')){
+    document.getElementById('adminApp').style.display='none';
+    document.getElementById('loginScreen').style.display='flex';
+    document.getElementById('loginUser').value='';
+    document.getElementById('loginPass').value='';
+  }
+}
+
+// ── NAVIGATION ──
+function showPage(page){
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+page)?.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+page+"'"))n.classList.add('active');
+  });
+  if(page==='dashboard') initDashboard();
+  if(page==='products') renderProductsTable(products);
+  if(page==='collections'){renderCollections();}
+  if(page==='orders') renderOrders();
+  if(page==='reviews') renderAdminReviews('pending');
+  if(page==='add-product'){
+    clearForm();
+    document.getElementById('addEditTitle').innerHTML='Add <span>New Product</span>';
+    setTimeout(()=>initColourPresets('colourPresets','add'),50);
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── DASHBOARD ──
+// ── LOAD PRODUCTS FROM GOOGLE SHEETS ON ADMIN LOAD ──
+// ── TOGGLE FEATURED ON HOMEPAGE ──
+async function toggleFeatured(id){
+  var p = products.find(function(p){ return p.id === id; });
+  if(!p) return;
+  p.featured = !p.featured;
+  localStorage.setItem('gna_products', JSON.stringify(products));
+  // Push to Firebase
+  if(typeof netlifyDBSave === 'function'){
+    var ok = await netlifyDBSave(products);
+    showToastMsg(p.featured ? '⭐ "'+p.name+'" added to homepage featured!' : '✓ "'+p.name+'" removed from featured', 'success');
+  } else {
+    showToastMsg(p.featured ? '⭐ Featured!' : 'Unfeatured', 'success');
+  }
+  renderProductsTable(products);
+}
+
+// ── QUICK STOCK RESET ──
+async function quickResetStock(id, qty){
+  qty = qty || 1;
+  var p = products.find(function(p){ return p.id === id; });
+  if(!p){ showToastMsg('Product not found','error'); return; }
+  try{
+    var variants = p.variants ? (typeof p.variants==='string'?JSON.parse(p.variants):p.variants) : [];
+    variants.forEach(function(v){
+      Object.keys(v.sizes||{}).forEach(function(s){ v.sizes[s] = qty; });
+    });
+    p.variants = JSON.stringify(variants);
+    // Also reset sizeQty
+    if(p.sizeQty){ Object.keys(p.sizeQty).forEach(function(s){ p.sizeQty[s] = qty; }); }
+    localStorage.setItem('gna_products', JSON.stringify(products));
+    if(typeof netlifyDBSave==='function'){
+      var ok = await netlifyDBSave(products);
+      showToastMsg(ok ? '✅ Stock reset to '+qty+' for all sizes!' : '✓ Stock reset locally.', 'success');
+    } else {
+      showToastMsg('✓ Stock reset to '+qty+' for all sizes!','success');
+    }
+    renderProductsTable(products);
+  }catch(e){ showToastMsg('Error: '+e.message,'error'); }
+}
+
+// ── PUSH ALL PRODUCTS TO NETLIFY NOW ──
+async function pushAllToNetlify(){
+  var prods = [];
+  try { prods = JSON.parse(localStorage.getItem('gna_products')||'[]'); } catch(e){}
+  if(prods.length === 0){ showToastMsg('No products to push!','error'); return; }
+  showToastMsg('⏳ Pushing '+prods.length+' product(s) to website...','');
+  if(typeof netlifyDBSave === 'function'){
+    const ok = await netlifyDBSave(prods);
+    if(ok) showToastMsg('✅ All '+prods.length+' products are now LIVE on your website!','success');
+    else showToastMsg('❌ Could not connect to Netlify. Try again.','error');
+  } else {
+    showToastMsg('❌ Netlify DB not loaded.','error');
+  }
+}
+
+// ── EXPORT PRODUCTS AS JS FILE (unified function) ──
+function exportProductsToFile(){ generateWebsiteFiles(); }
+
+// ── GENERATE & DOWNLOAD gna-products-data.js ──
+function generateWebsiteFiles(){
+  var prods = [];
+  try { prods = JSON.parse(localStorage.getItem('gna_products')||'[]'); } catch(e){}
+  if(prods.length === 0){ showToastMsg('No products to export. Add products first!','error'); return; }
+
+  var ts = new Date().toLocaleString('en-AU');
+  var js = '';
+  js += '// ══════════════════════════════════════════════════════════════\n';
+  js += '//  GnA Ethnic Wears — Product Data File\n';
+  js += '//  Generated: ' + ts + '\n';
+  js += '//  Products: ' + prods.length + '\n';
+  js += '//  HOW TO USE:\n';
+  js += '//    1. Replace the existing gna-products-data.js in your website folder\n';
+  js += '//    2. Re-upload to your web host (Netlify / cPanel / etc.)\n';
+  js += '//    3. Refresh any collection page — products appear instantly!\n';
+  js += '// ══════════════════════════════════════════════════════════════\n\n';
+  js += 'var GNA_PRODUCTS_DATA = ' + JSON.stringify(prods, null, 2) + ';\n\n';
+  js += '// Auto-seed all collection pages via localStorage\n';
+  js += '(function(){\n';
+  js += '  try{\n';
+  js += '    var existing=[];\n';
+  js += '    try{existing=JSON.parse(localStorage.getItem("gna_products")||"[]");}catch(e){}\n';
+  js += '    var merged=existing.slice();\n';
+  js += '    GNA_PRODUCTS_DATA.forEach(function(p){\n';
+  js += '      var idx=-1;\n';
+  js += '      for(var i=0;i<merged.length;i++){if(merged[i].id===p.id){idx=i;break;}}\n';
+  js += '      if(idx>=0) merged[idx]=p; else merged.push(p);\n';
+  js += '    });\n';
+  js += '    localStorage.setItem("gna_products",JSON.stringify(merged));\n';
+  js += '    console.log("[GnA] "+merged.length+" products loaded.");\n';
+  js += '  }catch(e){console.warn("[GnA] Could not seed product data:",e);}\n';
+  js += '})();\n';
+
+  var blob = new Blob([js], {type:'text/javascript'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'gna-products-data.js';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToastMsg('✅ Downloaded gna-products-data.js ('+prods.length+' products). Upload this file to your website to publish!','success');
+}
+
+
+async function pushAllToSheets(){
+  var products = [];
+  try { products = JSON.parse(localStorage.getItem('gna_products')||'[]'); } catch(e){}
+  if(products.length === 0){ showToastMsg('No products to sync','error'); return; }
+  
+  showToastMsg('⏳ Pushing '+products.length+' product(s) to Google Sheets...','');
+  
+  var success = 0;
+  for(var i=0; i<products.length; i++){
+    var p = products[i];
+    try{
+      var result = await apiPost({action:'addProduct', product:p});
+      if(result && result.success) success++;
+    }catch(e){ console.log('Failed:', p.name); }
+  }
+  
+  if(success > 0){
+    showToastMsg('✅ '+success+' product(s) pushed to Google Sheets! Website will now show them.','success');
+  } else {
+    showToastMsg('❌ Could not connect to Google Sheets. Check internet connection.','error');
+  }
+}
+
+async function syncFromSheet(){
+  try{
+    showToastMsg('⏳ Syncing products from website...','');
+    const sheetProducts = await apiGet('getAllProducts');
+    if(sheetProducts && sheetProducts.length > 0){
+      // Merge sheet products with local ones
+      const localIds = products.map(p=>p.id);
+      sheetProducts.forEach(sp=>{
+        if(!localIds.includes(sp.id)) products.push(sp);
+        else {
+          const idx = products.findIndex(p=>p.id===sp.id);
+          if(idx>=0) products[idx] = {...products[idx], ...sp};
+        }
+      });
+      localStorage.setItem('gna_products',JSON.stringify(products));
+      renderProductsTable(products);
+      showToastMsg('✓ Products synced! ('+products.length+' total)','success');
+      initDashboard();
+    } else {
+      showToastMsg('No products in sheet yet.','');
+    }
+  }catch(e){
+    showToastMsg('Could not sync. Check connection.','error');
+  }
+}
+
+function initDashboard(){
+  updateReviewBadge();
+  document.getElementById('statProducts').textContent=products.length;
+  const pendingRevCount = getReviews('pending').length;
+  const statRevEl = document.getElementById('statReviews');
+  if(statRevEl) statRevEl.textContent = pendingRevCount;
+  document.getElementById('statOrders').textContent=orders.length;
+  const rev=orders.reduce((a,o)=>a+(o.total||0),0);
+  document.getElementById('statRevenue').textContent='$'+rev.toFixed(0);
+  renderRecentProducts();
+  renderRecentOrders();
+}
+
+function renderRecentProducts(){
+  const el=document.getElementById('recentProductsTable');
+  if(products.length===0){el.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted)"><p>No products yet. <a href="#" onclick="showPage(\'add-product\')" style="color:var(--rust)">Add your first product →</a></p></div>';return;}
+  const recent=products.slice(-5).reverse();
+  el.innerHTML=`<div style="overflow-x:auto"><table class="products-table"><thead><tr><th>Photo</th><th>Name</th><th>Collection</th><th>Price</th><th>Sizes</th></tr></thead><tbody>${recent.map(p=>`
+    <tr>
+      <td>${p.photoData||p.photoUrl?`<img src="${p.photoData||p.photoUrl}" class="prod-thumb" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/><div class="prod-thumb-placeholder" style="background:${p.bg||'var(--cream2)'};display:none">${p.emoji||'👗'}</div>`:`<div class="prod-thumb-placeholder" style="background:${p.bg||'var(--cream2)'}">${p.emoji||'👗'}</div>`}</td>
+      <td><strong>${p.name}</strong></td>
+      <td>${p.collection}</td>
+      <td style="color:var(--rust);font-weight:700">AUD $${p.price}</td>
+      <td style="font-size:0.78rem">${(p.sizes||[]).join(', ')||'—'}</td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+function renderRecentOrders(){
+  const el=document.getElementById('recentOrdersTable');
+  if(orders.length===0){el.innerHTML='<div style="text-align:center;padding:2rem;color:var(--muted)"><p>No orders yet.</p></div>';return;}
+  const recent=orders.slice(-5).reverse();
+  el.innerHTML=`<div style="overflow-x:auto"><table class="orders-table"><thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody>${recent.map(o=>`
+    <tr><td>#${o.id}</td><td>${o.customer}</td><td style="font-weight:700;color:var(--rust)">AUD $${o.total}</td><td><span class="status-badge status-${o.status}">${o.status}</span></td><td>${o.date}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+// ── PRODUCT IMAGE PREVIEW ──
+// ── MULTI-PHOTO SYSTEM ──
+// ══════════════════════════════
+//  PHOTO UPLOAD SYSTEM
+// ══════════════════════════════
+// _photos declared at top
+
+function _compress(file, cb){
+  try {
+    var reader = new FileReader();
+    reader.onerror = function(){ console.error('FileReader error'); cb(null); };
+    reader.onload = function(e){
+      try {
+        var img = new Image();
+        img.onerror = function(){ console.error('Image load error'); cb(null); };
+        img.onload = function(){
+          try {
+            var canvas = document.createElement('canvas');
+            var maxW = 600, w = img.width, h = img.height;
+            if(w > maxW){ h = Math.round(h * maxW / w); w = maxW; }
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            var data = canvas.toDataURL('image/jpeg', 0.5);
+            if(data.length > 250000){
+              var c2 = document.createElement('canvas');
+              c2.width = 400; c2.height = Math.round(img.height * 400 / img.width);
+              c2.getContext('2d').drawImage(img, 0, 0, c2.width, c2.height);
+              data = c2.toDataURL('image/jpeg', 0.4);
+            }
+            console.log('Compressed photo size:', Math.round(data.length/1024)+'KB');
+            cb(data);
+          } catch(err){ console.error('Canvas error:', err); cb(null); }
+        };
+        img.src = e.target.result;
+      } catch(err){ console.error('Image create error:', err); cb(null); }
+    };
+    reader.readAsDataURL(file);
+  } catch(err){ console.error('Compress error:', err); cb(null); }
+}
+
+// Upload photo to Cloudinary (free image hosting)
+async function uploadToCloudinary(file){
+  try {
+    showToastMsg('⏳ Uploading photo...','');
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'gna_products');
+    formData.append('cloud_name', 'gnaethnicwears');
+    var res = await fetch('https://api.cloudinary.com/v1_1/gnaethnicwears/image/upload', {
+      method: 'POST',
+      body: formData
+    });
+    var data = await res.json();
+    if(data.secure_url){
+      showToastMsg('✓ Photo uploaded!','success');
+      return data.secure_url;
+    }
+    return null;
+  } catch(e) {
+    console.error('Cloudinary upload error:', e);
+    return null;
+  }
+}
+
+function triggerPhotoInput(){
+  var inp = document.getElementById('pPhotoInput');
+  if(inp) inp.click();
+}
+
+async function addPhotos(input){
+  if(!input || !input.files || input.files.length === 0) return;
+  var remaining = 5 - _photos.length;
+  if(remaining <= 0){ showToastMsg('Maximum 5 photos. Remove one first.','error'); return; }
+  var files = Array.from(input.files).slice(0, remaining);
+  var total = files.length;
+  var added = 0;
+  showToastMsg('⏳ Uploading ' + total + ' photo(s) to cloud...','');
+
+  for(var i = 0; i < files.length; i++){
+    try {
+      var formData = new FormData();
+      formData.append('file', files[i]);
+      formData.append('upload_preset', 'gna_products');
+      formData.append('cloud_name', 'dwbwldr1p');
+
+      var res = await fetch('https://api.cloudinary.com/v1_1/dwbwldr1p/image/upload', {
+        method: 'POST',
+        body: formData
+      });
+      var data = await res.json();
+      if(data.secure_url){
+        _photos.push(data.secure_url);
+        added++;
+        _renderPhotoGrid();
+        if(_photos.length === 1) _updatePreview(data.secure_url);
+        showToastMsg('✓ ' + added + '/' + total + ' photo(s) uploaded!','success');
+      } else {
+        console.error('Cloudinary error:', data);
+        showToastMsg('❌ Upload failed for photo ' + (i+1) + '. Try again.','error');
+      }
+    } catch(e) {
+      console.error('Upload error:', e);
+      showToastMsg('❌ Upload failed. Check internet connection.','error');
+    }
+  }
+  input.value = '';
+  if(added === total) showToastMsg('✅ All ' + total + ' photo(s) uploaded successfully!','success');
+}
+
+function addPhotoUrl(){
+  var url = document.getElementById('pPhotoUrl').value.trim();
+  if(!url){ showToastMsg('Enter a URL first','error'); return; }
+  if(_photos.length >= 5){ showToastMsg('Maximum 5 photos','error'); return; }
+  _photos.push(url);
+  document.getElementById('pPhotoUrl').value = '';
+  _renderPhotoGrid();
+  if(_photos.length === 1) _updatePreview(url);
+  showToastMsg('Photo URL added!','success');
+}
+
+function removePhoto(idx){
+  _photos.splice(idx, 1);
+  _renderPhotoGrid();
+  if(_photos.length > 0) _updatePreview(_photos[0]);
+  else {
+    var pc = document.getElementById('previewCardImg');
+    if(pc){ pc.innerHTML = '👗'; pc.style.background = 'linear-gradient(155deg,#C9184A,#6B0020)'; }
+  }
+}
+
+function setMainPhoto(idx){
+  if(idx === 0) return;
+  var p = _photos.splice(idx, 1)[0];
+  _photos.unshift(p);
+  _renderPhotoGrid();
+  _updatePreview(p);
+  showToastMsg('Main photo set!','success');
+}
+
+function _updatePreview(src){
+  var pc = document.getElementById('previewCardImg');
+  if(pc){
+    pc.style.background = 'none';
+    pc.innerHTML = '<img src="'+src+'" style="width:100%;height:100%;object-fit:cover"/>';
+  }
+}
+
+function _renderPhotoGrid(){
+  var grid = document.getElementById('photoGrid');
+  if(!grid) return;
+  var html = _photos.map(function(src, idx){
+    var imgSrc = typeof src === 'string' ? src : (src.data || src.url || '');
+    return '<div class="photo-thumb">'
+      + '<img src="'+imgSrc+'" onclick="setMainPhoto('+idx+')" style="cursor:pointer;width:100%;height:100%;object-fit:cover" title="'+(idx===0?'Main photo':'Click to make main')+'"/>'
+      + (idx===0 ? '<div class="photo-main-badge">Main</div>' : '')
+      + '<button class="photo-remove" onclick="removePhoto('+idx+')" title="Remove">✕</button>'
+      + '</div>';
+  }).join('');
+  // Always show Add Photo button if under 5
+  for(var i = _photos.length; i < 5; i++){
+    html += '<button type="button" class="photo-add-btn" onclick="triggerPhotoInput()"><span>📸</span><p>Add Photo</p></button>';
+    break; // Only show one add button
+  }
+  grid.innerHTML = html;
+}
+
+// Legacy compatibility
+function previewImage(input){ addPhotos(input); }
+function previewUrl(url){ if(url){ _photos.push(url); _renderPhotoGrid(); } }
+
+// ── LIVE PREVIEW UPDATE ──
+function updatePreview(){
+  const name=document.getElementById('pName').value||'Product Name';
+  const cat=document.getElementById('pCollection').value||'Collection';
+  const price=document.getElementById('pPrice').value||'0.00';
+  const badge=document.getElementById('pBadge').value;
+  document.getElementById('previewName').textContent=name.length>30?name.substring(0,30)+'...':name;
+  document.getElementById('previewCat').textContent=cat;
+  document.getElementById('previewPrice').textContent=`AUD $${parseFloat(price||0).toFixed(2)}`;
+  const pb=document.getElementById('previewBadge');
+  if(pb){if(badge){pb.style.display='block';pb.textContent=badge;}else{pb.style.display='none';}}
+}
+
+// ── SAVE PRODUCT ──
+function saveProduct(){
+  const name=document.getElementById('pName').value.trim();
+  const collection=document.getElementById('pCollection').value;
+  const price=parseFloat(document.getElementById('pPrice').value);
+  if(!name){showToastMsg('Please enter a product name','error');return;}
+  if(!collection){showToastMsg('Please select a collection','error');return;}
+  if(!price||price<=0){showToastMsg('Please enter a valid price','error');return;}
+
+  // Collect variants (colour + sizes per colour)
+  const variantsData = getVariantsData();
+  // Also build flat sizes list (all unique sizes across all variants)
+  const allSizesSet = new Set();
+  const sizeQty = {};
+  var colors = variantsData.map(function(v){ return {hex:v.hex, name:v.name}; });
+  variantsData.forEach(function(v){
+    Object.keys(v.sizes).forEach(function(s){
+      allSizesSet.add(s);
+      sizeQty[s] = (sizeQty[s]||0) + (v.sizes[s]||0);
+    });
+  });
+  const sizes = ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'].filter(function(s){ return allSizesSet.has(s); });
+  // Get all photos
+  const photoUrl = _photos.length > 0 && typeof _photos[0] === 'string' && _photos[0].startsWith('http') ? _photos[0] : '';
+  const weightVal=document.getElementById('pWeight').value;
+  const weight=weightVal==='custom'?parseInt(document.getElementById('pWeightCustom').value)||500:parseInt(weightVal);
+  // colors already set from variants above
+
+  const colInfo=COLLECTIONS_INFO.find(c=>c.name===collection);
+  const product={
+    id:'p'+Date.now(),
+    name,collection,
+    price:parseFloat(price.toFixed(2)),
+    oldPrice:parseFloat(document.getElementById('pOldPrice').value)||null,
+    desc:document.getElementById('pDesc').value.trim(),
+    sizes,sizeQty,colors,variants:JSON.stringify(variantsData),weight,
+    badge:document.getElementById('pBadge').value,
+    emoji:colInfo?.emoji||'👗',
+    bg:colInfo?.bg||'linear-gradient(155deg,#C9184A,#6B0020)',
+    cat:collection,
+    category:collection,
+    photoUrl:_photos.length>0&&typeof _photos[0]==='string'&&_photos[0].startsWith('http')?_photos[0]:null,
+    photoData:_photos.length>0&&_photos[0].startsWith('data:')?_photos[0]:null,
+    photos:JSON.stringify(_photos),
+    dateAdded:new Date().toLocaleDateString('en-AU'),
+  };
+
+  // Save to localStorage first (instant)
+  products.push(product);
+  localStorage.setItem('gna_products',JSON.stringify(products));
+  showToastMsg('⏳ Saving to website...','');
+
+  // Save to Firebase (real-time database)
+  if(typeof netlifyDBAddProduct === 'function'){
+    netlifyDBAddProduct(product).then(ok=>{
+      if(ok){
+        showToastMsg('✅ "'+name+'" is now LIVE on your website!','success');
+      } else {
+        showToastMsg('⚠️ Saved locally. Try "🚀 Push All" button.','error');
+      }
+    }).catch(()=>{
+      showToastMsg('✓ Saved locally. Click 🚀 Push All to publish.','success');
+    });
+  } else {
+    showToastMsg('✓ "'+name+'" saved! Click 🚀 Push All to publish.','success');
+  }
+
+  clearForm();
+  showPage('products');
+  initDashboard();
+}
+
+function clearForm(){
+  ['pName','pDesc','pPhotoUrl','pOldPrice','pWeightCustom'].forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
+  var elems = ['pPrice','pCollection','pBadge'];
+  elems.forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
+  var pw=document.getElementById('pWeight');if(pw)pw.value='350';
+  // Clear all size checkboxes and qty inputs
+  ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'].forEach(s=>{
+    const cb=document.getElementById('sz-'+s);
+    const qt=document.getElementById('qty-'+s);
+    if(cb){cb.checked=false;}
+    if(qt){qt.value='';qt.style.display='none';}
+  });
+  // Reset photos
+  _photos = [];
+  _renderPhotoGrid();
+  var pn=document.getElementById('previewName');if(pn)pn.textContent='Product Name';
+  var pc=document.getElementById('previewCat');if(pc)pc.textContent='Collection';
+  var pp = document.getElementById('previewPrice');
+  if(pp) pp.textContent='AUD $0.00';
+  editingId=null;
+  // Reset colours
+  window._addedColours=[];
+  try{ renderAddedColours(); }catch(e){}
+  document.querySelectorAll('.colour-preset').forEach(p=>p.classList.remove('selected'));
+  var ccn = document.getElementById('customColourName');
+  if(ccn) ccn.value='';
+}
+
+// ── PRODUCTS TABLE ──
+function renderProductsTable(list){
+  const tbody=document.getElementById('productsTableBody');
+  const noMsg=document.getElementById('noProductsMsg');
+  if(!list||list.length===0){tbody.innerHTML='';noMsg.style.display='block';return;}
+  noMsg.style.display='none';
+  tbody.innerHTML=list.map(p=>`
+    <tr>
+      <td>${p.photoData||p.photoUrl?`<img src="${p.photoData||p.photoUrl}" class="prod-thumb" onerror="this.style.display='none';this.nextSibling.style.display='flex'"/><div class="prod-thumb-placeholder" style="background:${p.bg};display:none">${p.emoji}</div>`:`<div class="prod-thumb-placeholder" style="background:${p.bg}">${p.emoji}</div>`}</td>
+      <td>
+        <strong style="font-size:0.9rem">${p.name}</strong>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.2rem">${p.desc?p.desc.substring(0,60)+'...':''}</div>
+      </td>
+      <td style="font-size:0.82rem">${p.collection}</td>
+      <td>
+        ${p.oldPrice?`<span style="text-decoration:line-through;color:var(--muted);font-size:0.78rem">$${p.oldPrice}</span><br/>`:''}
+        <strong style="color:var(--rust)">AUD $${p.price}</strong>
+      </td>
+      <td style="font-size:0.75rem;line-height:1.8">
+        ${(()=>{
+          try{
+            const variants = p.variants ? (typeof p.variants==='string'?JSON.parse(p.variants):p.variants) : null;
+            if(variants && variants.length>0){
+              return variants.map(v=>`<div style="display:flex;align-items:center;gap:0.3rem;margin-bottom:2px">
+                <div style="width:10px;height:10px;border-radius:50%;background:${v.hex};border:1px solid rgba(0,0,0,0.2);flex-shrink:0"></div>
+                <span style="font-weight:600">${v.name}:</span>
+                <span style="color:var(--muted)">${Object.keys(v.sizes||{}).join(', ')||'—'}</span>
+              </div>`).join('');
+            }
+          }catch(e){}
+          return (p.sizes||[]).join(', ')||'—';
+        })()}
+      </td>
+      <td>
+        <div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center">
+          ${(p.colors&&p.colors.length>0)?p.colors.map(c=>`<div title="${c.name||c}" style="width:18px;height:18px;border-radius:50%;background:${c.hex||c};border:1px solid rgba(0,0,0,0.15);flex-shrink:0"></div>`).join(''):'<span style="font-size:0.72rem;color:var(--muted)">—</span>'}
+        </div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:2px">${(p.colors&&p.colors.length>0)?p.colors.map(c=>c.name||c).join(', '):''}</div>
+      </td>
+      <td><span class="badge badge-${(p.badge||'none').toLowerCase()}">${p.badge||'—'}</span></td>
+      <td>
+        <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+          <button class="btn btn-success btn-sm" onclick="openEditModal('${p.id}')">✏️ Edit</button>
+          <button class="btn btn-danger btn-sm" onclick="openDeleteModal('${p.id}','${p.name.replace(/'/g,"\\'")}')">🗑</button>
+          <button class="btn btn-sm" style="background:#25D366;color:white;font-size:0.62rem" onclick="testAddToCart('${p.id}')" title="Add to cart for testing">🛒 Test</button>
+          <button class="btn btn-sm" style="background:#1565C0;color:white;font-size:0.62rem" onclick="quickResetStock('${p.id}',1)" title="Reset all stock to 1">🔄 Reset Stock</button>
+          <button class="btn btn-sm" style="background:${p.featured?'#C9A84C':'#f5f5f5'};color:${p.featured?'#1C0A00':'#666'};font-size:0.62rem" onclick="toggleFeatured('${p.id}')" title="Toggle homepage featured">⭐ ${p.featured?'Featured':'Feature'}</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterProductsAdmin(){
+  const search=document.getElementById('productSearch').value.toLowerCase();
+  const col=document.getElementById('productCollectionFilter').value;
+  const badge=document.getElementById('productBadgeFilter').value;
+  let filtered=products.filter(p=>{
+    const matchSearch=!search||p.name.toLowerCase().includes(search);
+    const matchCol=!col||p.collection===col;
+    const matchBadge=!badge||p.badge===badge;
+    return matchSearch&&matchCol&&matchBadge;
+  });
+  renderProductsTable(filtered);
+}
+
+// ── EDIT ──
+function openEditModal(id){
+  try{
+    const p=products.find(p=>p.id===id);
+    if(!p){showToastMsg('Product not found','error');return;}
+    editingId=id;
+    document.getElementById('editId').value=id;
+    document.getElementById('editName').value=p.name||'';
+    document.getElementById('editCollection').value=p.collection||'';
+    document.getElementById('editPrice').value=p.price||'';
+    document.getElementById('editOldPrice').value=p.oldPrice||'';
+    document.getElementById('editDesc').value=p.desc||'';
+    document.getElementById('editBadge').value=p.badge||'';
+    document.getElementById('editPhotoUrl').value=p.photoUrl||'';
+    // Load existing photos
+    try{
+      var photos = p.photos ? (typeof p.photos==='string'?JSON.parse(p.photos):p.photos) : [];
+      window._editPhotos = photos.map(function(ph){ return typeof ph==='string'?{url:ph,type:'url'}:ph; });
+    }catch(e){ window._editPhotos=[]; }
+    renderEditPhotoGrid();
+    // Load variants
+    try{
+      var editVariants = p.variants ? (typeof p.variants==='string'?JSON.parse(p.variants):p.variants) : [];
+      _variants = editVariants.map(function(v){ return {hex:v.hex||'#C9A84C',name:v.name||'',sizes:v.sizes||{}}; });
+      renderVariants();
+    }catch(e){ _variants=[]; renderVariants(); }
+    // Load colours
+    try{ initColourPresets('editColourPresets','edit'); }catch(e){}
+    try{ loadColoursForEdit(p.colors||[]); }catch(e){}
+    // Load sizes into edit checkboxes
+    try{
+      var allSizes=['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'];
+      var sizeQty = p.sizeQty || {};
+      allSizes.forEach(function(s){
+        var cb=document.getElementById('esz-'+s);
+        var qt=document.getElementById('eqty-'+s);
+        if(cb && sizeQty[s]!==undefined && sizeQty[s]>0){
+          cb.checked=true;
+          if(qt){qt.value=sizeQty[s];qt.style.display='block';}
+        } else if(cb){
+          cb.checked=false;
+          if(qt){qt.value='';qt.style.display='none';}
+        }
+      });
+    }catch(e){}
+    document.getElementById('editModal').classList.add('open');
+  }catch(err){
+    console.error('Edit modal error:',err);
+    showToastMsg('Error opening edit: '+err.message,'error');
+  }
+}
+
+function updateProduct(){
+  const id=document.getElementById('editId').value;
+  const idx=products.findIndex(p=>p.id===id);
+  if(idx<0) return;
+  const variantsData2 = getVariantsData();
+  const allSizesSet2 = new Set();
+  const sizeQty = {};
+  var colors2 = variantsData2.map(function(v){ return {hex:v.hex,name:v.name}; });
+  variantsData2.forEach(function(v){
+    Object.keys(v.sizes).forEach(function(s){ allSizesSet2.add(s); sizeQty[s]=(sizeQty[s]||0)+(v.sizes[s]||0); });
+  });
+  const sizes = ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'].filter(function(s){ return allSizesSet2.has(s); });
+  products[idx]={
+    ...products[idx],
+    name:document.getElementById('editName').value.trim(),
+    collection:document.getElementById('editCollection').value,
+    price:parseFloat(document.getElementById('editPrice').value),
+    oldPrice:parseFloat(document.getElementById('editOldPrice').value)||null,
+    desc:document.getElementById('editDesc').value.trim(),
+    badge:document.getElementById('editBadge').value,
+    photoUrl:document.getElementById('editPhotoUrl').value.trim()||products[idx].photoUrl,
+    sizes,sizeQty,colors,colors:colors2,variants:JSON.stringify(variantsData2),cat:document.getElementById('editCollection').value,
+    photoUrl:window._editPhotos.length>0&&window._editPhotos[0].url?window._editPhotos[0].url:null,
+    photoData:window._editPhotos.length>0&&window._editPhotos[0].data?window._editPhotos[0].data:null,
+    photos:window._editPhotos.map(p=>({url:p.url||'',data:p.data||'',type:p.type})),
+  };
+  localStorage.setItem('gna_products',JSON.stringify(products));
+  closeModal('editModal');
+  renderProductsTable(products);
+  initDashboard();
+  showToastMsg('⏳ Updating...','');
+
+  // Sync to Netlify Blobs
+  if(typeof netlifyDBSave === 'function'){
+    netlifyDBSave(products).then(ok=>{
+      showToastMsg(ok ? '✅ Product updated and live on website!' : '✓ Updated locally.', ok ? 'success' : '');
+    });
+  } else {
+    showToastMsg('✓ Product updated!','success');
+  }
+}
+
+// ── DELETE ──
+function openDeleteModal(id, name){
+  deleteTargetId=id;
+  document.getElementById('deleteProductName').textContent=name;
+  document.getElementById('deleteModal').classList.add('open');
+}
+
+function confirmDelete(){
+  const deletedId = deleteTargetId;
+  products=products.filter(p=>p.id!==deletedId);
+  localStorage.setItem('gna_products',JSON.stringify(products));
+  closeModal('deleteModal');
+  renderProductsTable(products);
+  initDashboard();
+  // Sync to Netlify Blobs
+  if(typeof netlifyDBSave === 'function'){
+    netlifyDBSave(products).then(ok=>{
+      showToastMsg(ok ? '✅ Product deleted from website!' : '✓ Deleted locally.', ok ? 'success' : '');
+    });
+  } else {
+    showToastMsg('✓ Deleted!','success');
+  }
+
+  // Sync to Google Sheets
+  apiPost({action:'deleteProduct', id:deletedId}).then(result=>{
+    if(result && result.success) showToastMsg('✓ Product removed from website!','success');
+    else showToastMsg('✓ Removed locally.','success');
+  }).catch(()=>showToastMsg('✓ Removed locally.','success'));
+  deleteTargetId=null;
+}
+
+// ── COLLECTIONS ──
+function renderCollections(){
+  const grid=document.getElementById('collectionsGrid');
+  const colCountEl=document.getElementById('colCount');
+  if(colCountEl) colCountEl.textContent=COLLECTIONS_INFO.length;
+  grid.innerHTML=COLLECTIONS_INFO.map(c=>{
+    const count=products.filter(p=>p.collection===c.name).length;
+    return `
+    <div class="collection-card-admin" style="position:relative">
+      <div class="col-card-header">
+        <div class="col-card-emoji">${c.emoji}</div>
+        <div style="display:flex;gap:0.4rem;align-items:center">
+          <span style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">${count} products</span>
+          ${!c.isDefault?`<button class="btn btn-danger btn-sm" style="padding:0.2rem 0.5rem;font-size:0.6rem" onclick="deleteCollection('${c.id}','${c.name.replace(/'/g,"\'")}')">🗑</button>`:'<span style="font-size:0.6rem;background:var(--cream2);padding:0.1rem 0.5rem;color:var(--muted)">Default</span>'}
+        </div>
+      </div>
+      <div class="col-card-name">${c.name}</div>
+      <div class="col-card-price">From AUD $${c.from}</div>
+      <div style="margin-top:0.3rem;font-size:0.75rem;color:var(--muted)">${c.desc||''}</div>
+      <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="filterToCollection('${c.name}')">View Products</button>
+        <button class="btn btn-gold btn-sm" onclick="showPage('add-product');document.getElementById('pCollection').value='${c.name}'">+ Add Product</button>
+        <button class="btn btn-sm" style="background:var(--cream2)" onclick="openEditCollectionModal('${c.id}')">✏️ Edit</button>
+      </div>
+    </div>`;
+  }).join('');
+  // Also refresh collection dropdowns in add/edit product forms
+  refreshCollectionDropdowns();
+}
+
+function refreshCollectionDropdowns(){
+  const opts=COLLECTIONS_INFO.map(c=>`<option value="${c.name}">${c.name}</option>`).join('');
+  ['pCollection','editCollection','productCollectionFilter'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    const currentVal=el.value;
+    if(id==='productCollectionFilter'){
+      el.innerHTML='<option value="">All Collections</option>'+opts;
+    } else {
+      el.innerHTML='<option value="">Select Collection...</option>'+opts;
+    }
+    el.value=currentVal;
+  });
+}
+
+function filterToCollection(name){
+  showPage('products');
+  document.getElementById('productCollectionFilter').value=name;
+  filterProductsAdmin();
+}
+
+// ── ORDERS ──
+async function renderOrders(){
+  const el=document.getElementById('ordersContent');
+  const tableWrap=document.getElementById('ordersTableWrap');
+
+  // Load from Firebase
+  showToastMsg('⏳ Loading orders...','');
+  try {
+    const res = await fetch('https://gna-ethnic-wears-default-rtdb.firebaseio.com/orders.json');
+    const data = await res.json();
+    if(data){
+      orders = Object.values(data).filter(Boolean).sort(function(a,b){
+        return new Date(b.timestamp||b.date) - new Date(a.timestamp||a.date);
+      });
+    } else {
+      orders = [];
+    }
+    showToastMsg('','');
+  } catch(e) {
+    console.error('Error loading orders:', e);
+    showToastMsg('Could not load orders from database','error');
+  }
+
+  if(orders.length===0){
+    el.style.display='block';tableWrap.style.display='none';return;
+  }
+  el.style.display='none';tableWrap.style.display='block';
+  document.getElementById('ordersTableBody').innerHTML=orders.map(o=>{
+    var itemsText = '';
+    if(Array.isArray(o.items)){
+      itemsText = o.items.map(function(i){ return i.name+' ('+i.size+(i.colour?' · '+i.colour:'')+') x'+i.qty; }).join('<br/>');
+    } else {
+      itemsText = o.items||'—';
+    }
+    return '<tr>'+
+      '<td><strong>'+o.id+'</strong><br/><span style="font-size:0.68rem;color:var(--muted)">'+o.date+'</span></td>'+
+      '<td>'+o.customer+'<br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.email||'')+'</span><br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.phone||'')+'</span></td>'+
+      '<td style="font-size:0.78rem">'+o.address+'</td>'+
+      '<td style="font-size:0.78rem">'+itemsText+'</td>'+
+      '<td style="font-weight:700;color:var(--rust)">AUD $'+(parseFloat(o.total)||0).toFixed(2)+'</td>'+
+      '<td><select style="font-size:0.72rem;padding:0.3rem 0.5rem;border:1px solid var(--border);font-family:Raleway,sans-serif" onchange="updateOrderStatus(\'' + o.id + '\',this.value)">'+
+        '<option '+(o.status==='paid'?'selected':'')+' value="paid">Paid</option>'+
+        '<option '+(o.status==='processing'?'selected':'')+' value="processing">Processing</option>'+
+        '<option '+(o.status==='shipped'?'selected':'')+' value="shipped">Shipped</option>'+
+        '<option '+(o.status==='delivered'?'selected':'')+' value="delivered">Delivered</option>'+
+      '</select></td>'+
+      '<td><a href="https://wa.me/'+( o.phone||'').replace(/[^0-9]/g,'')+'" target="_blank" class="btn btn-sm" style="background:#25D366;color:white">💬</a></td>'+
+    '</tr>';
+  }).join('');
+  document.getElementById('statOrders').textContent = orders.length;
+}
+
+async function updateOrderStatus(id,status){
+  const o=orders.find(o=>o.id===id);
+  if(o){
+    o.status=status;
+    try {
+      await fetch('https://gna-ethnic-wears-default-rtdb.firebaseio.com/orders/'+id+'.json', {
+        method:'PATCH',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({status:status})
+      });
+      showToastMsg('✅ Order status updated to '+status,'success');
+    } catch(e) {
+      showToastMsg('Order updated locally','success');
+    }
+  }
+}
+
+function deleteOrder(id){
+  if(confirm('Delete this order?')){
+    orders=orders.filter(o=>o.id!==id);
+    localStorage.setItem('gna_orders',JSON.stringify(orders));
+    renderOrders();initDashboard();
+    showToastMsg('Order deleted','success');
+  }
+}
+
+function addTestOrder(){
+  const testOrder={
+    id:'ORD-'+Math.floor(1000+Math.random()*9000),
+    customer:'Priya Sharma',email:'priya@email.com',
+    items:'2x Short Kurti (L), 1x Cord Set (XL)',
+    total:(Math.random()*150+30).toFixed(2),
+    country:'Australia',status:'pending',
+    date:new Date().toLocaleDateString('en-AU'),
+  };
+  orders.push(testOrder);
+  localStorage.setItem('gna_orders',JSON.stringify(orders));
+  renderOrders();initDashboard();
+  showToastMsg('Test order added!','success');
+}
+
+// ── SETTINGS ──
+function changePassword(){
+  const curr=document.getElementById('currPass').value;
+  const newP=document.getElementById('newPass').value;
+  if(curr!==ADMIN_PASS){showToastMsg('Current password is incorrect','error');return;}
+  if(newP.length<6){showToastMsg('New password must be at least 6 characters','error');return;}
+  showToastMsg('Password updated! Please note your new password.','success');
+  document.getElementById('currPass').value='';
+  document.getElementById('newPass').value='';
+}
+
+// ── MODAL ──
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+window.addEventListener('click',e=>{
+  if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('open');
+});
+
+// ── TOAST ──
+function showToastMsg(msg,type=''){
+  const t=document.getElementById('adminToast');
+  t.textContent=msg;t.className='toast '+(type||'');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ── WEIGHT TOGGLE ──
+document.getElementById('pWeight').addEventListener('change',function(){
+  document.getElementById('pWeightCustom').style.display=this.value==='custom'?'block':'none';
+});
+
+// ── COLLECTION BG PREVIEW ──
+document.addEventListener('change',function(e){
+  if(e.target.id==='colBg') updateColPreview();
+});
+document.addEventListener('input',function(e){
+  if(e.target.id==='colEmoji') updateColPreview();
+});
+
+// ── LIVE PREVIEW ──
+['pName','pCollection','pPrice','pBadge'].forEach(id=>{
+  document.getElementById(id)?.addEventListener('input',updatePreview);
+  document.getElementById(id)?.addEventListener('change',updatePreview);
+});
+
+// ── ENTER KEY LOGIN ──
+document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+
+// ── COLLECTIONS CRUD ──
+function openAddCollectionModal(){
+  document.getElementById('colModalTitle').textContent='Add New Collection';
+  document.getElementById('saveColBtn').textContent='➕ Add Collection';
+  document.getElementById('editColId').value='';
+  document.getElementById('colName').value='';
+  document.getElementById('colPrice').value='';
+  document.getElementById('colEmoji').value='';
+  document.getElementById('colDesc').value='';
+  document.getElementById('colBg').value='linear-gradient(155deg,#C9184A,#6B0020)';
+  updateColPreview();
+  document.getElementById('addCollectionModal').classList.add('open');
+}
+
+function openEditCollectionModal(id){
+  const c=COLLECTIONS_INFO.find(c=>c.id===id);
+  if(!c) return;
+  document.getElementById('colModalTitle').textContent='Edit Collection';
+  document.getElementById('saveColBtn').textContent='💾 Save Changes';
+  document.getElementById('editColId').value=id;
+  document.getElementById('colName').value=c.name;
+  document.getElementById('colPrice').value=c.from;
+  document.getElementById('colEmoji').value=c.emoji||'';
+  document.getElementById('colDesc').value=c.desc||'';
+  document.getElementById('colBg').value=c.bg||'linear-gradient(155deg,#C9184A,#6B0020)';
+  updateColPreview();
+  document.getElementById('addCollectionModal').classList.add('open');
+}
+
+function saveCollection(){
+  const name=document.getElementById('colName').value.trim();
+  const price=parseFloat(document.getElementById('colPrice').value);
+  const emoji=document.getElementById('colEmoji').value.trim()||'👗';
+  const desc=document.getElementById('colDesc').value.trim();
+  const bg=document.getElementById('colBg').value;
+  const editId=document.getElementById('editColId').value;
+
+  if(!name){showToastMsg('Please enter a collection name','error');return;}
+  if(!price||price<0){showToastMsg('Please enter a starting price','error');return;}
+
+  if(editId){
+    // EDIT existing
+    const idx=COLLECTIONS_INFO.findIndex(c=>c.id===editId);
+    if(idx>=0){
+      const oldName=COLLECTIONS_INFO[idx].name;
+      COLLECTIONS_INFO[idx]={...COLLECTIONS_INFO[idx],name,from:price,emoji,desc,bg};
+      // Update products that use old name
+      products.forEach(p=>{if(p.collection===oldName){p.collection=name;p.cat=name;}});
+      localStorage.setItem('gna_products',JSON.stringify(products));
+      saveCollections();
+      closeModal('addCollectionModal');
+      renderCollections();
+      showToastMsg('✓ Collection "'+name+'" updated!','success');
+    }
+  } else {
+    // CHECK duplicate
+    if(COLLECTIONS_INFO.find(c=>c.name.toLowerCase()===name.toLowerCase())){
+      showToastMsg('A collection with this name already exists','error');return;
+    }
+    // ADD new
+    const newCol={id:'col'+Date.now(),name,from:price,emoji,desc,bg,isDefault:false};
+    COLLECTIONS_INFO.push(newCol);
+    saveCollections();
+    closeModal('addCollectionModal');
+    renderCollections();
+    showToastMsg('✓ Collection "'+name+'" added!','success');
+    initDashboard();
+  }
+}
+
+function deleteCollection(id, name){
+  const productCount=products.filter(p=>p.collection===name).length;
+  let msg='Delete collection "'+name+'"?';
+  if(productCount>0) msg+='\n\n⚠️ WARNING: This collection has '+productCount+' product(s). Those products will still exist but won\'t show in any collection.';
+  if(!confirm(msg)) return;
+  COLLECTIONS_INFO=COLLECTIONS_INFO.filter(c=>c.id!==id);
+  saveCollections();
+  renderCollections();
+  showToastMsg('Collection deleted.','success');
+}
+
+function updateColPreview(){
+  const bg=document.getElementById('colBg').value;
+  const emoji=document.getElementById('colEmoji').value||'👗';
+  const prev=document.getElementById('colBgPreview');
+  if(prev){prev.style.background=bg;prev.textContent=emoji;}
+}
+
+// ══════════════════════════════════════
+//  REVIEWS ADMIN SYSTEM
+// ══════════════════════════════════════
+
+// ── FIREBASE REVIEW HELPERS ──
+const GNA_FB = 'https://gna-ethnic-wears-default-rtdb.firebaseio.com';
+
+async function fbGetReviews(type){
+  try{
+    const res = await fetch(`${GNA_FB}/reviews/${type}.json`);
+    if(!res.ok) return [];
+    const data = await res.json();
+    if(!data) return [];
+    return Array.isArray(data) ? data : Object.values(data);
+  }catch(e){ return []; }
+}
+
+async function fbSaveReviews(type, data){
+  try{
+    await fetch(`${GNA_FB}/reviews/${type}.json`, {
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+  }catch(e){ console.error('Firebase save error:',e); }
+}
+
+// Keep sync wrappers so existing calls still work
+async function getReviewsAsync(type){ return await fbGetReviews(type); }
+
+// Legacy sync fallback (reads from localStorage cache)
+function getReviews(type){
+  const key = type==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
+  try{ return JSON.parse(localStorage.getItem(key)||'[]'); }catch(e){ return []; }
+}
+function saveReviews(type, data){
+  const key = type==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
+  localStorage.setItem(key, JSON.stringify(data));
+  fbSaveReviews(type, data); // also push to Firebase
+}
+
+function renderStarsAdmin(rating){
+  return '★'.repeat(rating) + '☆'.repeat(5-rating);
+}
+
+async function updateReviewBadge(){
+  // Use cache first for speed, then refresh from Firebase
+  const pending = getReviews('pending');
+  const badge = document.getElementById('pendingBadge');
+  const countEl = document.getElementById('pendingCount');
+  if(badge){ if(pending.length>0){badge.style.display='inline';badge.textContent=pending.length;}else{badge.style.display='none';} }
+  if(countEl) countEl.textContent = pending.length;
+  const approvedEl = document.getElementById('approvedCount');
+  if(approvedEl) approvedEl.textContent = getReviews('approved').length;
+  // Refresh from Firebase in background
+  const freshPending = await fbGetReviews('pending');
+  try{ localStorage.setItem('gna_reviews_pending', JSON.stringify(freshPending)); }catch(e){}
+  if(badge){ if(freshPending.length>0){badge.style.display='inline';badge.textContent=freshPending.length;}else{badge.style.display='none';} }
+  if(countEl) countEl.textContent = freshPending.length;
+  const statRevEl = document.getElementById('statReviews');
+  if(statRevEl) statRevEl.textContent = freshPending.length;
+}
+
+let currentReviewTab = 'pending';
+
+function showReviewTab(tab){
+  currentReviewTab = tab;
+  document.getElementById('pendingTab').style.borderBottomColor = tab==='pending'?'var(--gold)':'transparent';
+  document.getElementById('pendingTab').style.color = tab==='pending'?'var(--deep)':'var(--muted)';
+  document.getElementById('approvedTab').style.borderBottomColor = tab==='approved'?'var(--gold)':'transparent';
+  document.getElementById('approvedTab').style.color = tab==='approved'?'var(--deep)':'var(--muted)';
+  renderAdminReviews(tab);
+}
+
+async function renderAdminReviews(tab){
+  const container = document.getElementById('reviewsAdminContent');
+  if(!container) return;
+  container.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:2rem;margin-bottom:0.5rem">⏳</div>Loading reviews...</div>`;
+
+  // Load from Firebase and sync to localStorage cache
+  const reviews = await fbGetReviews(tab);
+  const cacheKey = tab==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
+  try{ localStorage.setItem(cacheKey, JSON.stringify(reviews)); }catch(e){}
+
+  updateReviewBadge();
+
+  if(reviews.length===0){
+    container.innerHTML=`<div style="text-align:center;padding:4rem;color:var(--muted)">
+      <div style="font-size:3rem;margin-bottom:1rem">⭐</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--deep);margin-bottom:0.6rem">
+        ${tab==='pending'?'No Pending Reviews':'No Published Reviews'}
+      </h3>
+      <p style="font-size:0.85rem">${tab==='pending'?'All reviews have been processed!':'No reviews approved yet.'}</p>
+    </div>`;
+    return;
+  }
+
+  container.innerHTML = reviews.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(r=>`
+    <div style="background:white;border:1px solid var(--border);margin-bottom:1rem;overflow:hidden">
+      <div style="display:grid;grid-template-columns:${r.photos&&r.photos.length>0?'140px 1fr':'1fr'};gap:0">
+        ${r.photos&&r.photos.length>0?`<img src="${r.photos[0]}" style="width:140px;height:140px;object-fit:cover;display:block" onerror="this.style.display='none'"/>`:'' }
+        <div style="padding:1.2rem">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.6rem">
+            <div>
+              <span style="color:#F59E0B;font-size:1.1rem">${renderStarsAdmin(r.rating)}</span>
+              <strong style="font-size:0.95rem;color:var(--deep);margin-left:0.5rem">${r.name}</strong>
+              <span style="font-size:0.75rem;color:var(--muted);margin-left:0.5rem">${r.country||''}</span>
+            </div>
+            <span style="font-size:0.72rem;color:var(--muted)">${r.date||''}</span>
+          </div>
+          <div style="font-size:0.8rem;color:var(--muted);margin-bottom:0.5rem">
+            <span style="background:var(--cream2);padding:0.2rem 0.6rem;font-size:0.7rem">${r.product||''}</span>
+            ${r.size?`<span style="background:var(--deep);color:var(--gold);padding:0.2rem 0.6rem;font-size:0.7rem;margin-left:0.4rem">Size ${r.size}</span>`:''}
+          </div>
+          <p style="font-size:0.87rem;color:var(--text);line-height:1.75;margin-bottom:1rem;font-style:italic">"${r.text}"</p>
+          ${r.photos&&r.photos.length>1?`<div style="display:flex;gap:0.4rem;margin-bottom:0.8rem">${r.photos.slice(1).map(p=>`<img src="${p}" style="width:50px;height:50px;object-fit:cover" onerror="this.style.display='none'"/>`).join('')}</div>`:''}
+          <div style="display:flex;gap:0.6rem;flex-wrap:wrap">
+            ${tab==='pending'?`
+              <button class="btn btn-success btn-sm" onclick="approveReview('${r.id}')">✅ Approve & Publish</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteReview('${r.id}','pending')">🗑 Delete</button>
+            `:`
+              <button class="btn btn-danger btn-sm" onclick="deleteReview('${r.id}','approved')">🗑 Remove</button>
+            `}
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+async function approveReview(id){
+  const pending = await fbGetReviews('pending');
+  const idx = pending.findIndex(r=>r.id===id);
+  if(idx<0) return;
+  const review = {...pending[idx], status:'approved'};
+  pending.splice(idx,1);
+  const approved = await fbGetReviews('approved');
+  approved.push(review);
+  await fbSaveReviews('pending', pending);
+  await fbSaveReviews('approved', approved);
+  // Sync localStorage cache
+  try{ localStorage.setItem('gna_reviews_pending', JSON.stringify(pending)); }catch(e){}
+  try{ localStorage.setItem('gna_reviews_approved', JSON.stringify(approved)); }catch(e){}
+  showToastMsg('✓ Review approved and published!','success');
+  renderAdminReviews(currentReviewTab);
+  updateReviewBadge();
+}
+
+async function deleteReview(id, type){
+  if(!confirm('Delete this review? This cannot be undone.')) return;
+  const reviews = (await fbGetReviews(type)).filter(r=>r.id!==id);
+  await fbSaveReviews(type, reviews);
+  const cacheKey = type==='approved' ? 'gna_reviews_approved' : 'gna_reviews_pending';
+  try{ localStorage.setItem(cacheKey, JSON.stringify(reviews)); }catch(e){}
+  showToastMsg('Review deleted.','success');
+  renderAdminReviews(currentReviewTab);
+  updateReviewBadge();
+}
+
+// ══════════════════════════════════════
+//  COLOUR + SIZE VARIANT SYSTEM
+// ══════════════════════════════════════
+
+// _variants declared at top
+
+function addVariant(){
+  var hex = document.getElementById('newVarColour').value;
+  var name = document.getElementById('newVarName').value.trim();
+  if(!name){ showToastMsg('Enter a colour name first','error'); return; }
+  if(_variants.find(function(v){ return v.name.toLowerCase()===name.toLowerCase(); })){
+    showToastMsg(name+' already added','error'); return;
+  }
+  _variants.push({hex:hex, name:name, sizes:{}});
+  document.getElementById('newVarName').value = '';
+  renderVariants();
+  showToastMsg('✓ '+name+' added! Click it to set sizes.','success');
+}
+
+function quickAddVariant(hex, name){
+  if(_variants.find(function(v){ return v.name.toLowerCase()===name.toLowerCase(); })){
+    showToastMsg(name+' already added','error'); return;
+  }
+  _variants.push({hex:hex, name:name, sizes:{}});
+  renderVariants();
+  showToastMsg('✓ '+name+' added!','success');
+}
+
+function removeVariant(idx){
+  _variants.splice(idx,1);
+  renderVariants();
+}
+
+function toggleVariant(idx){
+  var body = document.getElementById('vbody-'+idx);
+  if(body) body.classList.toggle('open');
+}
+
+function renderVariants(){
+  var list = document.getElementById('variantList');
+  if(!list) return;
+  if(_variants.length === 0){
+    list.innerHTML = '<div style="font-size:0.82rem;color:var(--muted);font-style:italic;padding:0.8rem;text-align:center;border:1px dashed var(--border)">No colour variants added yet. Add a colour below.</div>';
+    return;
+  }
+
+  var allSizes = ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'];
+
+  list.innerHTML = _variants.map(function(v, idx){
+    // Count filled sizes
+    var filledSizes = Object.keys(v.sizes).filter(function(s){ return v.sizes[s] > 0; });
+    var summary = filledSizes.length > 0
+      ? filledSizes.map(function(s){ return s+'('+v.sizes[s]+')'; }).join(' · ')
+      : 'No sizes set yet — click to expand';
+
+    var sizesHtml = allSizes.map(function(s){
+      var cbId = 'v'+idx+'_sz_'+s;
+      var qId = 'v'+idx+'_qty_'+s;
+      var isChecked = v.sizes.hasOwnProperty(s);
+      var qty = v.sizes[s] || '';
+      return '<div class="vsz-item">'
+        + '<input type="checkbox" class="vsz-cb" id="'+cbId+'" '+(isChecked?'checked':'')+' onchange="varSizeToggle('+idx+',&quot;'+s+'&quot;,this)"/>'
+        + '<label class="vsz-lbl" for="'+cbId+'">'+s+'</label>'
+        + '<input type="number" class="vsz-qty" id="'+qId+'" value="'+(qty||'')+'" placeholder="Qty" min="0" style="'+(isChecked?'display:block':'display:none')+'" oninput="varQtyChange('+idx+',&quot;'+s+'&quot;,this)"/>'
+        + '</div>';
+    }).join('');
+
+    return '<div class="variant-card">'
+      + '<div class="variant-header" onclick="toggleVariant('+idx+')">'
+      +   '<div class="variant-swatch" style="background:'+v.hex+'"></div>'
+      +   '<div class="variant-name">'+v.name+'</div>'
+      +   '<div class="variant-summary">'+summary+'</div>'
+      +   '<div class="variant-actions">'
+      +     '<button type="button" class="btn btn-danger btn-sm" onclick="event.stopPropagation();removeVariant('+idx+')" style="padding:0.2rem 0.5rem;font-size:0.62rem">🗑</button>'
+      +   '</div>'
+      + '</div>'
+      + '<div class="variant-body" id="vbody-'+idx+'">'
+      +   '<div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem">Tick the sizes available in <strong>'+v.name+'</strong> and enter qty for each:</div>'
+      +   '<div class="variant-sizes">'+sizesHtml+'</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function varSizeToggle(vIdx, size, cb){
+  if(cb.checked){
+    _variants[vIdx].sizes[size] = 0;
+    var qEl = document.getElementById('v'+vIdx+'_qty_'+size);
+    if(qEl) qEl.style.display = 'block';
+  } else {
+    delete _variants[vIdx].sizes[size];
+    var qEl = document.getElementById('v'+vIdx+'_qty_'+size);
+    if(qEl){ qEl.style.display = 'none'; qEl.value = ''; }
+  }
+  // Update summary
+  renderVariantSummary(vIdx);
+}
+
+function varQtyChange(vIdx, size, input){
+  _variants[vIdx].sizes[size] = parseInt(input.value) || 0;
+  renderVariantSummary(vIdx);
+}
+
+function renderVariantSummary(vIdx){
+  var v = _variants[vIdx];
+  var filledSizes = Object.keys(v.sizes).filter(function(s){ return v.sizes.hasOwnProperty(s); });
+  var summary = filledSizes.length > 0
+    ? filledSizes.map(function(s){ return s+(v.sizes[s]>0?'('+v.sizes[s]+')':''); }).join(' · ')
+    : 'No sizes set';
+  var sumEl = document.querySelector('#variantList .variant-card:nth-child('+(vIdx+1)+') .variant-summary');
+  if(sumEl) sumEl.textContent = summary;
+}
+
+function getVariantsData(){
+  // Returns variants with sizes combined for storage
+  return _variants.map(function(v){
+    return {
+      hex: v.hex,
+      name: v.name,
+      sizes: v.sizes,
+      sizeList: Object.keys(v.sizes)
+    };
+  });
+}
+
+function clearVariants(){
+  _variants = [];
+  renderVariants();
+}
+
+// ── SIZE QTY TOGGLE ──
+// Show qty input when size is ticked, hide when unticked
+document.addEventListener('change', function(e){
+  if(e.target.classList.contains('sz-main-check')){
+    const s=e.target.value;
+    const qt=document.getElementById('qty-'+s);
+    if(qt){
+      qt.style.display=e.target.checked?'block':'none';
+      if(!e.target.checked) qt.value='';
+    }
+  }
+  if(e.target.classList.contains('esz-main-check')){
+    const s=e.target.value;
+    const qt=document.getElementById('eqty-'+s);
+    if(qt){
+      qt.style.display=e.target.checked?'block':'none';
+      if(!e.target.checked) qt.value='';
+    }
+  }
+});
+
+// ══════════════════════════════════════
+//  COLOUR VARIANT SYSTEM
+// ══════════════════════════════════════
+
+const PRESET_COLOURS = [
+  {name:'Red',hex:'#E53935'},{name:'Pink',hex:'#E91E8C'},
+  {name:'Hot Pink',hex:'#FF1493'},{name:'Maroon',hex:'#7B0023'},
+  {name:'Orange',hex:'#FF6B2B'},{name:'Peach',hex:'#FFAD80'},
+  {name:'Yellow',hex:'#FFC107'},{name:'Mustard',hex:'#C9A84C'},
+  {name:'Gold',hex:'#B8860B'},{name:'Green',hex:'#2E7D32'},
+  {name:'Mint',hex:'#4CAF50'},{name:'Teal',hex:'#00695C'},
+  {name:'Turquoise',hex:'#00BCD4'},{name:'Sky Blue',hex:'#0288D1'},
+  {name:'Royal Blue',hex:'#1565C0'},{name:'Navy Blue',hex:'#0D1B5E'},
+  {name:'Purple',hex:'#6A1B9A'},{name:'Lavender',hex:'#9C27B0'},
+  {name:'Indigo',hex:'#3949AB'},{name:'White',hex:'#FFFFFF'},
+  {name:'Ivory',hex:'#FFFFF0'},{name:'Cream',hex:'#FAF5EE'},
+  {name:'Beige',hex:'#F5F0DC'},{name:'Grey',hex:'#9E9E9E'},
+  {name:'Black',hex:'#212121'},{name:'Brown',hex:'#5D4037'},
+  {name:'Chocolate',hex:'#3E2723'},{name:'Rust',hex:'#8B2E0A'},
+  {name:'Magenta',hex:'#AD1457'},{name:'Coral',hex:'#FF7043'},
+  {name:'Olive',hex:'#827717'},{name:'Burgundy',hex:'#880E4F'},
+  {name:'Peacock Blue',hex:'#005F73'},{name:'Bottle Green',hex:'#1B4332'},
+  {name:'Rose Gold',hex:'#B76E79'},{name:'Silver',hex:'#B0BEC5'},
+];
+
+// Separate state for add and edit forms
+window._addedColours = [];
+window._editAddedColours = [];
+
+function initColourPresets(containerId, mode){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.innerHTML = PRESET_COLOURS.map(c => `
+    <div class="colour-preset" style="background:${c.hex};${c.hex==='#FFFFFF'||c.hex==='#FFFFF0'||c.hex==='#FAF5EE'||c.hex==='#F5F0DC'?'border:1px solid #ccc;':''}"
+      title="${c.name}" onclick="togglePresetColour('${c.hex}','${c.name}','${mode}',this)">
+    </div>`).join('');
+}
+
+function togglePresetColour(hex, name, mode, el){
+  const list = mode==='edit' ? window._editAddedColours : window._addedColours;
+  const exists = list.find(c=>c.hex===hex);
+  if(exists){
+    // Remove
+    const idx = list.indexOf(exists);
+    list.splice(idx,1);
+    el.classList.remove('selected');
+  } else {
+    list.push({hex, name});
+    el.classList.add('selected');
+  }
+  if(mode==='edit') renderEditAddedColours();
+  else renderAddedColours();
+}
+
+function addCustomColour(){
+  const hex = document.getElementById('customColourPicker').value;
+  const name = document.getElementById('customColourName').value.trim();
+  if(!name){showToastMsg('Please enter a colour name','error');return;}
+  if(window._addedColours.find(c=>c.hex===hex)){showToastMsg('This colour is already added','error');return;}
+  window._addedColours.push({hex, name});
+  document.getElementById('customColourName').value='';
+  renderAddedColours();
+}
+
+function addEditCustomColour(){
+  const hex = document.getElementById('editCustomColourPicker').value;
+  const name = document.getElementById('editCustomColourName').value.trim();
+  if(!name){showToastMsg('Please enter a colour name','error');return;}
+  if(window._editAddedColours.find(c=>c.hex===hex)){showToastMsg('Already added','error');return;}
+  window._editAddedColours.push({hex, name});
+  document.getElementById('editCustomColourName').value='';
+  renderEditAddedColours();
+}
+
+function removeColour(idx, mode){
+  if(mode==='edit'){
+    window._editAddedColours.splice(idx,1);
+    renderEditAddedColours();
+    syncPresetSelections('editColourPresets', window._editAddedColours);
+  } else {
+    window._addedColours.splice(idx,1);
+    renderAddedColours();
+    syncPresetSelections('colourPresets', window._addedColours);
+  }
+}
+
+function syncPresetSelections(containerId, list){
+  const container = document.getElementById(containerId);
+  if(!container) return;
+  container.querySelectorAll('.colour-preset').forEach(el=>{
+    const hex = el.style.background;
+    // Find by matching hex in list
+    const match = list.find(c=> el.title === c.name);
+    if(match) el.classList.add('selected');
+    else el.classList.remove('selected');
+  });
+}
+
+function renderAddedColours(){
+  const container = document.getElementById('addedColoursList');
+  if(!container) return;
+  if(window._addedColours.length===0){
+    container.innerHTML='<span style="font-size:0.78rem;color:var(--muted);font-style:italic">No colours added yet</span>';
+    return;
+  }
+  container.innerHTML = window._addedColours.map((c,i)=>`
+    <div class="colour-tag">
+      <div class="colour-tag-dot" style="background:${c.hex};${c.hex==='#FFFFFF'||c.hex==='#FFFFF0'||c.hex==='#FAF5EE'?'border:1px solid #ccc;':''}"></div>
+      <span class="colour-tag-name">${c.name}</span>
+      <button class="colour-tag-remove" onclick="removeColour(${i},'add')" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+function renderEditAddedColours(){
+  const container = document.getElementById('editAddedColoursList');
+  if(!container) return;
+  if(window._editAddedColours.length===0){
+    container.innerHTML='<span style="font-size:0.78rem;color:var(--muted);font-style:italic">No colours added</span>';
+    return;
+  }
+  container.innerHTML = window._editAddedColours.map((c,i)=>`
+    <div class="colour-tag">
+      <div class="colour-tag-dot" style="background:${c.hex};${c.hex==='#FFFFFF'||c.hex==='#FFFFF0'||c.hex==='#FAF5EE'?'border:1px solid #ccc;':''}"></div>
+      <span class="colour-tag-name">${c.name}</span>
+      <button class="colour-tag-remove" onclick="removeColour(${i},'edit')" title="Remove">✕</button>
+    </div>`).join('');
+}
+
+function getAddedColours(){ return window._addedColours||[]; }
+function getEditAddedColours(){ return window._editAddedColours||[]; }
+
+// Load colours into edit modal
+function loadColoursForEdit(colours){
+  window._editAddedColours = colours ? JSON.parse(JSON.stringify(colours)) : [];
+  renderEditAddedColours();
+  // Mark presets as selected
+  const container = document.getElementById('editColourPresets');
+  if(container){
+    container.querySelectorAll('.colour-preset').forEach(el=>{
+      const isSelected = window._editAddedColours.find(c=>c.name===el.title);
+      if(isSelected) el.classList.add('selected');
+      else el.classList.remove('selected');
+    });
+  }
+}
+
+// Init on page load
+document.addEventListener('DOMContentLoaded',()=>{
+  // Only init colour presets if elements exist
+  if(document.getElementById('colourPresets')) initColourPresets('colourPresets','add');
+  if(document.getElementById('editColourPresets')) initColourPresets('editColourPresets','edit');
+  // Init variant list
+  if(document.getElementById('variantList')) renderVariants();
+});
+</script>
+</body>
+</html>
