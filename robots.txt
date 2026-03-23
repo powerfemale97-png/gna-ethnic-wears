@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /gna-owner-panel.html
-Disallow: /netlify/
-
-Sitemap: https://www.gnaethnicwears.com.au/sitemap.xml
