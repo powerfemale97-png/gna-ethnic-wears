@@ -851,7 +851,18 @@ body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overf
         <input type="text" id="colDesc" placeholder="e.g. Traditional silk sarees for every occasion"/>
       </div>
       <div class="form-group">
-        <label>Card Background Color / Gradient</label>
+        <label>Collection Photo <span style="font-size:0.68rem;color:var(--muted)">(optional — replaces emoji on card)</span></label>
+        <div id="colPhotoPreviewWrap" style="display:none;margin-bottom:0.6rem;position:relative;width:100%;height:140px;overflow:hidden;border-radius:4px">
+          <img id="colPhotoPreview" src="" style="width:100%;height:140px;object-fit:cover;border-radius:4px;display:block"/>
+          <button type="button" onclick="removeColPhoto()" style="position:absolute;top:6px;right:6px;background:rgba(198,40,40,0.9);color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center">✕</button>
+        </div>
+        <input type="hidden" id="colPhoto"/>
+        <input type="file" id="colPhotoInput" accept="image/*" style="display:none" onchange="uploadColPhoto(this)"/>
+        <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('colPhotoInput').click()" style="width:100%">📸 Upload Collection Photo</button>
+        <div id="colPhotoUploadStatus" style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem;text-align:center"></div>
+      </div>
+      <div class="form-group">
+        <label>Card Background Color / Gradient <span style="font-size:0.68rem;color:var(--muted)">(shown if no photo)</span></label>
         <select id="colBg">
           <option value="linear-gradient(155deg,#C9184A,#6B0020)">🔴 Crimson</option>
           <option value="linear-gradient(155deg,#FF6B2B,#7A2000)">🟠 Rust Orange</option>
@@ -920,12 +931,12 @@ let deleteTargetId = null;
 let editingId = null;
 
 const DEFAULT_COLLECTIONS = [
-  {id:'col1',name:'Short Kurti',emoji:'👘',from:12,bg:'linear-gradient(155deg,#C9184A,#6B0020)',isDefault:true},
-  {id:'col2',name:'Long Kurti',emoji:'🥻',from:19,bg:'linear-gradient(155deg,#FF6B2B,#7A2000)',isDefault:true},
-  {id:'col3',name:'Cord Set',emoji:'🌸',from:25,bg:'linear-gradient(155deg,#4A148C,#1A0050)',isDefault:true},
-  {id:'col4',name:'Daily Wear 3 Piece Suit',emoji:'👗',from:25,bg:'linear-gradient(155deg,#006064,#001A1B)',isDefault:true},
-  {id:'col5',name:'Plus Size 3 Piece Suit',emoji:'💐',from:35,bg:'linear-gradient(155deg,#880E4F,#3D0021)',isDefault:true},
-  {id:'col6',name:'Premium 3 Piece Suit',emoji:'✨',from:35,bg:'linear-gradient(155deg,#B8860B,#5A3000)',isDefault:true},
+  {id:'col1',name:'Short Kurti',emoji:'👘',from:12,bg:'linear-gradient(155deg,#C9184A,#6B0020)',isDefault:true,firebaseKey:'short-kurti'},
+  {id:'col2',name:'Long Kurti',emoji:'🥻',from:19,bg:'linear-gradient(155deg,#FF6B2B,#7A2000)',isDefault:true,firebaseKey:'long-kurti'},
+  {id:'col3',name:'Cord Set',emoji:'🌸',from:25,bg:'linear-gradient(155deg,#4A148C,#1A0050)',isDefault:true,firebaseKey:'cord-set'},
+  {id:'col4',name:'Daily Wear 3 Piece Suit',emoji:'👗',from:25,bg:'linear-gradient(155deg,#006064,#001A1B)',isDefault:true,firebaseKey:'daily-wear'},
+  {id:'col5',name:'Plus Size 3 Piece Suit',emoji:'💐',from:35,bg:'linear-gradient(155deg,#880E4F,#3D0021)',isDefault:true,firebaseKey:'plus-size'},
+  {id:'col6',name:'Premium 3 Piece Suit',emoji:'✨',from:35,bg:'linear-gradient(155deg,#B8860B,#5A3000)',isDefault:true,firebaseKey:'premium-suit'},
 ];
 // Load collections from storage, merge with defaults
 let storedCollections = JSON.parse(localStorage.getItem('gna_collections')||'null');
@@ -1731,7 +1742,7 @@ function renderCollections(){
     return `
     <div class="collection-card-admin" style="position:relative">
       <div class="col-card-header">
-        <div class="col-card-emoji">${c.emoji}</div>
+        <div class="col-card-emoji" style="background:${c.bg||'linear-gradient(155deg,#C9184A,#6B0020)'};width:100%;padding:1.5rem;text-align:center;font-size:2.5rem;margin:-1rem -1rem 0.8rem -1rem;border-radius:4px 4px 0 0">${c.emoji}</div>
         <div style="display:flex;gap:0.4rem;align-items:center">
           <span style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)">${count} products</span>
           ${!c.isDefault?`<button class="btn btn-danger btn-sm" style="padding:0.2rem 0.5rem;font-size:0.6rem" onclick="deleteCollection('${c.id}','${c.name.replace(/'/g,"\'")}')">🗑</button>`:'<span style="font-size:0.6rem;background:var(--cream2);padding:0.1rem 0.5rem;color:var(--muted)">Default</span>'}
@@ -1931,6 +1942,8 @@ function openAddCollectionModal(){
   document.getElementById('colEmoji').value='';
   document.getElementById('colDesc').value='';
   document.getElementById('colBg').value='linear-gradient(155deg,#C9184A,#6B0020)';
+  document.getElementById('colPhoto').value='';
+  document.getElementById('colPhotoPreviewWrap').style.display='none';
   updateColPreview();
   document.getElementById('addCollectionModal').classList.add('open');
 }
@@ -1946,6 +1959,15 @@ function openEditCollectionModal(id){
   document.getElementById('colEmoji').value=c.emoji||'';
   document.getElementById('colDesc').value=c.desc||'';
   document.getElementById('colBg').value=c.bg||'linear-gradient(155deg,#C9184A,#6B0020)';
+  // Load photo if exists
+  const photoUrl = c.photo||'';
+  document.getElementById('colPhoto').value = photoUrl;
+  if(photoUrl){
+    document.getElementById('colPhotoPreview').src = photoUrl;
+    document.getElementById('colPhotoPreviewWrap').style.display = 'block';
+  } else {
+    document.getElementById('colPhotoPreviewWrap').style.display = 'none';
+  }
   updateColPreview();
   document.getElementById('addCollectionModal').classList.add('open');
 }
@@ -1956,6 +1978,7 @@ function saveCollection(){
   const emoji=document.getElementById('colEmoji').value.trim()||'👗';
   const desc=document.getElementById('colDesc').value.trim();
   const bg=document.getElementById('colBg').value;
+  const photo=document.getElementById('colPhoto').value.trim();
   const editId=document.getElementById('editColId').value;
 
   if(!name){showToastMsg('Please enter a collection name','error');return;}
@@ -1966,14 +1989,21 @@ function saveCollection(){
     const idx=COLLECTIONS_INFO.findIndex(c=>c.id===editId);
     if(idx>=0){
       const oldName=COLLECTIONS_INFO[idx].name;
-      COLLECTIONS_INFO[idx]={...COLLECTIONS_INFO[idx],name,from:price,emoji,desc,bg};
+      COLLECTIONS_INFO[idx]={...COLLECTIONS_INFO[idx],name,from:price,emoji,desc,bg,photo};
       // Update products that use old name
       products.forEach(p=>{if(p.collection===oldName){p.collection=name;p.cat=name;}});
       localStorage.setItem('gna_products',JSON.stringify(products));
       saveCollections();
+      // Also save to Firebase so homepage updates live
+      const firebaseKey = COLLECTIONS_INFO[idx].firebaseKey || oldName.toLowerCase().replace(/[^a-z0-9]/g,'-').replace(/-+/g,'-');
+      fetch('https://gna-ethnic-wears-default-rtdb.firebaseio.com/collections/'+firebaseKey+'.json',{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({emoji,title:name,desc,price,bg,from:price,photo})
+      }).then(()=>showToastMsg('✅ Collection updated on website!','success'))
+        .catch(()=>showToastMsg('✓ Saved locally',''));
       closeModal('addCollectionModal');
       renderCollections();
-      showToastMsg('✓ Collection "'+name+'" updated!','success');
     }
   } else {
     // CHECK duplicate
@@ -2000,6 +2030,39 @@ function deleteCollection(id, name){
   saveCollections();
   renderCollections();
   showToastMsg('Collection deleted.','success');
+}
+
+async function uploadColPhoto(input){
+  const file = input.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById('colPhotoUploadStatus');
+  statusEl.textContent = '⏳ Uploading...';
+  try {
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('upload_preset', 'gna_products');
+    fd.append('folder', 'gna_collections');
+    const res = await fetch('https://api.cloudinary.com/v1_1/dwbwldr1p/image/upload', {method:'POST',body:fd});
+    const data = await res.json();
+    if(data.secure_url){
+      document.getElementById('colPhoto').value = data.secure_url;
+      document.getElementById('colPhotoPreview').src = data.secure_url;
+      document.getElementById('colPhotoPreviewWrap').style.display = 'block';
+      statusEl.textContent = '✅ Photo uploaded!';
+      setTimeout(()=>statusEl.textContent='', 2000);
+    } else {
+      statusEl.textContent = '❌ Upload failed';
+    }
+  } catch(e) {
+    statusEl.textContent = '❌ Upload error';
+  }
+}
+
+function removeColPhoto(){
+  document.getElementById('colPhoto').value = '';
+  document.getElementById('colPhotoPreview').src = '';
+  document.getElementById('colPhotoPreviewWrap').style.display = 'none';
+  document.getElementById('colPhotoInput').value = '';
 }
 
 function updateColPreview(){

@@ -87,12 +87,12 @@ h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino L
 <section class="collections-section">
   <div class="sec-header reveal"><span class="sec-tag">✦ Our Collections</span><h2 class="sec-title">Explore Every <em>Style</em></h2><p>From everyday elegance to festive grandeur — find your perfect ethnic look.</p></div>
   <div class="collections-grid">
-    <a href="short-kurti.html" class="col-card col-c1 reveal"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji">👘</div><div class="col-info"><h3>Short Kurti</h3><p>Casual elegance for everyday wear</p><span>From AUD $15 · Shop Now →</span></div></a>
-    <a href="long-kurti.html" class="col-card col-c2 reveal" style="transition-delay:0.1s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji">🥻</div><div class="col-info"><h3>Long Kurti</h3><p>Flowing silhouettes, graceful style</p><span>From AUD $19 · Shop Now →</span></div></a>
-    <a href="cord-set.html" class="col-card col-c3 reveal" style="transition-delay:0.2s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji">🌸</div><div class="col-info"><h3>Cord Set</h3><p>Coordinated ethnic chic sets</p><span>From AUD $25 · Shop Now →</span></div></a>
-    <a href="daily-wear.html" class="col-card col-c4 reveal" style="transition-delay:0.1s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji">👗</div><div class="col-info"><h3>Daily Wear 3 Piece Suit</h3><p>Everyday traditional elegance</p><span>From AUD $20 · Shop Now →</span></div></a>
-    <a href="plus-size.html" class="col-card col-c5 reveal" style="transition-delay:0.2s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji">💐</div><div class="col-info"><h3>Plus Size 3 Piece Suit</h3><p>Inclusive ethnic fashion for all</p><span>From AUD $35 · Shop Now →</span></div></a>
-    <a href="premium-suit.html" class="col-card col-c1 reveal" style="transition-delay:0.3s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji">✨</div><div class="col-info"><h3>Premium 3 Piece Suit</h3><p>Luxury craftsmanship &amp; fabrics</p><span>From AUD $45 · Shop Now →</span></div></a>
+    <a href="short-kurti.html" class="col-card col-c1 reveal" id="colCard-short-kurti"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji" id="colEmoji-short-kurti">👘</div><div class="col-info"><h3 id="colTitle-short-kurti">Short Kurti</h3><p id="colDesc-short-kurti">Casual elegance for everyday wear</p><span id="colPrice-short-kurti">From AUD $15 · Shop Now →</span></div></a>
+    <a href="long-kurti.html" class="col-card col-c2 reveal" id="colCard-long-kurti" style="transition-delay:0.1s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji" id="colEmoji-long-kurti">🥻</div><div class="col-info"><h3 id="colTitle-long-kurti">Long Kurti</h3><p id="colDesc-long-kurti">Flowing silhouettes, graceful style</p><span id="colPrice-long-kurti">From AUD $19 · Shop Now →</span></div></a>
+    <a href="cord-set.html" class="col-card col-c3 reveal" id="colCard-cord-set" style="transition-delay:0.2s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji" id="colEmoji-cord-set">🌸</div><div class="col-info"><h3 id="colTitle-cord-set">Cord Set</h3><p id="colDesc-cord-set">Coordinated ethnic chic sets</p><span id="colPrice-cord-set">From AUD $25 · Shop Now →</span></div></a>
+    <a href="daily-wear.html" class="col-card col-c4 reveal" id="colCard-daily-wear" style="transition-delay:0.1s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji" id="colEmoji-daily-wear">👗</div><div class="col-info"><h3 id="colTitle-daily-wear">Daily Wear 3 Piece Suit</h3><p id="colDesc-daily-wear">Everyday traditional elegance</p><span id="colPrice-daily-wear">From AUD $20 · Shop Now →</span></div></a>
+    <a href="plus-size.html" class="col-card col-c5 reveal" id="colCard-plus-size" style="transition-delay:0.2s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji" id="colEmoji-plus-size">💐</div><div class="col-info"><h3 id="colTitle-plus-size">Plus Size 3 Piece Suit</h3><p id="colDesc-plus-size">Inclusive ethnic fashion for all</p><span id="colPrice-plus-size">From AUD $35 · Shop Now →</span></div></a>
+    <a href="premium-suit.html" class="col-card col-c1 reveal" id="colCard-premium-suit" style="transition-delay:0.3s"><div class="col-overlay"></div><div class="col-border-deco"></div><div class="col-emoji" id="colEmoji-premium-suit">✨</div><div class="col-info"><h3 id="colTitle-premium-suit">Premium 3 Piece Suit</h3><p id="colDesc-premium-suit">Luxury craftsmanship &amp; fabrics</p><span id="colPrice-premium-suit">From AUD $45 · Shop Now →</span></div></a>
   </div>
 </section>
 <section class="why-section">
@@ -208,6 +208,36 @@ function navSearchProducts(q){
   }catch(e){res.classList.remove('show');}
 }
 updateCartCount();
+
+// ── LOAD COLLECTION CARDS FROM FIREBASE ──
+(function loadCollections(){
+  var DB = 'https://gna-ethnic-wears-default-rtdb.firebaseio.com/collections.json';
+  fetch(DB).then(function(r){return r.json();}).then(function(data){
+    if(!data) return;
+    Object.keys(data).forEach(function(key){
+      var c = data[key];
+      var card = document.getElementById('colCard-'+key);
+      var emoji = document.getElementById('colEmoji-'+key);
+      var title = document.getElementById('colTitle-'+key);
+      var desc = document.getElementById('colDesc-'+key);
+      var price = document.getElementById('colPrice-'+key);
+      if(card && c.bg) card.style.background = c.bg;
+      // If photo exists, replace emoji with full-cover photo
+      if(emoji){
+        if(c.photo){
+          emoji.style.cssText='position:absolute;top:0;left:0;width:100%;height:100%;font-size:0;padding:0;opacity:0.55;';
+          emoji.innerHTML='<img src="'+c.photo+'" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.parentNode.innerHTML=''+(c.emoji||'👗')+''"/>';
+        } else if(c.emoji){
+          emoji.textContent = c.emoji;
+        }
+      }
+      if(title && c.title) title.textContent = c.title;
+      if(desc && c.desc) desc.textContent = c.desc;
+      if(price && c.price) price.textContent = 'From AUD $'+c.price+' · Shop Now →';
+    });
+  }).catch(function(){});
+})();
+
 </script>
 <script src="nav-footer.js"></script>
 </body>
