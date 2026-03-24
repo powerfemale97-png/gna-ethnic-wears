@@ -1818,7 +1818,10 @@ async function renderOrders(){
         '<option '+(o.status==='shipped'?'selected':'')+' value="shipped">Shipped</option>'+
         '<option '+(o.status==='delivered'?'selected':'')+' value="delivered">Delivered</option>'+
       '</select></td>'+
-      '<td><a href="https://wa.me/'+( o.phone||'').replace(/[^0-9]/g,'')+'" target="_blank" class="btn btn-sm" style="background:#25D366;color:white">💬</a></td>'+
+      '<td style="display:flex;gap:0.4rem;align-items:center">'+
+        '<a href="https://wa.me/'+( o.phone||'').replace(/[^0-9]/g,'')+'" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;border:none">💬</a>'+
+        '<button class="btn btn-danger btn-sm" onclick="deleteOrder(\'' + o.id + '\')" title="Delete order" style="padding:0.35rem 0.6rem;font-size:0.9rem">🗑</button>'+
+      '</td>'+
     '</tr>';
   }).join('');
   document.getElementById('statOrders').textContent = orders.length;
@@ -1841,13 +1844,19 @@ async function updateOrderStatus(id,status){
   }
 }
 
-function deleteOrder(id){
-  if(confirm('Delete this order?')){
-    orders=orders.filter(o=>o.id!==id);
-    localStorage.setItem('gna_orders',JSON.stringify(orders));
-    renderOrders();initDashboard();
-    showToastMsg('Order deleted','success');
+async function deleteOrder(id){
+  if(!confirm('🗑 Delete order '+id+'?\n\nThis cannot be undone.')) return;
+  try {
+    await fetch('https://gna-ethnic-wears-default-rtdb.firebaseio.com/orders/'+id+'.json', {
+      method: 'DELETE'
+    });
+    showToastMsg('✅ Order deleted!','success');
+  } catch(e) {
+    showToastMsg('Deleted locally only','');
   }
+  orders = orders.filter(o=>o.id!==id);
+  renderOrders();
+  initDashboard();
 }
 
 function addTestOrder(){

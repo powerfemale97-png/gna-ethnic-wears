@@ -178,7 +178,9 @@ function navSearchProducts(q){
   if(!res)return;
   if(!q||q.length<2){res.classList.remove('show');return;}
   try{
-    var all=JSON.parse(localStorage.getItem('gna_products')||'[]');
+    var all=[];
+    try{ all=JSON.parse(localStorage.getItem('gna_products')||'[]'); }catch(e){}
+    if(!all.length && typeof GNA_PRODUCTS_DATA!=='undefined') all=GNA_PRODUCTS_DATA;
     var filtered=all.filter(function(p){
       return p.name.toLowerCase().includes(q.toLowerCase())||
              (p.collection||'').toLowerCase().includes(q.toLowerCase())||

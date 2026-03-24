@@ -222,14 +222,14 @@
           </p>
           <div style="background:white;border:1px solid var(--border);padding:1rem;margin-bottom:0.8rem">
             <div style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">PayID</div>
-            <div style="font-size:1.1rem;font-weight:700;color:var(--deep);letter-spacing:0.05em">gnaethnicwears@gmail.com</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--deep);letter-spacing:0.05em">0404 722 166</div>
           </div>
           <div style="background:white;border:1px solid var(--border);padding:1rem;margin-bottom:1rem">
             <div style="font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">Reference / Description</div>
             <div style="font-size:0.88rem;color:var(--muted)">Use your name + order items e.g. <strong>"Priya – Short Kurti M"</strong></div>
           </div>
           <p style="font-size:0.78rem;color:var(--muted);line-height:1.6">
-            📋 <strong>Steps:</strong> Open your banking app → Pay Anyone → PayID → enter email above → enter amount shown in your order summary → use your name as reference → send screenshot to our WhatsApp so we can confirm!
+            📋 <strong>Steps:</strong> Open your banking app → Pay Anyone → PayID → enter phone number above → enter amount shown in your order summary → use your name as reference → send screenshot to our WhatsApp so we can confirm!
           </p>
         </div>
         <button class="pay-btn" style="background:#1C0A00" onclick="confirmPayIDOrder()">
@@ -364,7 +364,7 @@ function confirmPayIDOrder(){
     + '📧 Email: ' + d.email + '\n'
     + '📦 Ship to: ' + d.address + ', ' + d.city + ' ' + d.postcode + '\n\n'
     + '🛒 Order:\n' + buildOrderText() + '\n\n'
-    + 'I have sent AUD $' + subtotal.toFixed(2) + ' to gnaethnicwears@gmail.com via PayID. Please confirm receipt!';
+    + 'I have sent AUD $' + subtotal.toFixed(2) + ' to 0404 722 166 via PayID. Please confirm receipt!';
   // Save order to Firebase
   saveOrderToFirebase({
     id: 'GNA-' + Date.now(), customer: d.firstName+' '+d.lastName,

@@ -22,7 +22,7 @@
 .review-card{background:white;border:1px solid var(--border);padding:0;overflow:hidden;transition:all 0.3s;}
 .review-card:hover{transform:translateY(-4px);box-shadow:0 12px 35px rgba(28,10,0,0.1);border-color:var(--gold);}
 .review-photo{width:100%;height:220px;object-fit:cover;display:block;}
-.review-no-photo{width:100%;height:120px;background:linear-gradient(135deg,var(--deep),var(--rust));display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.review-no-photo{display:none!important;}
 .review-body{padding:1.2rem 1.4rem 1.4rem;}
 .review-stars{color:#F59E0B;font-size:1.1rem;letter-spacing:2px;margin-bottom:0.6rem;}
 .review-stars .empty{color:#D1D5DB;}
@@ -476,7 +476,7 @@ async function renderReviews(filter='all'){
     <div class="review-card reveal">
       ${r.photos&&r.photos.length>0
         ?`<img src="${r.photos[0]}" class="review-photo" alt="Customer photo" loading="lazy" onerror="this.style.display='none'"/>`
-        :`<div class="review-no-photo">🥻</div>`}
+        :`<div class="review-no-photo" style="display:none"></div>`}
       <div class="review-body">
         <div class="review-stars">${renderStars(r.rating,'1.1rem')}</div>
         <div class="review-text">${r.text}</div>
