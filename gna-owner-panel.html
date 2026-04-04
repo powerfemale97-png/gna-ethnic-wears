@@ -1692,6 +1692,8 @@ function updateProduct(){
     Object.keys(v.sizes).forEach(function(s){ allSizesSet2.add(s); sizeQty[s]=(sizeQty[s]||0)+(v.sizes[s]||0); });
   });
   const sizes = ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'].filter(function(s){ return allSizesSet2.has(s); });
+  var ewVal=document.getElementById('editWeight')?document.getElementById('editWeight').value:'350';
+  var editWeight=ewVal==='custom'?parseInt(document.getElementById('editWeightCustom').value)||500:parseInt(ewVal);
   products[idx]={
     ...products[idx],
     name:document.getElementById('editName').value.trim(),
@@ -1700,7 +1702,6 @@ function updateProduct(){
     oldPrice:parseFloat(document.getElementById('editOldPrice').value)||null,
     desc:document.getElementById('editDesc').value.trim(),
     badge:document.getElementById('editBadge').value,
-    var ewVal=document.getElementById('editWeight').value;var editWeight=ewVal==='custom'?parseInt(document.getElementById('editWeightCustom').value)||500:parseInt(ewVal); // injected
     sizes,sizeQty,colors:colors2,weight:editWeight,variants:JSON.stringify(variantsData2),cat:document.getElementById('editCollection').value,
     photoUrl:window._editPhotos.length>0&&window._editPhotos[0].url?window._editPhotos[0].url:null,
     photoData:window._editPhotos.length>0&&window._editPhotos[0].data?window._editPhotos[0].data:null,
