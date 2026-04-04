@@ -323,6 +323,7 @@ function addToCart(){
       bg:currentProduct.bg||'linear-gradient(155deg,#C9184A,#6B0020)',
       emoji:currentProduct.emoji||'👗',
       photoData:src,
+      weight:parseInt(currentProduct.weight)||0,
     });
   }
   localStorage.setItem('gna_cart',JSON.stringify(cart));
