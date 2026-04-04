@@ -956,6 +956,18 @@ function doLogin(){
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('adminApp').style.display = 'block';
     initDashboard();
+    // Load latest products from Firebase on login
+    if(typeof netlifyDBLoad === 'function'){
+      netlifyDBLoad().then(function(fbProducts){
+        if(fbProducts && fbProducts.length > 0){
+          products = fbProducts;
+          try{ localStorage.setItem('gna_products', JSON.stringify(products)); }catch(e){}
+          renderProductsTable(products);
+          initDashboard();
+          showToastMsg('✅ Products loaded from website (' + products.length + ' total)', 'success');
+        }
+      }).catch(function(e){ console.warn('Firebase load on login failed:', e); });
+    }
   } else if(okUser && !okPass){
     document.getElementById('loginError').style.display = 'block';
     document.getElementById('loginError').innerHTML = '❌ Wrong password. Try: <strong>Gnaethnicwears@2025</strong> or <strong>gna2025</strong>';
