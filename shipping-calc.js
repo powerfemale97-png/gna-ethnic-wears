@@ -123,8 +123,10 @@ function getProductWeight(productId) {
 
 function getTotalWeight(cartItems) {
   // Sum item weights + 100g packaging per parcel
+  // Uses custom weight saved on product if available, otherwise falls back to prefix lookup
   const itemWeight = cartItems.reduce((total, item) => {
-    return total + (getProductWeight(item.id) * item.qty);
+    const w = item.weight && parseInt(item.weight) > 0 ? parseInt(item.weight) : getProductWeight(item.id);
+    return total + (w * item.qty);
   }, 0);
   const packagingWeight = 100; // standard poly bag + cardboard
   return itemWeight + packagingWeight;

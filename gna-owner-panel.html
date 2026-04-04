@@ -756,7 +756,7 @@ body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overf
         <div style="font-size:0.7rem;color:var(--muted);margin-top:0.5rem">Tick size → enter stock quantity for that size</div>
       </div>
       <div class="form-row">
-        <div class="form-group"><label>Badge</label>
+        <div class="form-group"><label>Weight (grams)</label><select id="editWeight"><option value="350">~350g — Short Kurti</option><option value="450">~450g — Long Kurti</option><option value="600">~600g — Cord Set</option><option value="700">~700g — Daily Wear 3 Piece Suit</option><option value="800">~800g — Plus Size / Premium Suit</option><option value="900">~900g — Party Wear</option><option value="custom">Custom weight...</option></select><input type="number" id="editWeightCustom" placeholder="Enter grams e.g. 520" style="display:none;margin-top:0.5rem;padding:0.7rem 1rem;border:1px solid var(--border);font-family:Raleway,sans-serif;font-size:0.88rem;outline:none;width:100%"/></div><div class="form-group"><label>Badge</label>
           <select id="editBadge">
             <option value="">None</option>
             <option value="New">New Arrival</option>
@@ -1632,6 +1632,15 @@ function openEditModal(id){
     document.getElementById('editOldPrice').value=p.oldPrice||'';
     document.getElementById('editDesc').value=p.desc||'';
     document.getElementById('editBadge').value=p.badge||'';
+    // Load weight into edit modal
+    try{
+      var ew=document.getElementById('editWeight');
+      var ewc=document.getElementById('editWeightCustom');
+      var wVal=p.weight||350;
+      var knownVals=['350','450','600','700','800','900'];
+      if(knownVals.indexOf(String(wVal))>=0){ew.value=String(wVal);ewc.style.display='none';}
+      else{ew.value='custom';ewc.style.display='block';ewc.value=wVal;}
+    }catch(e){}
     document.getElementById('editPhotoUrl').value=p.photoUrl||'';
     // Load existing photos
     try{
@@ -1691,7 +1700,8 @@ function updateProduct(){
     oldPrice:parseFloat(document.getElementById('editOldPrice').value)||null,
     desc:document.getElementById('editDesc').value.trim(),
     badge:document.getElementById('editBadge').value,
-    sizes,sizeQty,colors:colors2,variants:JSON.stringify(variantsData2),cat:document.getElementById('editCollection').value,
+    var ewVal=document.getElementById('editWeight').value;var editWeight=ewVal==='custom'?parseInt(document.getElementById('editWeightCustom').value)||500:parseInt(ewVal); // injected
+    sizes,sizeQty,colors:colors2,weight:editWeight,variants:JSON.stringify(variantsData2),cat:document.getElementById('editCollection').value,
     photoUrl:window._editPhotos.length>0&&window._editPhotos[0].url?window._editPhotos[0].url:null,
     photoData:window._editPhotos.length>0&&window._editPhotos[0].data?window._editPhotos[0].data:null,
     photos:window._editPhotos.map(p=>({url:p.url||'',data:p.data||'',type:p.type})),
@@ -1924,6 +1934,12 @@ function showToastMsg(msg,type=''){
 // ── WEIGHT TOGGLE ──
 document.getElementById('pWeight').addEventListener('change',function(){
   document.getElementById('pWeightCustom').style.display=this.value==='custom'?'block':'none';
+});
+document.addEventListener('change',function(e){
+  if(e.target.id==='editWeight'){
+    var ewc=document.getElementById('editWeightCustom');
+    if(ewc) ewc.style.display=e.target.value==='custom'?'block':'none';
+  }
 });
 
 // ── COLLECTION BG PREVIEW ──
