@@ -1889,7 +1889,7 @@ async function renderOrders(){
     }
     return '<tr>'+
       '<td><strong>'+o.id+'</strong><br/><span style="font-size:0.68rem;color:var(--muted)">'+o.date+'</span></td>'+
-      '<td>'+o.customer+'<br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.email||'')+'</span><br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.phone||'')+'</span></td>'+
+      '<td>'+o.customer+'<br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.email||'')+'</span><br/><span style="font-size:0.72rem;color:var(--muted)">'+( o.phone||'')+'</span>'+(o.confirmationEmailSent?'<br/><span style="font-size:0.65rem;color:#1B5E20;font-weight:600">✅ Email sent</span>':'')+'</td>'+
       '<td style="font-size:0.78rem">'+o.address+'</td>'+
       '<td style="font-size:0.78rem">'+itemsText+'</td>'+
       '<td style="font-weight:700;color:var(--rust)">AUD $'+(parseFloat(o.total)||0).toFixed(2)+'</td>'+
@@ -1899,8 +1899,9 @@ async function renderOrders(){
         '<option '+(o.status==='shipped'?'selected':'')+' value="shipped">Shipped</option>'+
         '<option '+(o.status==='delivered'?'selected':'')+' value="delivered">Delivered</option>'+
       '</select></td>'+
-      '<td style="display:flex;gap:0.4rem;align-items:center">'+
-        '<a href="https://wa.me/'+( o.phone||'').replace(/[^0-9]/g,'')+'" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;border:none">💬</a>'+
+      '<td style="display:flex;gap:0.4rem;align-items:center;flex-wrap:wrap">'+
+        '<a href="https://wa.me/'+( o.phone||'').replace(/[^0-9]/g,'')+'" target="_blank" class="btn btn-sm" style="background:#25D366;color:white;border:none" title="WhatsApp customer">💬</a>'+
+        '<button class="btn btn-sm" onclick="sendConfirmationEmail(\'' + o.id + '\')" title="Send confirmation email to customer" style="background:#0D47A1;color:white;border:none;font-size:0.7rem;padding:0.35rem 0.55rem">📧</button>'+
         '<button class="btn btn-danger btn-sm" onclick="deleteOrder(\'' + o.id + '\')" title="Delete order" style="padding:0.35rem 0.6rem;font-size:0.9rem">🗑</button>'+
       '</td>'+
     '</tr>';
@@ -1938,6 +1939,55 @@ async function deleteOrder(id){
   orders = orders.filter(o=>o.id!==id);
   renderOrders();
   initDashboard();
+}
+
+// ── SEND CONFIRMATION EMAIL TO CUSTOMER ──
+async function sendConfirmationEmail(orderId){
+  const o = orders.find(o => o.id === orderId);
+  if(!o){ showToastMsg('Order not found','error'); return; }
+  if(!o.email){ showToastMsg('No customer email on this order','error'); return; }
+  if(!confirm('📧 Send order confirmation email to:\n' + o.email + '?')) return;
+
+  try {
+    var items = '';
+    if(Array.isArray(o.items)){
+      items = o.items.map(function(i){
+        return i.name + ' (' + i.size + (i.colour ? ' · ' + i.colour : '') + ') x' + i.qty + ' = AUD $' + (i.price * i.qty).toFixed(2);
+      }).join('\n');
+    } else {
+      items = o.items || '';
+    }
+
+    await emailjs.send('service_0gvv7ma', 'template_ypjosom', {
+      order_id: o.id,
+      customer_name: o.customer,
+      customer_email: o.email,
+      customer_phone: o.phone || '',
+      customer_address: o.address || '',
+      order_items: items,
+      subtotal: parseFloat(o.subtotal||0).toFixed(2),
+      shipping: o.shipping === 0 ? 'FREE' : 'AUD $' + parseFloat(o.shipping||0).toFixed(2),
+      total: parseFloat(o.total||0).toFixed(2),
+      order_date: o.date || '',
+      payment_method: o.paymentMethod || '',
+      to_email: o.email,
+      to_name: o.customer,
+    });
+    showToastMsg('✅ Confirmation email sent to ' + o.email, 'success');
+
+    // Mark email as sent in Firebase
+    await fetch('https://gna-ethnic-wears-default-rtdb.firebaseio.com/orders/' + orderId + '.json', {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ confirmationEmailSent: true })
+    });
+    // Update local order
+    o.confirmationEmailSent = true;
+    renderOrders();
+  } catch(e) {
+    console.error('Email send error:', e);
+    showToastMsg('❌ Failed to send email. Check EmailJS settings.', 'error');
+  }
 }
 
 function addTestOrder(){
