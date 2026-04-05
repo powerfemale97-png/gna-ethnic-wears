@@ -1665,6 +1665,7 @@ function openEditModal(id){
     }catch(e){}
     document.getElementById('editPhotoUrl').value=p.photoUrl||'';
     if(document.getElementById('editVideoUrl')) document.getElementById('editVideoUrl').value=p.videoUrl||'';
+    if(document.getElementById('editVideoStatus')) document.getElementById('editVideoStatus').textContent=p.videoUrl?'✅ Video saved':'';
     // Load existing photos
     try{
       var photos = p.photos ? (typeof p.photos==='string'?JSON.parse(p.photos):p.photos) : [];
