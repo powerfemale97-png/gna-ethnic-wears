@@ -1724,6 +1724,23 @@ function updateProduct(){
   const sizes = allSizesList.filter(function(s){ return sizeQty[s] !== undefined; });
   var ewVal=document.getElementById('editWeight')?document.getElementById('editWeight').value:'350';
   var editWeight=ewVal==='custom'?parseInt(document.getElementById('editWeightCustom').value)||500:parseInt(ewVal);
+
+  // Sync variants sizes to match the checkboxes — so product page reads correct sizes
+  var updatedVariants = variantsData2.map(function(v){
+    var newSizes = {};
+    sizes.forEach(function(s){ newSizes[s] = sizeQty[s]||1; });
+    return Object.assign({}, v, {sizes: newSizes, sizeList: sizes});
+  });
+  // If no colour variants exist, create a default one so sizes still save
+  if(updatedVariants.length === 0 && sizes.length > 0){
+    var existingVariants = [];
+    try{ existingVariants = typeof products[idx].variants==='string'?JSON.parse(products[idx].variants||'[]'):(products[idx].variants||[]); }catch(e){}
+    var baseVariant = existingVariants[0] || {hex:'#C9A84C', name:'Default'};
+    var newSizes = {};
+    sizes.forEach(function(s){ newSizes[s] = sizeQty[s]||1; });
+    updatedVariants = [{hex:baseVariant.hex, name:baseVariant.name, sizes:newSizes, sizeList:sizes}];
+  }
+
   products[idx]={
     ...products[idx],
     name:document.getElementById('editName').value.trim(),
@@ -1732,7 +1749,7 @@ function updateProduct(){
     oldPrice:parseFloat(document.getElementById('editOldPrice').value)||null,
     desc:document.getElementById('editDesc').value.trim(),
     badge:document.getElementById('editBadge').value,
-    sizes,sizeQty,colors:colors2,weight:editWeight,variants:JSON.stringify(variantsData2),cat:document.getElementById('editCollection').value,
+    sizes,sizeQty,colors:colors2,weight:editWeight,variants:JSON.stringify(updatedVariants),cat:document.getElementById('editCollection').value,
     photoUrl:window._editPhotos.length>0&&window._editPhotos[0].url?window._editPhotos[0].url:null,
     photoData:window._editPhotos.length>0&&window._editPhotos[0].data?window._editPhotos[0].data:null,
     photos:window._editPhotos.map(p=>({url:p.url||'',data:p.data||'',type:p.type})),
