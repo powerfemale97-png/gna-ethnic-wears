@@ -554,7 +554,7 @@ body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overf
             <!-- RIGHT COLUMN — PHOTOS -->
             <div>
               <div class="form-group">
-                <label>Product Photos <span style="font-size:0.65rem;color:var(--muted)">(add up to 5 photos — first photo is main)</span></label>
+                <label>Product Photos <span style="font-size:0.65rem;color:var(--muted)">(add up to 10 photos — first photo is main)</span></label>
                 <div class="photo-grid" id="photoGrid">
                   <!-- Photos appear here -->
                   <button type="button" class="photo-add-btn" onclick="triggerPhotoInput()">
@@ -566,7 +566,7 @@ body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overf
                 <div style="font-size:0.7rem;color:var(--muted);margin-top:0.5rem;background:var(--gold-pale);padding:0.5rem 0.8rem;border-left:3px solid var(--gold);line-height:1.6">
                   💡 First photo = main photo shown to customers.<br/>
                   Click any photo to make it the main one.<br/>
-                  Up to 5 photos per product.
+                  Up to 10 photos + 1 video per product.
                 </div>
               </div>
 
@@ -575,6 +575,16 @@ body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overf
                 <div style="display:flex;gap:0.5rem">
                   <input type="text" id="pPhotoUrl" placeholder="https://..." style="flex:1;padding:0.7rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.85rem;outline:none"/>
                   <button type="button" class="btn btn-primary btn-sm" onclick="addPhotoUrl()">Add</button>
+                </div>
+              </div>
+              <div class="form-group" style="margin-top:0.8rem">
+                <label>Product Video URL <span style="font-size:0.65rem;color:var(--muted)">(YouTube, Vimeo, or direct .mp4 link — optional)</span></label>
+                <div style="display:flex;gap:0.5rem">
+                  <input type="text" id="pVideoUrl" placeholder="https://youtube.com/watch?v=... or https://..." style="flex:1;padding:0.7rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.85rem;outline:none"/>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="previewVideoUrl()">Preview</button>
+                </div>
+                <div id="videoPreviewWrap" style="display:none;margin-top:0.5rem;background:var(--cream2);padding:0.5rem;border:1px solid var(--border);font-size:0.78rem;color:var(--muted)">
+                  ✅ Video URL saved — will show on product page
                 </div>
               </div>
 
@@ -767,7 +777,7 @@ body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overf
           </select>
         </div>
         <div class="form-group">
-        <label>Product Photos <span style="font-size:0.62rem;color:var(--muted)">(up to 5 photos · first = main)</span></label>
+        <label>Product Photos <span style="font-size:0.62rem;color:var(--muted)">(up to 10 photos · first = main)</span></label>
         <div class="photo-grid" id="editPhotoGrid"></div>
         <input type="file" id="editPhotoInput" accept="image/*" multiple style="display:none" onchange="addEditPhotos(this)"/>
         <button type="button" class="btn btn-primary btn-sm" style="margin-top:0.5rem" onclick="document.getElementById('editPhotoInput').click()">📸 Add More Photos</button>
@@ -777,6 +787,10 @@ body{font-family:'Raleway',sans-serif;background:#f0ebe3;color:var(--text);overf
           <input type="text" id="editPhotoUrl" placeholder="https://..." style="flex:1"/>
           <button type="button" class="btn btn-primary btn-sm" onclick="addEditPhotoUrl()">Add</button>
         </div>
+      </div>
+      <div class="form-group">
+        <label>Product Video URL <span style="font-size:0.62rem;color:var(--muted)">(YouTube, Vimeo, or .mp4 — optional)</span></label>
+        <input type="text" id="editVideoUrl" placeholder="https://youtube.com/watch?v=..." style="width:100%;padding:0.7rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.85rem;outline:none"/>
       </div>
       </div>
       <div class="form-group">
@@ -985,12 +999,12 @@ function doLogin(){
 
 function addEditPhotos(input){
   if(!input.files || input.files.length===0) return;
-  const files = Array.from(input.files).slice(0, 5 - window._editPhotos.length);
+  const files = Array.from(input.files).slice(0, 10 - window._editPhotos.length);
   if(files.length===0){showToastMsg('Maximum 5 photos','error');return;}
   showToastMsg('⏳ Processing...','');
   let done=0;
   files.forEach(file=>{
-    if(window._editPhotos.length>=5) return;
+    if(window._editPhotos.length>=10) return;
     compressImage(file, 800, 0.7, compressed=>{
       window._editPhotos.push({data:compressed,type:'file'});
       renderEditPhotoGrid();
@@ -1004,7 +1018,7 @@ function addEditPhotos(input){
 function addEditPhotoUrl(){
   const url=document.getElementById('editPhotoUrl').value.trim();
   if(!url) return;
-  if(window._editPhotos.length>=5){showToastMsg('Maximum 5 photos','error');return;}
+  if(window._editPhotos.length>=10){showToastMsg('Maximum 10 photos','error');return;}
   window._editPhotos.push({url,type:'url'});
   document.getElementById('editPhotoUrl').value='';
   renderEditPhotoGrid();
@@ -1342,8 +1356,8 @@ function triggerPhotoInput(){
 
 async function addPhotos(input){
   if(!input || !input.files || input.files.length === 0) return;
-  var remaining = 5 - _photos.length;
-  if(remaining <= 0){ showToastMsg('Maximum 5 photos. Remove one first.','error'); return; }
+  var remaining = 10 - _photos.length;
+  if(remaining <= 0){ showToastMsg('Maximum 10 photos. Remove one first.','error'); return; }
   var files = Array.from(input.files).slice(0, remaining);
   var total = files.length;
   var added = 0;
@@ -1383,7 +1397,7 @@ async function addPhotos(input){
 function addPhotoUrl(){
   var url = document.getElementById('pPhotoUrl').value.trim();
   if(!url){ showToastMsg('Enter a URL first','error'); return; }
-  if(_photos.length >= 5){ showToastMsg('Maximum 5 photos','error'); return; }
+  if(_photos.length >= 10){ showToastMsg('Maximum 10 photos','error'); return; }
   _photos.push(url);
   document.getElementById('pPhotoUrl').value = '';
   _renderPhotoGrid();
@@ -1430,7 +1444,7 @@ function _renderPhotoGrid(){
       + '</div>';
   }).join('');
   // Always show Add Photo button if under 5
-  for(var i = _photos.length; i < 5; i++){
+  for(var i = _photos.length; i < 10; i++){
     html += '<button type="button" class="photo-add-btn" onclick="triggerPhotoInput()"><span>📸</span><p>Add Photo</p></button>';
     break; // Only show one add button
   }
@@ -1452,6 +1466,13 @@ function updatePreview(){
   document.getElementById('previewPrice').textContent=`AUD $${parseFloat(price||0).toFixed(2)}`;
   const pb=document.getElementById('previewBadge');
   if(pb){if(badge){pb.style.display='block';pb.textContent=badge;}else{pb.style.display='none';}}
+}
+
+// ── VIDEO PREVIEW ──
+function previewVideoUrl(){
+  var url = document.getElementById('pVideoUrl').value.trim();
+  var wrap = document.getElementById('videoPreviewWrap');
+  if(url && wrap){ wrap.style.display='block'; }
 }
 
 // ── SAVE PRODUCT ──
@@ -1498,6 +1519,7 @@ function saveProduct(){
     photoUrl:_photos.length>0&&typeof _photos[0]==='string'&&_photos[0].startsWith('http')?_photos[0]:null,
     photoData:_photos.length>0&&_photos[0].startsWith('data:')?_photos[0]:null,
     photos:JSON.stringify(_photos),
+    videoUrl:document.getElementById('pVideoUrl')?document.getElementById('pVideoUrl').value.trim():'',
     dateAdded:new Date().toLocaleDateString('en-AU'),
   };
 
@@ -1527,7 +1549,7 @@ function saveProduct(){
 }
 
 function clearForm(){
-  ['pName','pDesc','pPhotoUrl','pOldPrice','pWeightCustom'].forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
+  ['pName','pDesc','pPhotoUrl','pOldPrice','pWeightCustom','pVideoUrl'].forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
   var elems = ['pPrice','pCollection','pBadge'];
   elems.forEach(id=>{var el=document.getElementById(id);if(el)el.value='';});
   var pw=document.getElementById('pWeight');if(pw)pw.value='350';
@@ -1642,6 +1664,7 @@ function openEditModal(id){
       else{ew.value='custom';ewc.style.display='block';ewc.value=wVal;}
     }catch(e){}
     document.getElementById('editPhotoUrl').value=p.photoUrl||'';
+    if(document.getElementById('editVideoUrl')) document.getElementById('editVideoUrl').value=p.videoUrl||'';
     // Load existing photos
     try{
       var photos = p.photos ? (typeof p.photos==='string'?JSON.parse(p.photos):p.photos) : [];
@@ -1706,6 +1729,7 @@ function updateProduct(){
     photoUrl:window._editPhotos.length>0&&window._editPhotos[0].url?window._editPhotos[0].url:null,
     photoData:window._editPhotos.length>0&&window._editPhotos[0].data?window._editPhotos[0].data:null,
     photos:window._editPhotos.map(p=>({url:p.url||'',data:p.data||'',type:p.type})),
+    videoUrl:document.getElementById('editVideoUrl')?document.getElementById('editVideoUrl').value.trim():'',
   };
   localStorage.setItem('gna_products',JSON.stringify(products));
   closeModal('editModal');

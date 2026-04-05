@@ -359,6 +359,30 @@ function renderProduct(p){
     }).join('')+'</div>';
   }
 
+  // Video
+  var videoHTML = '';
+  if(p.videoUrl && p.videoUrl.trim()){
+    var vurl = p.videoUrl.trim();
+    var embedSrc = '';
+    // YouTube
+    var ytMatch = vurl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    if(ytMatch) embedSrc = 'https://www.youtube.com/embed/'+ytMatch[1];
+    // Vimeo
+    var viMatch = vurl.match(/vimeo\.com\/(\d+)/);
+    if(viMatch) embedSrc = 'https://player.vimeo.com/video/'+viMatch[1];
+
+    if(embedSrc){
+      videoHTML = '<div style="margin-top:1rem"><div style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">▶ Product Video</div>'
+        +'<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border:1px solid var(--border)">'
+        +'<iframe src="'+embedSrc+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none" allowfullscreen loading="lazy"></iframe>'
+        +'</div></div>';
+    } else if(vurl.match(/\.(mp4|webm|ogg)(\?|$)/i)){
+      videoHTML = '<div style="margin-top:1rem"><div style="font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem">▶ Product Video</div>'
+        +'<video controls style="width:100%;border:1px solid var(--border)" preload="metadata">'
+        +'<source src="'+vurl+'"/></video></div>';
+    }
+  }
+
   // Colours
   var coloursHTML = '';
   if(variants.length>0){
@@ -389,6 +413,8 @@ function renderProduct(p){
   var firstAvailSize = initSizeKeys.find(function(s){ return (parseInt(initSizesObj[s])||0) > 0; }) || initSizeKeys[0] || '';
   selectedSize = firstAvailSize;
   maxQty = firstAvailSize ? (parseInt(initSizesObj[firstAvailSize])||1) : 1;
+
+  thumbsHTML += videoHTML;
 
   var sizesHTML = '<div class="option-label">Size &nbsp;<a href="size-guide.html" style="font-size:0.68rem;color:var(--rust);text-transform:none;letter-spacing:0">📏 Size Guide</a></div>'+
     '<div class="size-options" id="sizeWrap">'+
