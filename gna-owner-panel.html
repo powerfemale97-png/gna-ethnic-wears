@@ -1709,13 +1709,19 @@ function updateProduct(){
   const idx=products.findIndex(p=>p.id===id);
   if(idx<0) return;
   const variantsData2 = getVariantsData();
-  const allSizesSet2 = new Set();
-  const sizeQty = {};
   var colors2 = variantsData2.map(function(v){ return {hex:v.hex,name:v.name}; });
-  variantsData2.forEach(function(v){
-    Object.keys(v.sizes).forEach(function(s){ allSizesSet2.add(s); sizeQty[s]=(sizeQty[s]||0)+(v.sizes[s]||0); });
+
+  // Read sizes & quantities from the edit checkboxes (source of truth)
+  const allSizesList = ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'];
+  const sizeQty = {};
+  allSizesList.forEach(function(s){
+    var cb = document.getElementById('esz-'+s);
+    var qt = document.getElementById('eqty-'+s);
+    if(cb && cb.checked){
+      sizeQty[s] = parseInt((qt&&qt.value)||1)||1;
+    }
   });
-  const sizes = ['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'].filter(function(s){ return allSizesSet2.has(s); });
+  const sizes = allSizesList.filter(function(s){ return sizeQty[s] !== undefined; });
   var ewVal=document.getElementById('editWeight')?document.getElementById('editWeight').value:'350';
   var editWeight=ewVal==='custom'?parseInt(document.getElementById('editWeightCustom').value)||500:parseInt(ewVal);
   products[idx]={
