@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Customer Reviews — GnA Ethnic Wears Australia</title>
+<meta name="description" content="Read real customer reviews of GnA Ethnic Wears. See what our customers say about our Indian ethnic fashion."/>
+<meta name="keywords" content="gna ethnic wears reviews, indian wear australia reviews"/>
+<meta property="og:title" content="Customer Reviews — GnA Ethnic Wears Australia"/>
+<meta property="og:description" content="Read real customer reviews of GnA Ethnic Wears. See what our customers say about our Indian ethnic fashion."/>
+<meta property="og:image" content="https://www.gnaethnicwears.com.au/logo.png"/>
+<meta property="og:url" content="https://www.gnaethnicwears.com.au/reviews.html"/>
+<meta property="og:type" content="website"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="canonical" href="https://www.gnaethnicwears.com.au/reviews.html"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+/* ── REVIEWS PAGE STYLES ── */
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;}
+.review-card{background:white;border:1px solid var(--border);padding:0;overflow:hidden;transition:all 0.3s;}
+.review-card:hover{transform:translateY(-4px);box-shadow:0 12px 35px rgba(28,10,0,0.1);border-color:var(--gold);}
+.review-photo{width:100%;height:220px;object-fit:cover;display:block;}
+.review-no-photo{display:none!important;}
+.review-body{padding:1.2rem 1.4rem 1.4rem;}
+.review-stars{color:#F59E0B;font-size:1.1rem;letter-spacing:2px;margin-bottom:0.6rem;}
+.review-stars .empty{color:#D1D5DB;}
+.review-text{font-size:0.88rem;color:var(--muted);line-height:1.8;margin-bottom:1rem;font-style:italic;}
+.review-text::before{content:'"';font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);opacity:0.4;line-height:0;vertical-align:-0.5rem;margin-right:0.2rem;}
+.review-text::after{content:'"';font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold);opacity:0.4;line-height:0;vertical-align:-0.5rem;margin-left:0.2rem;}
+.review-footer{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:0.5rem;}
+.review-author{font-size:0.8rem;font-weight:700;color:var(--deep);letter-spacing:0.05em;}
+.review-product{font-size:0.7rem;color:var(--muted);margin-top:0.15rem;}
+.review-date{font-size:0.68rem;color:var(--muted);letter-spacing:0.05em;}
+.review-size-badge{display:inline-block;background:var(--deep);color:var(--gold);font-size:0.62rem;padding:0.18rem 0.55rem;letter-spacing:0.1em;text-transform:uppercase;margin-top:0.3rem;}
+
+/* ── STAR RATING INPUT ── */
+.star-input{display:flex;gap:0.3rem;margin-top:0.4rem;flex-direction:row-reverse;justify-content:flex-end;}
+.star-input input{display:none;}
+.star-input label{font-size:2rem;cursor:pointer;color:#D1D5DB;transition:color 0.15s;}
+.star-input label:hover,.star-input label:hover~label,.star-input input:checked~label{color:#F59E0B;}
+
+/* ── SUBMIT FORM ── */
+.review-form-wrap{background:var(--deep);padding:4rem 3rem;position:relative;overflow:hidden;}
+.review-form-wrap::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(45deg,rgba(201,168,76,0.04) 0,rgba(201,168,76,0.04) 1px,transparent 1px,transparent 32px);}
+.review-form{background:white;padding:2.5rem;max-width:650px;margin:0 auto;position:relative;z-index:2;}
+.form-note{font-size:0.75rem;color:var(--muted);margin-top:0.3rem;line-height:1.5;}
+
+/* ── PHOTO UPLOAD ── */
+.photo-upload-area{border:2px dashed rgba(201,168,76,0.4);padding:1.5rem;text-align:center;cursor:pointer;background:var(--gold-pale);position:relative;transition:all 0.3s;}
+.photo-upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.08);}
+.photo-upload-area input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.photo-previews{display:flex;gap:0.6rem;flex-wrap:wrap;margin-top:0.8rem;}
+.photo-preview-item{position:relative;width:80px;height:80px;}
+.photo-preview-item img{width:100%;height:100%;object-fit:cover;}
+.photo-preview-item button{position:absolute;top:-6px;right:-6px;background:var(--rust);color:white;border:none;border-radius:50%;width:20px;height:20px;cursor:pointer;font-size:0.7rem;display:flex;align-items:center;justify-content:center;}
+
+/* ── STATS BAR ── */
+.review-stats{display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center;background:white;padding:2rem;border:1px solid var(--border);margin-bottom:2rem;}
+.avg-score{text-align:center;}
+.avg-num{font-family:'Playfair Display',serif;font-size:4rem;color:var(--deep);font-weight:700;line-height:1;}
+.avg-stars{color:#F59E0B;font-size:1.3rem;letter-spacing:3px;margin:0.3rem 0;}
+.avg-count{font-size:0.78rem;color:var(--muted);}
+.rating-bars{flex:1;display:flex;flex-direction:column;gap:0.5rem;}
+.rating-bar-row{display:flex;align-items:center;gap:0.8rem;font-size:0.8rem;}
+.rating-bar-label{width:40px;color:var(--muted);text-align:right;flex-shrink:0;}
+.rating-bar-track{flex:1;height:8px;background:var(--cream2);border-radius:4px;overflow:hidden;}
+.rating-bar-fill{height:100%;background:linear-gradient(90deg,#F59E0B,#FBBF24);border-radius:4px;transition:width 0.6s;}
+.rating-bar-count{width:25px;color:var(--muted);font-size:0.75rem;}
+
+/* ── FILTER TABS ── */
+.review-filters{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;}
+.review-filter-btn{padding:0.45rem 1.1rem;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;border:1px solid var(--border);background:white;cursor:pointer;color:var(--text);font-family:'Raleway',sans-serif;transition:all 0.2s;}
+.review-filter-btn.active,.review-filter-btn:hover{background:var(--deep);color:var(--gold);border-color:var(--deep);}
+
+/* ── SUCCESS MESSAGE ── */
+.submit-success{display:none;text-align:center;padding:2rem;}
+.submit-success h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--deep);margin-bottom:0.8rem;}
+
+@media(max-width:900px){.reviews-grid{grid-template-columns:1fr 1fr;}.review-stats{grid-template-columns:1fr;gap:1rem;}.review-form-wrap{padding:3rem 1.5rem;}}
+@media(max-width:600px){.reviews-grid{grid-template-columns:1fr;}.review-form-wrap{padding:2.5rem 1rem;}.review-form{padding:1.5rem;}}
+</style>
+<style>
+/* Fallback fonts if Google Fonts unavailable */
+body{font-family:'Raleway','Helvetica Neue',Arial,sans-serif;}
+h1,h2,h3,.logo,.footer-logo,.modal-head h3,.product-name{font-family:'Palatino Linotype','Book Antiqua',Palatino,Georgia,serif;}
+</style><!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-VXGK39TFNJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-VXGK39TFNJ');
+</script>
+</head>
+<body>
+<div class="topbar">🌍 Worldwide Shipping &nbsp;|&nbsp; ⭐ Share Your Experience &nbsp;|&nbsp; 📱 0404 722 166</div>
+<nav id="navbar">
+  <div class="nav-left"><a href="index.html" class="logo-img-wrap"><img src="logo.png" alt="GnA Ethnic Wears" style="height:46px;width:auto"/></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li class="dropdown"><a href="#">Collections ▾</a>
+      <div class="dropdown-menu">
+        <a href="short-kurti.html">Short Kurti</a><a href="long-kurti.html">Long Kurti</a>
+        <a href="cord-set.html">Cord Set</a><a href="daily-wear.html">Daily Wear 3 Piece Suit</a>
+        <a href="plus-size.html">Plus Size 3 Piece Suit</a><a href="premium-suit.html">Premium 3 Piece Suit</a>
+      </div>
+    </li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <li><a href="reviews.html" class="active">Reviews</a></li>
+  </ul>
+  <div class="search-wrap">
+    <input class="search-input-nav" id="navSearch" type="text" placeholder="🔍 Search products..." oninput="navSearchProducts(this.value)" onblur="setTimeout(function(){document.getElementById('navSearchResults').classList.remove('show')},200)"/>
+    <div class="search-results" id="navSearchResults"></div>
+  </div>
+  <div class="nav-actions">
+    <a href="cart.html" class="cart-btn">🛒 <span class="cart-count" id="cartCount">0</span></a>
+    <a href="short-kurti.html" class="btn-nav">Shop Now</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-pattern"></div>
+  <div class="page-hero-content">
+    <div class="breadcrumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Customer Reviews</div>
+    <h1>Customer <em>Reviews</em></h1>
+    <p>Real reviews from real customers — see how our ethnic wear looks in person!</p>
+  </div>
+  <div class="page-hero-deco"></div>
+</div>
+
+<section style="background:var(--cream2);padding:5rem 3rem;">
+  <div style="max-width:1100px;margin:0 auto">
+
+    <!-- Stats Bar -->
+    <div class="review-stats reveal" id="reviewStats">
+      <div class="avg-score">
+        <div class="avg-num" id="avgScore">5.0</div>
+        <div class="avg-stars" id="avgStars">★★★★★</div>
+        <div class="avg-count" id="reviewCount">0 reviews</div>
+      </div>
+      <div class="rating-bars">
+        <div class="rating-bar-row"><span class="rating-bar-label">5 ★</span><div class="rating-bar-track"><div class="rating-bar-fill" id="bar5" style="width:0%"></div></div><span class="rating-bar-count" id="count5">0</span></div>
+        <div class="rating-bar-row"><span class="rating-bar-label">4 ★</span><div class="rating-bar-track"><div class="rating-bar-fill" id="bar4" style="width:0%"></div></div><span class="rating-bar-count" id="count4">0</span></div>
+        <div class="rating-bar-row"><span class="rating-bar-label">3 ★</span><div class="rating-bar-track"><div class="rating-bar-fill" id="bar3" style="width:0%"></div></div><span class="rating-bar-count" id="count3">0</span></div>
+        <div class="rating-bar-row"><span class="rating-bar-label">2 ★</span><div class="rating-bar-track"><div class="rating-bar-fill" id="bar2" style="width:0%"></div></div><span class="rating-bar-count" id="count2">0</span></div>
+        <div class="rating-bar-row"><span class="rating-bar-label">1 ★</span><div class="rating-bar-track"><div class="rating-bar-fill" id="bar1" style="width:0%"></div></div><span class="rating-bar-count" id="count1">0</span></div>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="review-filters reveal">
+      <button class="review-filter-btn active" onclick="filterReviews('all',this)">All Reviews</button>
+      <button class="review-filter-btn" onclick="filterReviews(5,this)">★★★★★ 5 Stars</button>
+      <button class="review-filter-btn" onclick="filterReviews(4,this)">★★★★ 4 Stars</button>
+      <button class="review-filter-btn" onclick="filterReviews(3,this)">★★★ 3 Stars</button>
+      <button class="review-filter-btn" onclick="filterReviews('photo',this)">📸 With Photos</button>
+    </div>
+
+    <!-- Reviews Grid -->
+    <div class="reviews-grid" id="reviewsGrid"></div>
+
+    <!-- Empty State -->
+    <div id="noReviews" style="text-align:center;padding:4rem 2rem;display:none">
+      <div style="font-size:3rem;margin-bottom:1rem">⭐</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--deep);margin-bottom:0.8rem">No Reviews Yet</h3>
+      <p style="color:var(--muted);margin-bottom:1.5rem">Be the first to share your GnA Ethnic Wears experience!</p>
+      <a href="#writeReview" class="btn-gold">Write a Review ↓</a>
+    </div>
+  </div>
+</section>
+
+<!-- WRITE A REVIEW -->
+<div class="review-form-wrap" id="writeReview">
+  <div style="text-align:center;margin-bottom:2.5rem;position:relative;z-index:2">
+    <span class="sec-tag" style="color:var(--gold)">✦ Share Your Experience</span>
+    <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.5rem);color:var(--cream);font-weight:600;margin-top:0.3rem">Write a <em style="font-style:italic;color:var(--gold)">Review</em></h2>
+    <p style="color:rgba(250,245,238,0.65);font-size:0.9rem;margin-top:0.5rem">Your review will be published after approval. Photos are encouraged! 📸</p>
+  </div>
+
+  <div class="review-form" id="reviewFormBox">
+    <!-- Star Rating -->
+    <div class="form-group" style="margin-bottom:1.2rem">
+      <label style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.3rem">Your Rating *</label>
+      <div class="star-input" id="starInput">
+        <input type="radio" name="rating" id="star5" value="5"/><label for="star5" title="5 stars">★</label>
+        <input type="radio" name="rating" id="star4" value="4"/><label for="star4" title="4 stars">★</label>
+        <input type="radio" name="rating" id="star3" value="3"/><label for="star3" title="3 stars">★</label>
+        <input type="radio" name="rating" id="star2" value="2"/><label for="star2" title="2 stars">★</label>
+        <input type="radio" name="rating" id="star1" value="1"/><label for="star1" title="1 star">★</label>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">Your Name *</label>
+        <input type="text" id="rName" placeholder="e.g. Priya S., Melbourne"/>
+      </div>
+      <div class="form-group">
+        <label style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">Product Purchased *</label>
+        <select id="rProduct" style="-webkit-appearance:none;padding:0.75rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.88rem;outline:none;width:100%;background:white;color:var(--text)">
+          <option value="">Select collection...</option>
+          <option>Short Kurti</option>
+          <option>Long Kurti</option>
+          <option>Cord Set</option>
+          <option>Daily Wear 3 Piece Suit</option>
+          <option>Plus Size 3 Piece Suit</option>
+          <option>Premium 3 Piece Suit</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">Size Purchased</label>
+        <select id="rSize" style="-webkit-appearance:none;padding:0.75rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.88rem;outline:none;width:100%;background:white;color:var(--text)">
+          <option value="">Select size...</option>
+          <option>XS</option><option>S</option><option>M</option><option>L</option>
+          <option>XL</option><option>XXL</option><option>3XL</option>
+          <option>4XL</option><option>5XL</option><option>6XL</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted)">Your Country</label>
+        <input type="text" id="rCountry" placeholder="e.g. Melbourne, Australia"/>
+      </div>
+    </div>
+
+    <div class="form-group" style="margin-bottom:1.2rem">
+      <label style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.35rem">Your Review *</label>
+      <textarea id="rText" placeholder="Tell us about the quality, fit, fabric, how it looked in person..." style="min-height:120px;width:100%;padding:0.8rem 1rem;border:1px solid var(--border);font-family:'Raleway',sans-serif;font-size:0.88rem;outline:none;resize:vertical;transition:border-color 0.3s" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+    </div>
+
+    <!-- Photo Upload -->
+    <div class="form-group" style="margin-bottom:1.5rem">
+      <label style="font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:0.35rem">📸 Photos of Your Dress (optional but loved!)</label>
+      <div class="photo-upload-area" onclick="document.getElementById('rPhotos').click()">
+        <input type="file" id="rPhotos" accept="image/*" multiple onchange="previewReviewPhotos(this)" style="display:none"/>
+        <div id="uploadPlaceholder">
+          <div style="font-size:2rem;margin-bottom:0.5rem">📷</div>
+          <div style="font-size:0.85rem;font-weight:600;color:var(--text)">Click to upload your dress photos</div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:0.3rem">JPG, PNG · Max 3 photos · 5MB each</div>
+        </div>
+        <div class="photo-previews" id="photoPreviews"></div>
+      </div>
+      <p class="form-note">📸 Customers LOVE seeing real photos! Your photo helps other shoppers see how the dress actually looks.</p>
+    </div>
+
+    <div style="background:var(--gold-pale);border:1px solid var(--border);padding:0.9rem 1.2rem;font-size:0.78rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.65">
+      🔍 <strong>Review Approval:</strong> All reviews are checked before publishing to ensure quality. Approved reviews usually appear within 24–48 hours.
+    </div>
+
+    <button class="btn-gold" style="width:100%;font-size:0.85rem;padding:1rem;letter-spacing:0.15em" onclick="submitReview()">
+      Submit Review ⭐
+    </button>
+  </div>
+
+  <!-- Success Message -->
+  <div class="submit-success" id="submitSuccess" style="display:none;position:relative;z-index:2">
+    <div style="background:white;padding:3rem;max-width:500px;margin:0 auto;text-align:center">
+      <div style="font-size:4rem;margin-bottom:1rem">🎉</div>
+      <h3 style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--deep);margin-bottom:0.8rem">Thank You for Your Review!</h3>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.8;margin-bottom:1.5rem">Your review has been submitted and is pending approval. It will appear on this page once approved — usually within 24 hours!</p>
+      <a href="index.html" class="btn-gold">Continue Shopping</a>
+    </div>
+  </div>
+</div>
+
+<div class="payment-strip">
+  <div class="payment-title">✦ Secure Payment Methods Accepted ✦</div>
+  <div class="payment-icons">
+    <span class="pay-badge">💳 Visa</span><span class="pay-badge">🏦 PayID</span><span class="pay-badge">💳 Mastercard</span>
+    
+    
+    
+  </div>
+</div>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo"><img src="logo.png" alt="GnA Ethnic Wears" style="height:55px;width:auto;"/></div>
+      <p>Authentic Indian ethnic fashion delivered worldwide from Australia.</p>
+      <div class="social-links"><a href="https://www.facebook.com/share/19hwZJTKyC/?mibextid=wwXIfr" target="_blank">📘 Facebook</a><a href="https://www.instagram.com/gna_ethnicwears?igsh=MTZkemN1ZWJsZWNtdw%3D%3D&utm_source=qr" target="_blank">📸 Instagram</a><a href="https://wa.me/61404722166">💬 WhatsApp</a></div>
+    </div>
+    <div class="footer-links-col"><h4>Collections</h4>
+      <a href="short-kurti.html">Short Kurti</a><a href="long-kurti.html">Long Kurti</a>
+      <a href="cord-set.html">Cord Set</a><a href="daily-wear.html">Daily Wear 3 Piece Suit</a>
+      <a href="plus-size.html">Plus Size 3 Piece Suit</a><a href="premium-suit.html">Premium 3 Piece Suit</a>
+    </div>
+    <div class="footer-links-col"><h4>Information</h4>
+      <a href="about.html">About Us</a><a href="contact.html">Contact</a>
+      <a href="shipping.html">Shipping Policy</a><a href="returns.html">Returns Policy</a>
+      <a href="size-guide.html">Size Guide</a><a href="reviews.html">Reviews</a>
+    </div>
+    <div class="footer-links-col"><h4>Contact Us</h4>
+      <p>📧 gnaethnicwears@gmail.com</p><p>📱 0404 722 166</p>
+      <p>🕐 24/7 — 7 Days a Week</p><p>🌍 Ships Worldwide via AusPost</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 GnA Ethnic Wears. All rights reserved.</span>
+    <span>Proudly Australian · Authentically Indian 🇦🇺🇮🇳</span>
+  </div>
+</footer>
+
+<script>
+// ── CART COUNT ──
+function updateCartCount(){
+  try{
+    var c=JSON.parse(localStorage.getItem('gna_cart')||'[]');
+    var t=c.reduce(function(a,b){return a+(parseInt(b.qty)||1);},0);
+    document.querySelectorAll('#cartCount,.cart-count,.cartCount').forEach(function(el){el.textContent=t;});
+  }catch(e){}
+}
+// ── TOGGLE MENU ──
+function toggleMenu(){
+  var m=document.getElementById('mobileMenu');var o=document.getElementById('overlayBg');
+  if(m)m.classList.toggle('open');if(o)o.classList.toggle('open');
+}
+
+function navSearchProducts(q){
+  var res = document.getElementById('navSearchResults');
+  if(!res) return;
+  if(!q || q.length < 2){ res.classList.remove('show'); return; }
+  try {
+    var all = JSON.parse(localStorage.getItem('gna_products')||'[]');
+    var filtered = all.filter(function(p){
+      return p.name.toLowerCase().includes(q.toLowerCase()) ||
+             (p.collection||'').toLowerCase().includes(q.toLowerCase()) ||
+             (p.cat||'').toLowerCase().includes(q.toLowerCase()) ||
+             (p.desc||'').toLowerCase().includes(q.toLowerCase());
+    }).slice(0,6);
+    if(filtered.length === 0){
+      res.innerHTML = '<div style="padding:1rem;text-align:center;color:var(--muted);font-size:0.82rem">No products found for \"'+q+'\"</div>';
+    } else {
+      res.innerHTML = filtered.map(function(p){
+        var src='';
+        try{ var ph=typeof p.photos==='string'?JSON.parse(p.photos||'[]'):(p.photos||[]); if(ph.length>0) src=typeof ph[0]==='string'?ph[0]:(ph[0].data||ph[0].url||''); if(!src) src=p.photoData||p.photoUrl||''; }catch(e){}
+        return '<a href="product.html?id='+p.id+'" class="search-result-item">'+
+          (src?'<img class="search-result-img" src="'+src+'" onerror="this.style.display='none'"/>':'<div class="search-result-img" style="background:'+(p.bg||'#eee')+';display:flex;align-items:center;justify-content:center;font-size:1.5rem">'+(p.emoji||'\u{1F457}')+'</div>')+
+          '<div class="search-result-info">'+
+            '<div class="cat">'+(p.cat||p.collection||'')+'</div>'+
+            '<div class="name">'+p.name+'</div>'+
+            '<div class="price">AUD $'+parseFloat(p.price||0).toFixed(2)+'</div>'+
+          '</div></a>';
+      }).join('');
+    }
+    res.classList.add('show');
+  } catch(e){ res.classList.remove('show'); }
+}
+updateCartCount();
+</script>
+<script src="nav-footer.js"></script>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  GnA Ethnic Wears — Reviews System
+//  Firebase Realtime DB · Cloudinary Photo Upload
+// ══════════════════════════════════════════════════════
+
+const GNA_FB = 'https://gna-ethnic-wears-default-rtdb.firebaseio.com';
+const CLOUDINARY_CLOUD = 'dwbwldr1p';
+const CLOUDINARY_PRESET = 'gna_products';
+
+// ── STARTER REVIEWS (shown until real ones come in) ──
+const STARTER_REVIEWS = [
+  {
+    id:'starter_1', rating:5, name:'Priya M.',
+    product:'Premium 3 Piece Suit', size:'M', country:'Melbourne, Australia',
+    text:'Absolutely stunning quality! The fabric is so soft and the embroidery is beautiful. I wore it to Diwali and got so many compliments. Fits perfectly and the colour is exactly as shown.',
+    photos:[], date:'15 Nov 2024', status:'approved'
+  },
+  {
+    id:'starter_2', rating:5, name:'Anita K.',
+    product:'Short Kurti', size:'L', country:'Sydney, Australia',
+    text:'Finally found a store in Australia with authentic Indian ethnic wear! The kurti arrived quickly and the packaging was lovely. The print is vibrant and the cotton is very breathable. Will definitely order again!',
+    photos:[], date:'2 Dec 2024', status:'approved'
+  },
+  {
+    id:'starter_3', rating:5, name:'Sunita R.',
+    product:'Cord Set', size:'S', country:'Brisbane, Australia',
+    text:'I ordered the cord set for my sister\'s wedding and it was perfect. The stitching quality is excellent and it looks way more expensive than what I paid. Shipping was faster than expected too!',
+    photos:[], date:'20 Jan 2025', status:'approved'
+  },
+  {
+    id:'starter_4', rating:4, name:'Deepa V.',
+    product:'Daily Wear 3 Piece Suit', size:'XL', country:'Auckland, New Zealand',
+    text:'Really happy with my purchase! The dupatta material is gorgeous and the suit fits well. Sizing runs true to the chart. Knocked off one star only because delivery to NZ took a little longer than expected, but well worth the wait.',
+    photos:[], date:'8 Feb 2025', status:'approved'
+  },
+  {
+    id:'starter_5', rating:5, name:'Rekha S.',
+    product:'Long Kurti', size:'XXL', country:'Perth, Australia',
+    text:'The long kurti is beautiful — exactly what I was looking for. The plus sizing is very generous and flattering. I love that they actually carry sizes that fit real women! The customer service was also very helpful when I asked about sizing.',
+    photos:[], date:'1 Mar 2025', status:'approved'
+  },
+  {
+    id:'starter_6', rating:5, name:'Kavya P.',
+    product:'Plus Size 3 Piece Suit', size:'3XL', country:'Melbourne, Australia',
+    text:'So happy I found GnA Ethnic Wears! I\'ve been struggling to find Indian ethnic wear in larger sizes in Australia and this is perfect. The fabric quality is top notch, the colour is rich and it\'s stitched so well. Already planning my next order!',
+    photos:[], date:'12 Mar 2025', status:'approved'
+  }
+];
+
+// ── FIREBASE HELPERS ──
+async function fbGetApprovedReviews(){
+  try{
+    const res = await fetch(`${GNA_FB}/reviews/approved.json`);
+    if(!res.ok) return null;
+    const data = await res.json();
+    if(!data) return [];
+    return Array.isArray(data) ? data : Object.values(data);
+  }catch(e){ return null; }
+}
+
+async function fbSavePending(reviews){
+  try{
+    await fetch(`${GNA_FB}/reviews/pending.json`,{
+      method:'PUT', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(reviews)
+    });
+    return true;
+  }catch(e){ return false; }
+}
+
+async function fbGetPending(){
+  try{
+    const res = await fetch(`${GNA_FB}/reviews/pending.json`);
+    if(!res.ok) return [];
+    const data = await res.json();
+    if(!data) return [];
+    return Array.isArray(data) ? data : Object.values(data);
+  }catch(e){ return []; }
+}
+
+// ── GET APPROVED REVIEWS (Firebase + starter fallback) ──
+async function getApprovedReviews(){
+  const firebaseReviews = await fbGetApprovedReviews();
+  // If Firebase has real reviews, use those
+  if(firebaseReviews !== null && firebaseReviews.length > 0){
+    return firebaseReviews;
+  }
+  // Otherwise show starter reviews
+  return STARTER_REVIEWS;
+}
+
+// ── RENDER STARS ──
+function renderStars(rating, size='1rem'){
+  return `<span style="color:#F59E0B;font-size:${size}">${'★'.repeat(rating)}</span><span style="color:#D1D5DB;font-size:${size}">${'★'.repeat(5-rating)}</span>`;
+}
+
+// ── RENDER REVIEWS ──
+async function renderReviews(filter='all'){
+  const grid = document.getElementById('reviewsGrid');
+  const noReviews = document.getElementById('noReviews');
+  grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)"><div style="font-size:2rem;margin-bottom:0.5rem">⏳</div>Loading reviews...</div>`;
+
+  let reviews = await getApprovedReviews();
+
+  if(filter==='photo') reviews = reviews.filter(r=>r.photos&&r.photos.length>0);
+  else if(typeof filter==='number') reviews = reviews.filter(r=>r.rating===filter);
+
+  if(reviews.length===0){
+    grid.innerHTML='';
+    noReviews.style.display='block';
+    updateStats([]);
+    return;
+  }
+
+  noReviews.style.display='none';
+  grid.innerHTML = reviews.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(r=>`
+    <div class="review-card reveal">
+      ${r.photos&&r.photos.length>0
+        ?`<img src="${r.photos[0]}" class="review-photo" alt="Customer photo" loading="lazy" onerror="this.style.display='none'"/>`
+        :`<div class="review-no-photo" style="display:none"></div>`}
+      <div class="review-body">
+        <div class="review-stars">${renderStars(r.rating,'1.1rem')}</div>
+        <div class="review-text">${r.text}</div>
+        <div class="review-footer">
+          <div>
+            <div class="review-author">✓ ${r.name}</div>
+            <div class="review-product">${r.product||''}${r.country?' · '+r.country:''}</div>
+            ${r.size?`<span class="review-size-badge">Size ${r.size}</span>`:''}
+          </div>
+          <div class="review-date">${r.date||''}</div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  updateStats(reviews);
+  observeReveal();
+}
+
+// ── UPDATE STATS ──
+function updateStats(reviews){
+  if(reviews.length===0){
+    document.getElementById('avgScore').textContent='—';
+    document.getElementById('avgStars').textContent='★★★★★';
+    document.getElementById('reviewCount').textContent='No reviews yet';
+    [1,2,3,4,5].forEach(n=>{
+      document.getElementById('bar'+n).style.width='0%';
+      document.getElementById('count'+n).textContent='0';
+    });
+    return;
+  }
+  const avg = reviews.reduce((a,r)=>a+r.rating,0)/reviews.length;
+  document.getElementById('avgScore').textContent=avg.toFixed(1);
+  document.getElementById('avgStars').innerHTML=renderStars(Math.round(avg),'1.3rem');
+  document.getElementById('reviewCount').textContent=reviews.length+' verified review'+(reviews.length!==1?'s':'');
+  const total = reviews.length;
+  [1,2,3,4,5].forEach(n=>{
+    const cnt=reviews.filter(r=>r.rating===n).length;
+    document.getElementById('bar'+n).style.width=(total?cnt/total*100:0)+'%';
+    document.getElementById('count'+n).textContent=cnt;
+  });
+}
+
+// ── FILTER ──
+function filterReviews(filter, btn){
+  document.querySelectorAll('.review-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderReviews(filter);
+}
+
+// ── PHOTO UPLOAD TO CLOUDINARY ──
+let reviewPhotos = [];
+let reviewPhotoFiles = [];
+
+async function uploadToCloudinary(file){
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_PRESET);
+  formData.append('folder', 'gna_reviews');
+  try{
+    const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {
+      method:'POST', body: formData
+    });
+    const data = await res.json();
+    return data.secure_url || null;
+  }catch(e){ return null; }
+}
+
+function previewReviewPhotos(input){
+  if(!input.files) return;
+  const files = Array.from(input.files).slice(0,3);
+  reviewPhotoFiles = files;
+  reviewPhotos = [];
+  const container = document.getElementById('photoPreviews');
+  const placeholder = document.getElementById('uploadPlaceholder');
+  container.innerHTML='';
+  if(files.length>0) placeholder.style.display='none';
+  files.forEach((file,i)=>{
+    const reader = new FileReader();
+    reader.onload = e => {
+      reviewPhotos.push(e.target.result); // temp base64 preview
+      const div = document.createElement('div');
+      div.className = 'photo-preview-item';
+      div.innerHTML = `<img src="${e.target.result}" alt="preview"/><button onclick="removeReviewPhoto(${i})" type="button">✕</button>`;
+      container.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removeReviewPhoto(idx){
+  reviewPhotos.splice(idx,1);
+  reviewPhotoFiles.splice(idx,1);
+  document.getElementById('rPhotos').value='';
+  document.getElementById('photoPreviews').innerHTML='';
+  if(reviewPhotos.length===0) document.getElementById('uploadPlaceholder').style.display='block';
+  reviewPhotos.forEach((src,i)=>{
+    const div = document.createElement('div');
+    div.className = 'photo-preview-item';
+    div.innerHTML = `<img src="${src}" alt="preview"/><button onclick="removeReviewPhoto(${i})" type="button">✕</button>`;
+    document.getElementById('photoPreviews').appendChild(div);
+  });
+}
+
+// ── SUBMIT REVIEW ──
+async function submitReview(){
+  const rating = parseInt(document.querySelector('input[name="rating"]:checked')?.value||0);
+  const name = document.getElementById('rName').value.trim();
+  const product = document.getElementById('rProduct').value;
+  const text = document.getElementById('rText').value.trim();
+  const size = document.getElementById('rSize').value;
+  const country = document.getElementById('rCountry').value.trim();
+
+  if(!rating){ alert('Please select a star rating!'); return; }
+  if(!name){ alert('Please enter your name!'); return; }
+  if(!product){ alert('Please select which product you purchased!'); return; }
+  if(!text || text.length<15){ alert('Please write at least a sentence about your experience!'); return; }
+
+  const btn = document.querySelector('[onclick="submitReview()"]');
+  if(btn){ btn.disabled=true; btn.textContent='Submitting...'; }
+
+  // Upload photos to Cloudinary
+  let uploadedUrls = [];
+  if(reviewPhotoFiles.length > 0){
+    if(btn) btn.textContent = 'Uploading photos...';
+    for(const file of reviewPhotoFiles){
+      const url = await uploadToCloudinary(file);
+      if(url) uploadedUrls.push(url);
+    }
+  }
+
+  const review = {
+    id: 'r' + Date.now(),
+    rating, name, product, text, size, country,
+    photos: uploadedUrls,
+    date: new Date().toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}),
+    status: 'pending'
+  };
+
+  // Save to Firebase pending
+  const pending = await fbGetPending();
+  pending.push(review);
+  const saved = await fbSavePending(pending);
+
+  // Also cache locally as fallback
+  try{ localStorage.setItem('gna_reviews_pending', JSON.stringify(pending)); }catch(e){}
+
+  if(btn){ btn.disabled=false; btn.textContent='Submit Review ⭐'; }
+
+  // Show success
+  document.getElementById('reviewFormBox').style.display='none';
+  document.getElementById('reviewSuccess').style.display='block';
+  window.scrollTo({top: document.getElementById('reviewSuccess').offsetTop - 100, behavior:'smooth'});
+
+  // Reset form
+  document.querySelectorAll('input[name="rating"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('.star-label').forEach(s=>s.classList.remove('active'));
+  document.getElementById('rName').value='';
+  document.getElementById('rProduct').value='';
+  document.getElementById('rText').value='';
+  document.getElementById('rSize').value='';
+  document.getElementById('rCountry').value='';
+  reviewPhotoFiles=[];
+  document.getElementById('reviewPhotoPreview').innerHTML='';
+}
+</script>
+</body>
+</html>
