@@ -1697,16 +1697,24 @@ function openEditModal(id){
     // Load colours
     try{ initColourPresets('editColourPresets','edit'); }catch(e){}
     try{ loadColoursForEdit(p.colors||[]); }catch(e){}
-    // Load sizes into edit checkboxes
+    // Load sizes into edit checkboxes — use first variant's stock (per-colour), not total
     try{
       var allSizes=['XS','S','M','L','XL','XXL','3XL','4XL','5XL','6XL'];
-      var sizeQty = p.sizeQty || {};
+      // Use first variant's sizes if available (correct per-colour stock)
+      var editVariantSizes = {};
+      try{
+        var evs = p.variants ? (typeof p.variants==='string'?JSON.parse(p.variants):p.variants) : [];
+        if(evs.length > 0 && evs[0].sizes) editVariantSizes = evs[0].sizes;
+      }catch(e){}
+      // Fall back to sizeQty only if no variants
+      var sizeQtyFallback = p.sizeQty || {};
+      var sizeDisplay = Object.keys(editVariantSizes).length > 0 ? editVariantSizes : sizeQtyFallback;
       allSizes.forEach(function(s){
         var cb=document.getElementById('esz-'+s);
         var qt=document.getElementById('eqty-'+s);
-        if(cb && sizeQty[s]!==undefined && sizeQty[s]>0){
+        if(cb && sizeDisplay[s]!==undefined && parseInt(sizeDisplay[s])>0){
           cb.checked=true;
-          if(qt){qt.value=sizeQty[s];qt.style.display='block';}
+          if(qt){qt.value=parseInt(sizeDisplay[s]);qt.style.display='block';}
         } else if(cb){
           cb.checked=false;
           if(qt){qt.value='';qt.style.display='none';}
@@ -1741,10 +1749,20 @@ function updateProduct(){
   var ewVal=document.getElementById('editWeight')?document.getElementById('editWeight').value:'350';
   var editWeight=ewVal==='custom'?parseInt(document.getElementById('editWeightCustom').value)||500:parseInt(ewVal);
 
-  // Sync variants sizes to match the checkboxes — so product page reads correct sizes
+  // Sync variants: preserve each variant's OWN per-size stock
+  // Only update sizes that are newly added/removed, keep existing stock values
   var updatedVariants = variantsData2.map(function(v){
     var newSizes = {};
-    sizes.forEach(function(s){ newSizes[s] = sizeQty[s]||1; });
+    sizes.forEach(function(s){
+      // Keep the variant's existing stock for this size if it exists
+      // Only use the checkbox qty if this variant doesn't have its own stock yet
+      if(v.sizes && v.sizes[s] !== undefined){
+        newSizes[s] = parseInt(v.sizes[s]) || 1;
+      } else {
+        // New size added — use 1 as default per colour (not the total)
+        newSizes[s] = 1;
+      }
+    });
     return Object.assign({}, v, {sizes: newSizes, sizeList: sizes});
   });
   // If no colour variants exist, create a default one so sizes still save
