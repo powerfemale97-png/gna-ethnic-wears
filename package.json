@@ -1,0 +1,8 @@
+{
+  "name": "gna-ethnic-wears-functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions for GnA Ethnic Wears",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}
