@@ -38,9 +38,10 @@ exports.handler = async function(event, context) {
         product_data: {
           name: item.name,
           description: `Size: ${item.size || 'N/A'} | Colour: ${item.colour || 'N/A'}`,
-          images: item.image ? [item.image] : [],
+          // Only include images if they are valid https URLs
+          ...(item.image && item.image.startsWith('https://') ? { images: [item.image] } : {}),
         },
-        unit_amount: Math.round(item.price * 100), // Stripe uses cents
+        unit_amount: Math.round(item.price * 100),
       },
       quantity: item.qty || 1,
     }));
