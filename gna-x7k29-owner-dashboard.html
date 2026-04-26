@@ -975,12 +975,12 @@ function doLogin(){
     }
   } else if(okUser && !okPass){
     document.getElementById('loginError').style.display = 'block';
-    document.getElementById('loginError').innerHTML = '❌ Wrong password. Try: <strong>Gnaethnicwears@2025</strong> or <strong>gna2025</strong>';
+    document.getElementById('loginError').innerHTML = '❌ Incorrect username or password. Please try again.';
     document.getElementById('loginPass').value = '';
     setTimeout(()=>{ document.getElementById('loginError').style.display='none'; }, 5000);
   } else {
     document.getElementById('loginError').style.display = 'block';
-    document.getElementById('loginError').innerHTML = '❌ Username must be <strong>admin</strong> or <strong>gna</strong>';
+    document.getElementById('loginError').innerHTML = '❌ Incorrect username or password. Please try again.';
     setTimeout(()=>{ document.getElementById('loginError').style.display='none'; }, 5000);
   }
 }
